@@ -1,217 +1,384 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.kadeal.demo</groupId>
-	<artifactId>kadeal</artifactId>
-	<packaging>war</packaging>
-	<version>0.0</version>
-	<name>kadeal Maven Webapp</name>
-	<url>http://maven.apache.org</url>
+
+	<groupId>com.avricot</groupId>
+	<artifactId>prediction-parent</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>prediction-parent</name>
+
+	<modules>
+		<module>prediction-common</module>
+		<module>prediction-web</module>
+	</modules>
+	
 	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<encoding>UTF-8</encoding>
+
+		<!-- Plugins maven -->
+		<maven-surefire-plugin.version>2.7.2</maven-surefire-plugin.version>
+		<jaxb2-maven-plugin.version>1.3</jaxb2-maven-plugin.version>
+		<maven-war-plugin.version>2.1.1</maven-war-plugin.version>
+		
+		<!-- versions-->
+		<inject-api.version>1</inject-api.version>
 		<spring.version>3.0.5.RELEASE</spring.version>
 		<slf4j.version>1.5.6</slf4j.version>
 		<powermock.version>1.4.8</powermock.version>
 	</properties>
-
 	<dependencies>
-		<!-- Validation -->
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator-annotation-processor</artifactId>
-			<version>4.1.0.Final</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>org.springframework.context</artifactId>
-			<version>${spring.version}</version>
-			<exclusions>
-				<!-- Exclude Commons Logging in favor of SLF4j -->
-				<exclusion>
-					<groupId>org.apache.commons</groupId>
-					<artifactId>com.springsource.org.apache.commons.logging</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>org.springframework.web.servlet</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>javax.persistence</groupId>
-			<artifactId>com.springsource.javax.persistence</artifactId>
-			<version>1.0.0</version>
-		</dependency>
-
-		<!-- Servlet -->
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>com.springsource.javax.servlet</artifactId>
-			<version>2.5.0</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>com.springsource.javax.servlet.jsp</artifactId>
-			<version>2.1.0</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>com.springsource.javax.servlet.jsp.jstl</artifactId>
-			<version>1.2.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.taglibs</groupId>
-			<artifactId>com.springsource.org.apache.taglibs.standard</artifactId>
-			<version>1.1.2</version>
-		</dependency>
-
-		<!-- Logging -->
+			<!-- Logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>com.springsource.slf4j.api</artifactId>
-			<version>${slf4j.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>com.springsource.slf4j.org.apache.commons.logging</artifactId>
-			<version>${slf4j.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>com.springsource.slf4j.log4j</artifactId>
-			<version>${slf4j.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
-			<version>1.2.16</version>
 		</dependency>
 
 		<!-- Unitary Tests -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.8.2</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.powermock</groupId>
 			<artifactId>powermock-module-junit4</artifactId>
-			<version>${powermock.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.powermock</groupId>
 			<artifactId>powermock-api-easymock</artifactId>
-			<version>${powermock.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.easymock</groupId>
 			<artifactId>easymock</artifactId>
-			<version>3.0</version>
 			<scope>test</scope>
 		</dependency>
-
-		<!-- Spring JavaConfig - transaction cglib -->
-		<dependency>
-			<groupId>org.springframework.javaconfig</groupId>
-			<artifactId>spring-javaconfig</artifactId>
-			<version>1.0.0.m3</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>3.0.5.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-			<version>3.0.5.RELEASE</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-			<version>3.0.5.RELEASE</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-aop</artifactId>
-			<version>3.0.5.RELEASE</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-
-
-		<dependency>
-			<groupId>org.mongodb</groupId>
-			<artifactId>mongo-java-driver</artifactId>
-			<version>2.7.1</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-			<version>3.0.5.RELEASE</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-mongodb</artifactId>
-			<version>1.0.0.M5</version>
-		</dependency>
-
-		<!-- Twitter -->
-		<dependency>
-			<groupId>org.twitter4j</groupId>
-			<artifactId>twitter4j-core</artifactId>
-			<version>[2.1,)</version>
-		</dependency>
-
-		<!-- Jackson JSON Mapper -->
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-asl</artifactId>
-			<version>1.8.5</version>
-		</dependency>
-
-		<!-- StringUtils -->
-		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-			<version>2.4</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sf.ehcache</groupId>
-			<artifactId>ehcache</artifactId>
-			<version>2.4.3</version>
-		</dependency>
-		<dependency>
-			<groupId>com.googlecode.ehcache-spring-annotations</groupId>
-			<artifactId>ehcache-spring-annotations</artifactId>
-			<version>1.1.3</version>
-		</dependency>
-
+		
 	</dependencies>
+	<dependencyManagement>
+		<dependencies>
+
+			<!-- ****************************************************** -->
+			<!-- PREDICTION DEPENDENCIES -->
+			<!-- ****************************************************** -->
+			<dependency>
+				<groupId>com.avricot</groupId>
+				<artifactId>prediction-common</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.avricot</groupId>
+				<artifactId>prediction-web</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<!-- Validation -->
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-validator-annotation-processor</artifactId>
+				<version>4.1.0.Final</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>javax.inject</groupId>
+				<artifactId>javax.inject</artifactId>
+				<version>${inject-api.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>org.springframework.context</artifactId>
+				<version>${spring.version}</version>
+				<exclusions>
+					<!-- Exclude Commons Logging in favor of SLF4j -->
+					<exclusion>
+						<groupId>org.apache.commons</groupId>
+						<artifactId>com.springsource.org.apache.commons.logging</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>org.springframework.web.servlet</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>javax.persistence</groupId>
+				<artifactId>com.springsource.javax.persistence</artifactId>
+				<version>1.0.0</version>
+			</dependency>
+
+			<!-- Servlet -->
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>com.springsource.javax.servlet</artifactId>
+				<version>2.5.0</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>com.springsource.javax.servlet.jsp</artifactId>
+				<version>2.1.0</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>com.springsource.javax.servlet.jsp.jstl</artifactId>
+				<version>1.2.0</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.taglibs</groupId>
+				<artifactId>com.springsource.org.apache.taglibs.standard</artifactId>
+				<version>1.1.2</version>
+			</dependency>
+
+			<!-- Logging -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>com.springsource.slf4j.api</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>com.springsource.slf4j.org.apache.commons.logging</artifactId>
+				<version>${slf4j.version}</version>
+				<scope>runtime</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>com.springsource.slf4j.log4j</artifactId>
+				<version>${slf4j.version}</version>
+				<scope>runtime</scope>
+			</dependency>
+			<dependency>
+				<groupId>log4j</groupId>
+				<artifactId>log4j</artifactId>
+				<version>1.2.16</version>
+			</dependency>
+
+			<!-- Unitary Tests -->
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.8.2</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.powermock</groupId>
+				<artifactId>powermock-module-junit4</artifactId>
+				<version>${powermock.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.powermock</groupId>
+				<artifactId>powermock-api-easymock</artifactId>
+				<version>${powermock.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.easymock</groupId>
+				<artifactId>easymock</artifactId>
+				<version>3.0</version>
+				<scope>test</scope>
+			</dependency>
+
+			<!-- Spring JavaConfig - transaction cglib -->
+			<dependency>
+				<groupId>org.springframework.javaconfig</groupId>
+				<artifactId>spring-javaconfig</artifactId>
+				<version>1.0.0.m3</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-test</artifactId>
+				<version>3.0.5.RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-core</artifactId>
+				<version>3.0.5.RELEASE</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-webmvc</artifactId>
+				<version>3.0.5.RELEASE</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-aop</artifactId>
+				<version>3.0.5.RELEASE</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+
+
+			<dependency>
+				<groupId>org.mongodb</groupId>
+				<artifactId>mongo-java-driver</artifactId>
+				<version>2.7.1</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-web</artifactId>
+				<version>3.0.5.RELEASE</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.data</groupId>
+				<artifactId>spring-data-mongodb</artifactId>
+				<version>1.0.0.M5</version>
+			</dependency>
+
+			<!-- Twitter -->
+			<dependency>
+				<groupId>org.twitter4j</groupId>
+				<artifactId>twitter4j-core</artifactId>
+				<version>[2.1,)</version>
+			</dependency>
+
+			<!-- Jackson JSON Mapper -->
+			<dependency>
+				<groupId>org.codehaus.jackson</groupId>
+				<artifactId>jackson-mapper-asl</artifactId>
+				<version>1.8.5</version>
+			</dependency>
+
+			<!-- StringUtils -->
+			<dependency>
+				<groupId>commons-lang</groupId>
+				<artifactId>commons-lang</artifactId>
+				<version>2.4</version>
+			</dependency>
+			<dependency>
+				<groupId>net.sf.ehcache</groupId>
+				<artifactId>ehcache</artifactId>
+				<version>2.4.3</version>
+			</dependency>
+			<dependency>
+				<groupId>com.googlecode.ehcache-spring-annotations</groupId>
+				<artifactId>ehcache-spring-annotations</artifactId>
+				<version>1.1.3</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<build>
-		<finalName>Prediction</finalName>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-report-plugin</artifactId>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-eclipse-plugin</artifactId>
+					<configuration>
+						<source>1.6</source>
+						<target>1.6</target>
+						<downloadSources>true</downloadSources>
+						<downloadJavadoc>true</downloadJavadoc>
+						<wtpversion>2.0</wtpversion>
+						<ajdtVersion>0</ajdtVersion>
+						<buildOutputDirectory>eclipse-target/classes
+						</buildOutputDirectory>
+						<!-- BRANCHE <projectNameTemplate>branche-[artifactId]</projectNameTemplate> -->
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<executions>
+						<execution>
+							<id>attach-sources</id>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<configuration>
+						<encoding>${encoding}</encoding>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<configuration>
+						<source>1.6</source>
+						<target>1.6</target>
+						<encoding>${encoding}</encoding>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-war-plugin</artifactId>
+					<version>${maven-war-plugin.version}</version>
+					<configuration>
+						<archive>
+							<manifest>
+								<addClasspath>true</addClasspath>
+							</manifest>
+						</archive>
+					</configuration>
+				</plugin>
+				
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>${maven-surefire-plugin.version}</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+			</resource>
+		</resources>
 	</build>
+
+	<developers>
+		<developer>
+			<name>Quentin Ambard</name>
+			<organization>Avricot</organization>
+			<email>quentin.ambard@gmail.com</email>
+		</developer>
+	</developers>
+	
 	<repositories>
 		<!-- spring repositories -->
 		<repository>
@@ -256,9 +423,10 @@
 			<url>https://repository.jboss.org/nexus/content/groups/public-jboss/</url>
 		</repository>
 		<!-- twitter4j -->
-		<!-- <repository> <id>twitter4j.org</id> <name>twitter4j.org Repository</name> 
+		<repository> <id>twitter4j.org</id> <name>twitter4j.org Repository</name> 
 			<url>http://twitter4j.org/maven2</url> <releases> <enabled>true</enabled> 
-			</releases> <snapshots> <enabled>true</enabled> </snapshots> </repository> -->
+			</releases> <snapshots> <enabled>true</enabled> </snapshots> 
+		</repository>
 		<repository>
 			<id>spring-snapshot</id>
 			<name>Spring Maven SNAPSHOT Repository</name>
@@ -266,4 +434,5 @@
 		</repository>
 
 	</repositories>
+
 </project>
