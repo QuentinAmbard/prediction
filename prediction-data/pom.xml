@@ -14,6 +14,10 @@
 	<name>prediction-data</name>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.avricot</groupId>
+			<artifactId>prediction-common</artifactId>
+		</dependency>
 		<!-- Twitter -->
 		<dependency>
 			<groupId>org.twitter4j</groupId>
