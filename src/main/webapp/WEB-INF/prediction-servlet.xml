@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:mvc="http://www.springframework.org/schema/mvc"
+		xmlns:tx="http://www.springframework.org/schema/tx"
+		xmlns:ehcache="http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring"
+		
+		
+		xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+				http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+				http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+
+	<!-- Add JSR-303 validation support, message conversion, and support for field formatting -->
+	<mvc:annotation-driven validator="validator" />
+	
+	<!-- Enable annotation-based validation using Bean Validation Framework -->  
+	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
+	<!-- transaction managed with annotations -->
+	<tx:annotation-driven />
+	<!-- map the static resources. Could be done using the "default" servlet mapping -->
+	<mvc:resources mapping="/resources/**" location="/resources/" />
+	
+	<!--
+		- The controllers are autodetected POJOs labeled with the @Controller annotation.
+		- @Repository
+		- @Service etc.
+	-->
+	<context:component-scan base-package="com.avricot.prediction"/>
+
+	<!--
+		- The form-based controllers within this application provide @RequestMapping 
+		- annotations at the type level for path mapping URLs and @RequestMapping 
+		- at the method level for request type mappings (e.g., GET and POST). 
+		- In contrast, ClinicController - which is not form-based - provides 
+		- @RequestMapping only at the method level for path mapping URLs.
+		-
+		- DefaultAnnotationHandlerMapping is driven by these annotations and is 
+		- enabled by default with Java 5+.
+	-->
+	
+	<!--
+		- The BeanNameViewResolver is used to pick up the visits view name (below).
+		  (Finds an implementation of View that is registered as a <bean> whose ID is the same as the logical view name)
+		
+	 
+	<bean class="org.springframework.web.servlet.view.BeanNameViewResolver" p:order="1"/>-->
+	<!--
+		Finds a view template contained within the web application's WAR file. The path to the view template is 
+		derived by prefixing and suffixing the logical view name.
+	-->
+ 	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver" p:prefix="/WEB-INF/jsp/"
+			p:suffix=".jsp" p:order="2"/>
+ 
+	<!--  Mappings avaible: 
+		- BeanNameUrlHandlerMapping: Maps controllers to URLs that are based on the controllers' bean names.
+		- ControllerBeanNameHandlerMapping: Similar to BeanNameUrlHandlerMapping, mapping controllers to URLs that are based on the controllers' bane names. In this case,the bean names aren't required follow URL conventions.
+		- ControllerClassNameHandlerMapping - Maps controllers to URLs by using the controller's class name as the basis for the URL.
+		- DefaultAnnotationHandlerMapping - Maps request to controller and controller methods that are annotated with @Request
+		- SimpleUrlHandlerMapping - Maps controllers to URLs using a property collection defined in the Spring application context. -->	
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="webBindingInitializer">
+			<!-- Bind Date & String -->
+			<bean class="com.avricot.prediction.web.DefaultBindingInitializer"/>
+		</property>
+	</bean>
+
+	<!--
+		- This bean resolves specific types of exceptions to corresponding logical 
+		- view names for error views. The default behaviour of DispatcherServlet 
+		- is to propagate all exceptions to the servlet container: this will happen 
+		- here with all other types of exceptions.
+	-->
+	<!-- 
+	On s'en tape avec mongo ?
+	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="exceptionMappings">
+			<props>
+				<prop key="org.springframework.web.servlet.PageNotFound">error/pageNotFound</prop>
+				<prop key="org.springframework.dao.DataAccessException">dataAccessFailure</prop>
+				<prop key="org.springframework.transaction.TransactionException">dataAccessFailure</prop>
+			</props>
+		</property>
+	</bean>
+	 -->
+	<!-- Message source for this context, loaded from localized "messages_xx" files.	-->
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource"
+			p:basename="messages"/>
+
+
+
+</beans>
