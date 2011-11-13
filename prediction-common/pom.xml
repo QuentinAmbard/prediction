@@ -14,19 +14,6 @@
 
 	<name>prediction-common</name>
 
-	<properties>
-	</properties>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
-
-
 	<dependencies>
 		<dependency>
 			<groupId>javax.inject</groupId>
@@ -57,11 +44,6 @@
 			<artifactId>mongo-java-driver</artifactId>
 			<type>jar</type>
 			<scope>compile</scope>
-		</dependency>
-		<!-- Twitter -->
-		<dependency>
-			<groupId>org.twitter4j</groupId>
-			<artifactId>twitter4j-core</artifactId>
 		</dependency>
 		<!-- Jackson JSON Mapper -->
 		<dependency>

@@ -11,6 +11,8 @@
 
 	<modules>
 		<module>prediction-common</module>
+		<module>prediction-sentiments</module>
+		<module>prediction-data</module>
 		<module>prediction-web</module>
 	</modules>
 	
@@ -89,7 +91,17 @@
 				<artifactId>prediction-web</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-
+			<dependency>
+				<groupId>com.avricot</groupId>
+				<artifactId>prediction-data</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.avricot</groupId>
+				<artifactId>prediction-sentiments</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			
 			<!-- Validation -->
 			<dependency>
 				<groupId>org.hibernate</groupId>
