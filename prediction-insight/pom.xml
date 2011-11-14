@@ -10,9 +10,9 @@
 	</parent>
 
 	<groupId>com.avricot</groupId>
-	<artifactId>prediction-data</artifactId>
+	<artifactId>prediction-insight</artifactId>
 	<packaging>jar</packaging>
-	<name>prediction-data</name>
+	<name>prediction-insight</name>
 
 	<dependencies>
 		<dependency>
@@ -21,8 +21,10 @@
 		</dependency>
 		<!-- Twitter -->
 		<dependency>
-			<groupId>org.twitter4j</groupId>
-			<artifactId>twitter4j-core</artifactId>
+			<groupId>net.sf.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>2.3</version>
 		</dependency>
+
 	</dependencies>
 </project>
