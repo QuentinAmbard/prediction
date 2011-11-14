@@ -1,4 +1,4 @@
-package com.avricot.prediction;
+package com.avricot.prediction.insight;
 
 import org.springframework.context.ApplicationContext;
 

@@ -4,9 +4,9 @@ import com.avricot.prediction.model.report.tweeter.TweetReport;
 
 public class DailyReport {
 	private TweetReport tweetReport;
+	private int insight;
 
 	// YoutubeReport,
-	// insightReport etc...
 
 	public TweetReport getTweetReport() {
 		return tweetReport;

@@ -9,14 +9,16 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.avricot.prediction.model.report.DailyReport;
+import com.avricot.prediction.model.report.Region;
 
 @Document(collection = "candidat")
 public class Candidat {
 	@Id
 	private ObjectId id;
 	private CandidatName name;
-	private final List<String> nicknames = new ArrayList<String>();
-	private final HashMap<Long, DailyReport> dailyReports = new HashMap<Long, DailyReport>();
+	private List<String> nicknames = new ArrayList<String>();
+	private HashMap<Long, DailyReport> dailyReports = new HashMap<Long, DailyReport>();
+	private HashMap<Region, Integer> geoReport = new HashMap<Region, Integer>();
 
 	public Candidat() {
 	}
@@ -53,4 +55,21 @@ public class Candidat {
 	public HashMap<Long, DailyReport> getDailyReports() {
 		return dailyReports;
 	}
+
+	public void setNicknames(List<String> nicknames) {
+		this.nicknames = nicknames;
+	}
+
+	public void setDailyReports(HashMap<Long, DailyReport> dailyReports) {
+		this.dailyReports = dailyReports;
+	}
+
+	public HashMap<Region, Integer> getGeoReport() {
+		return geoReport;
+	}
+
+	public void setGeoReport(HashMap<Region, Integer> geoLocReport) {
+		this.geoReport = geoLocReport;
+	}
+
 }

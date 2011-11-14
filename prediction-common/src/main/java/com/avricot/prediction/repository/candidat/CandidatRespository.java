@@ -1,7 +1,10 @@
 package com.avricot.prediction.repository.candidat;
 
+import java.util.List;
+
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 
 import com.avricot.prediction.model.candidat.Candidat;
 import com.avricot.prediction.model.candidat.Candidat.CandidatName;
@@ -30,8 +33,7 @@ public interface CandidatRespository extends MongoRepository<Candidat, ObjectId>
 	 * @return the candidat with the given name, but doesn't load the report
 	 *         collection.
 	 */
-	/*
-	 * @Query(value = "", fields = "{dailyReports : false}") Candidat
-	 * findAllNoReports();
-	 */
+
+	@Query(value = "{}", fields = "{dailyReports : false}")
+	List<Candidat> findAllNoReports();
 }
