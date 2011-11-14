@@ -12,8 +12,6 @@
            http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring 
            http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring/ehcache-spring-1.1.xsd">
 
-	<!-- cache manager for cached repositories -->
-	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean" p:configLocation="classpath:/ehcache.xml" />
 	<!--
 		- The controllers are autodetected POJOs labeled with the @Controller annotation.
 		- @Repository
@@ -21,6 +19,7 @@
 	-->
 	<context:component-scan base-package="com.avricot.prediction"/>
 
-	<import resource="mongo-context.xml"/>
+	<import resource="classpath:mongo-context.xml"/>
+	<import resource="classpath:ehcache-context.xml"/>
 
 </beans>
