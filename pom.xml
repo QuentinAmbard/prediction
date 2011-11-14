@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.avricot</groupId>
@@ -15,7 +16,7 @@
 		<module>prediction-data</module>
 		<module>prediction-web</module>
 	</modules>
-	
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<encoding>UTF-8</encoding>
@@ -24,15 +25,15 @@
 		<maven-surefire-plugin.version>2.7.2</maven-surefire-plugin.version>
 		<jaxb2-maven-plugin.version>1.3</jaxb2-maven-plugin.version>
 		<maven-war-plugin.version>2.1.1</maven-war-plugin.version>
-		
-		<!-- versions-->
+
+		<!-- versions -->
 		<inject-api.version>1</inject-api.version>
 		<spring.version>3.0.5.RELEASE</spring.version>
 		<slf4j.version>1.5.6</slf4j.version>
 		<powermock.version>1.4.8</powermock.version>
 	</properties>
 	<dependencies>
-			<!-- Logging -->
+		<!-- Logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>com.springsource.slf4j.api</artifactId>
@@ -73,7 +74,7 @@
 			<artifactId>easymock</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
+
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -101,14 +102,14 @@
 				<artifactId>prediction-sentiments</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-			
+
 			<!-- Validation -->
 			<dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-validator-annotation-processor</artifactId>
 				<version>4.1.0.Final</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>javax.inject</groupId>
 				<artifactId>javax.inject</artifactId>
@@ -247,6 +248,13 @@
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>org.springframework.context.support</artifactId>
+				<version>3.0.5.RELEASE</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
 
 
 			<dependency>
@@ -293,10 +301,10 @@
 			</dependency>
 			<!-- ehcache -->
 			<dependency>
-			    <groupId>net.sf.ehcache</groupId>
-			    <artifactId>ehcache-core</artifactId>
-			    <version>2.4.6</version>
-			</dependency>			
+				<groupId>net.sf.ehcache</groupId>
+				<artifactId>ehcache-core</artifactId>
+				<version>2.4.6</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -362,7 +370,7 @@
 						</archive>
 					</configuration>
 				</plugin>
-				
+
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
@@ -386,7 +394,7 @@
 			<email>quentin.ambard@gmail.com</email>
 		</developer>
 	</developers>
-	
+
 	<repositories>
 		<!-- spring repositories -->
 		<repository>
@@ -431,9 +439,16 @@
 			<url>https://repository.jboss.org/nexus/content/groups/public-jboss/</url>
 		</repository>
 		<!-- twitter4j -->
-		<repository> <id>twitter4j.org</id> <name>twitter4j.org Repository</name> 
-			<url>http://twitter4j.org/maven2</url> <releases> <enabled>true</enabled> 
-			</releases> <snapshots> <enabled>true</enabled> </snapshots> 
+		<repository>
+			<id>twitter4j.org</id>
+			<name>twitter4j.org Repository</name>
+			<url>http://twitter4j.org/maven2</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
 		</repository>
 		<repository>
 			<id>spring-snapshot</id>
