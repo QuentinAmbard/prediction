@@ -12,6 +12,8 @@
 
 
     <bean id="contextApplicationContextProvider" class="com.avricot.prediction.insight.ApplicationContextProvider"></bean>
+    
+    <bean id="insightImport" class="com.avricot.prediction.insight.InsightImport"/>
     <!--
         - The controllers are autodetected POJOs labeled with the @Controller annotation.
         - @Repository

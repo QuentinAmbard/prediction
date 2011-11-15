@@ -15,4 +15,12 @@ public class DailyReport {
 	public void setTweetReport(TweetReport tweetReport) {
 		this.tweetReport = tweetReport;
 	}
+
+	public int getInsight() {
+		return insight;
+	}
+
+	public void setInsight(int insight) {
+		this.insight = insight;
+	}
 }

@@ -1,0 +1,3 @@
+{"_class" : "com.avricot.prediction.model.candidat.Candidat", "name" : "SARKOZY", "nicknames" : [ "Sarko", "Sarkozy", "Nicolas Sarkozy", "Nicolas S" ], "dailyReports" : { }, "geoReport" : { } }
+{"_class" : "com.avricot.prediction.model.candidat.Candidat", "name" : "LEPEN", "nicknames" : [ "Lepen", "Marine Lepen", "Marine L"], "dailyReports" : { }, "geoReport" : { } }
+{"_class" : "com.avricot.prediction.model.candidat.Candidat", "name" : "HOLLANDE", "nicknames" : [ "Francois Hollande", "François Hollande", "Hollande", "Francois H"], "dailyReports" : { }, "geoReport" : { } }
