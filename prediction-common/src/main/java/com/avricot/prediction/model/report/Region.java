@@ -35,4 +35,14 @@ public enum Region {
 	public String getName() {
 		return name;
 	}
+
+	public static Region findByName(String name) {
+		String nameLowerCase = name.toLowerCase();
+		for (Region region : Region.values()) {
+			if (region.getName().toLowerCase().equals(nameLowerCase)) {
+				return region;
+			}
+		}
+		return null;
+	}
 }
