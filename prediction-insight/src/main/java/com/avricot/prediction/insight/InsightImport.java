@@ -30,7 +30,11 @@ public class InsightImport {
 
 	@Inject
 	private CandidatRespository candidatRepository;
-	private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	private final SimpleDateFormat dateFormat;
+
+	public InsightImport(String datePattern) {
+		dateFormat = new SimpleDateFormat(datePattern);
+	}
 
 	public void importInsight() {
 
