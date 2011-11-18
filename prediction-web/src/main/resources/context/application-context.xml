@@ -12,14 +12,6 @@
            http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring 
            http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring/ehcache-spring-1.1.xsd">
 
-	<!--
-		- The controllers are autodetected POJOs labeled with the @Controller annotation.
-		- @Repository
-		- @Service etc.
-	-->
-	<context:component-scan base-package="com.avricot.prediction"/>
-
-	<import resource="classpath:mongo-context.xml"/>
-	<import resource="classpath:ehcache-context.xml"/>
+	<import resource="classpath:default-context.xml"/>
 
 </beans>

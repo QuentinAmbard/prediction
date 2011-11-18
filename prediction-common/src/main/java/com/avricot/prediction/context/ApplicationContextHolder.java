@@ -1,8 +1,8 @@
-package com.avricot.prediction.insight;
+package com.avricot.prediction.context;
 
 import org.springframework.context.ApplicationContext;
 
-public class AppContext {
+public class ApplicationContextHolder {
 
 	private static ApplicationContext ctx;
 

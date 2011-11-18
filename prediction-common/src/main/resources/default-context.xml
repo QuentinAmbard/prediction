@@ -5,7 +5,13 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
-	<context:component-scan base-package="com.avricot.prediction" />
+    <context:component-scan base-package="com.avricot.prediction"/>
+    
+    <context:property-placeholder location="classpath*:*.properties" />
+    
+    <import resource="classpath:context/ehcache-context.xml"/>
+    <import resource="classpath:context/mongo-context.xml"/>
 
+    <bean id="contextApplicationContextProvider" class="com.avricot.prediction.context.ApplicationContextProvider" />
 
 </beans>

@@ -45,4 +45,8 @@ public enum Region {
 		}
 		return null;
 	}
+
+	public int getPopulation() {
+		return population;
+	}
 }

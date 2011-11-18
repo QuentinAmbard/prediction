@@ -11,7 +11,7 @@
            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
 
-    <bean id="contextApplicationContextProvider" class="com.avricot.prediction.insight.ApplicationContextProvider"></bean>
+    <import resource="classpath:default-context.xml"/>
     
     <bean id="insightImport" class="com.avricot.prediction.insight.InsightImport">
     	<constructor-arg value="yyyy-MM-dd" />
@@ -21,9 +21,6 @@
         - @Repository
         - @Service etc.
     -->
-    <context:component-scan base-package="com.avricot.prediction"/>
 
-    <import resource="classpath:/mongo-context.xml"/>
-    <import resource="classpath:/ehcache-context.xml"/>
 
 </beans>
