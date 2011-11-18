@@ -1,12 +1,12 @@
 package com.avricot.prediction;
 
-import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import com.avricot.prediction.context.ApplicationContextHolder;
 
 public class Main {
 	public static void main(String[] args) {
-		ClassPathXmlApplicationContext appContext = new ClassPathXmlApplicationContext(new String[] { "classpath:context/application-context.xml" });
-		BeanFactory factory = (BeanFactory) appContext;
-		AppContext.getApplicationContext().getBean(TwitterListener.class).listen();
+		new ClassPathXmlApplicationContext(new String[] { "classpath:context/application-context.xml" });
+		ApplicationContextHolder.getApplicationContext().getBean(TwitterListener.class).listen();
 	}
 }
