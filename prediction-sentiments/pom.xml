@@ -11,10 +11,18 @@
 	<groupId>com.avricot</groupId>
 	<artifactId>prediction-sentiments</artifactId>
 	<packaging>jar</packaging>
-
 	<name>prediction-sentiments</name>
 
 	<dependencies>
-		<!-- tes deps ici -->
+		<dependency>
+		    <groupId>com.google.guava</groupId>
+		    <artifactId>guava</artifactId>
+		    <version>r09</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.jsoup</groupId>
+		    <artifactId>jsoup</artifactId>
+		    <version>1.6.1</version>
+		</dependency>
 	</dependencies>
 </project>
