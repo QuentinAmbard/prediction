@@ -13,7 +13,8 @@
 	<modules>
 		<module>prediction-common</module>
 		<module>prediction-sentiments</module>
-		<module>prediction-data</module>
+		<module>prediction-mashup</module>
+		<module>prediction-twitter</module>
 		<module>prediction-insight</module>
 		<module>prediction-web</module>
 	</modules>
@@ -95,9 +96,14 @@
 			</dependency>
 			<dependency>
 				<groupId>com.avricot</groupId>
-				<artifactId>prediction-data</artifactId>
+				<artifactId>prediction-twitter</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+                        <dependency>
+                                <groupId>com.avricot</groupId>
+                                <artifactId>prediction-mashup</artifactId>
+                                <version>${project.version}</version>
+                        </dependency>
 			<dependency>
 				<groupId>com.avricot</groupId>
 				<artifactId>prediction-sentiments</artifactId>

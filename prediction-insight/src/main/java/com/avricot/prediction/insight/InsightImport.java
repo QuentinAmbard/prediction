@@ -51,13 +51,11 @@ public class InsightImport {
 
 		String[] nextLine;
 		try {
-			while ((nextLine = csvReader.readNext()) != null) {
+			// Read the first part of the exported file
+			while ((nextLine = csvReader.readNext()) != null && !"".equals(nextLine[0])) {
 				for (String l : nextLine) {
 					System.out.println(l);
 				}
-			}
-			// Read the first part of the exported file
-			while ((nextLine = csvReader.readNext()) != null && !"".equals(nextLine[0])) {
 				scanGenericLine(nextLine, candidats);
 			}
 			// Skip 4 lines
@@ -128,7 +126,7 @@ public class InsightImport {
 		Resource ressource = ApplicationContextHolder.getApplicationContext().getResource(csvPath);
 		try {
 			reader = new FileReader(ressource.getFile());
-			csvReader = new CSVReader(reader, '\t', '"', 5);
+			csvReader = new CSVReader(reader, ',', '"', 5);
 		} catch (FileNotFoundException e) {
 			LOGGER.error("can't open file" + csvPath, e);
 		} catch (IOException e) {
@@ -169,6 +167,9 @@ public class InsightImport {
 	 * @param candidats
 	 */
 	private void scanGenericLine(String[] line, List<Candidat> candidats) {
+		if (" ".equals(line[1])) {
+			return;
+		}
 		try {
 			Date date = dateFormat.parse(line[0]);
 			Long timestamp = DateUtils.getMidnightTimestamp(date);

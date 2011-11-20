@@ -4,7 +4,11 @@ import com.avricot.prediction.model.report.tweeter.TweetReport;
 
 public class DailyReport {
 	private TweetReport tweetReport;
-	private int insight;
+	private float insight;
+	private float buzz;
+	private float tendance;
+	private PolarityReport negativePolarity;
+	private PolarityReport positivePolarity;
 
 	// YoutubeReport,
 
@@ -16,11 +20,44 @@ public class DailyReport {
 		this.tweetReport = tweetReport;
 	}
 
-	public int getInsight() {
+	public float getInsight() {
 		return insight;
 	}
 
-	public void setInsight(int insight) {
+	public void setInsight(float insight) {
 		this.insight = insight;
 	}
+
+	public float getBuzz() {
+		return buzz;
+	}
+
+	public void setBuzz(float buzz) {
+		this.buzz = buzz;
+	}
+
+	public float getTendance() {
+		return tendance;
+	}
+
+	public void setTendance(float tendance) {
+		this.tendance = tendance;
+	}
+
+	public PolarityReport getNegativePolarity() {
+		return negativePolarity;
+	}
+
+	public void setNegativePolarity(PolarityReport negativePolarity) {
+		this.negativePolarity = negativePolarity;
+	}
+
+	public PolarityReport getPositivePolarity() {
+		return positivePolarity;
+	}
+
+	public void setPositivePolarity(PolarityReport positivePolarity) {
+		this.positivePolarity = positivePolarity;
+	}
+
 }

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bson.types.ObjectId;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -28,14 +29,20 @@ public class Candidat {
 		this.id = new ObjectId();
 	}
 
-	public ObjectId getId() {
+	public String getId() {
+		return id.toStringMongod();
+	}
+
+	@JsonIgnore
+	public ObjectId getObjectId() {
 		return id;
 	}
 
-	public void setId(ObjectId id) {
+	public void setObjectId(ObjectId id) {
 		this.id = id;
 	}
 
+	@JsonIgnore
 	public List<String> getNicknames() {
 		return nicknames;
 	}

@@ -10,23 +10,14 @@
 	</parent>
 
 	<groupId>com.avricot</groupId>
-	<artifactId>prediction-data</artifactId>
+	<artifactId>prediction-mashup</artifactId>
 	<packaging>jar</packaging>
-	<name>prediction-data</name>
+	<name>prediction-mashup</name>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.avricot</groupId>
 			<artifactId>prediction-common</artifactId>
-		</dependency>
-		<!-- Twitter -->
-		<dependency>
-			<groupId>org.twitter4j</groupId>
-			<artifactId>twitter4j-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.twitter4j</groupId>
-			<artifactId>twitter4j-stream</artifactId>
 		</dependency>
 	</dependencies>
 </project>
