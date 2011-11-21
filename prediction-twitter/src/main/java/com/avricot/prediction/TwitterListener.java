@@ -26,7 +26,7 @@ public class TwitterListener {
 
 	@Inject
 	CandidatRespository candidatRespository;
-	
+
 	private static Logger LOG = Logger.getLogger(TwitterListener.class);
 
 	private List<Candidat> candidats;
@@ -37,10 +37,11 @@ public class TwitterListener {
 
 		UserStreamListener userListener = new CandidatStreamListener() {
 
+			@Override
 			public void onStatus(Status status) {
 
 				checkCandidatConcerned(status);
-				
+
 				LOG.info("@" + status.getUser().getScreenName() + " - " + status.getText());
 				if (status.getGeoLocation() != null) {
 					LOG.info(status.getGeoLocation().toString());
@@ -76,13 +77,13 @@ public class TwitterListener {
 	private void saveTweet(Status status, Candidat candidat) {
 		Tweet tweet = new Tweet();
 
-		tweet.setCandidatId(candidat.getId());
+		tweet.setCandidatId(candidat.getObjectId());
 		tweet.setValue(status.getText());
 		tweet.setDate(new Date());
 		tweet.setUserId(status.getUser().getScreenName());
 
 		tweeterRepository.save(tweet);
-		
+
 		LOG.info("Tweet saved : " + status.getText() + " (" + candidat.getName() + ")");
 	}
 }

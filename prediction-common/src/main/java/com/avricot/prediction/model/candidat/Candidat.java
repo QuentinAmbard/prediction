@@ -1,6 +1,7 @@
 package com.avricot.prediction.model.candidat;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -16,6 +17,13 @@ import com.avricot.prediction.model.report.Region;
 public class Candidat {
 	@Id
 	private ObjectId id;
+	private String schemeUrl;
+	private String tendancy;
+	private String description;
+	private Date birthday;
+	private String siteUrl;
+	private String partiFullName;
+	private String parti;
 	private CandidatName name;
 	private String displayName;
 	private List<String> nicknames = new ArrayList<String>();
@@ -82,6 +90,30 @@ public class Candidat {
 
 	public List<DailyReport> getDailyReports() {
 		return dailyReports;
+	}
+
+	public String getSiteUrl() {
+		return siteUrl;
+	}
+
+	public void setSiteUrl(String siteUrl) {
+		this.siteUrl = siteUrl;
+	}
+
+	public String getPartiFullName() {
+		return partiFullName;
+	}
+
+	public void setPartiFullName(String partiFullName) {
+		this.partiFullName = partiFullName;
+	}
+
+	public String getParti() {
+		return parti;
+	}
+
+	public void setParti(String parti) {
+		this.parti = parti;
 	}
 
 }
