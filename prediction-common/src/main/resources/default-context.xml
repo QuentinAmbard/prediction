@@ -7,11 +7,23 @@
 
     <context:component-scan base-package="com.avricot.prediction"/>
     
-    <context:property-placeholder location="classpath*:*.properties" />
+    <bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+      	<property name="locations">
+   	      	<list>
+	      		<value>classpath:mongo.properties</value>
+	      		<value>classpath:default.properties</value>
+	      	</list>
+      	</property>
+      	<property name="ignoreResourceNotFound" value="true" />
+      	<property name="systemPropertiesMode">
+      		<util:constant static-field="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+      	</property>
+	</bean>
+    
+    <bean id="contextApplicationContextProvider" class="com.avricot.prediction.context.ApplicationContextProvider" />
     
     <import resource="classpath:context/ehcache-context.xml"/>
     <import resource="classpath:context/mongo-context.xml"/>
 
-    <bean id="contextApplicationContextProvider" class="com.avricot.prediction.context.ApplicationContextProvider" />
 
 </beans>

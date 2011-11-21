@@ -116,4 +116,36 @@ public class Candidat {
 		this.parti = parti;
 	}
 
+	public String getSchemeUrl() {
+		return schemeUrl;
+	}
+
+	public void setSchemeUrl(String schemeUrl) {
+		this.schemeUrl = schemeUrl;
+	}
+
+	public String getTendancy() {
+		return tendancy;
+	}
+
+	public void setTendancy(String tendancy) {
+		this.tendancy = tendancy;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public Date getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
+	}
+
 }

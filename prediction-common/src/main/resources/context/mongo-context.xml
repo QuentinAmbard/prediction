@@ -8,10 +8,10 @@
       http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd">
 
 	<!-- Default bean name is 'mongo' -->
-	<mongo:mongo host="localhost" port="27017" />
+	<mongo:mongo host="${mongo.host}" port="${mongo.port}" />
 	<mongo:mapping-converter base-package="com.avricot.prediction" />
 
-	<mongo:db-factory dbname="prediction" mongo-ref="mongo" />
+	<mongo:db-factory dbname="${mongo.dbname}" mongo-ref="mongo" password="${mongo.password}" />
 
 	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
 		<constructor-arg ref="mongoDbFactory" />
