@@ -17,8 +17,9 @@ public class Candidat {
 	@Id
 	private ObjectId id;
 	private CandidatName name;
+	private String displayName;
 	private List<String> nicknames = new ArrayList<String>();
-	private HashMap<Long, DailyReport> dailyReports = new HashMap<Long, DailyReport>();
+	private final List<DailyReport> dailyReports = new ArrayList<DailyReport>();
 	private HashMap<Region, Integer> geoReport = new HashMap<Region, Integer>();
 
 	public Candidat() {
@@ -47,10 +48,6 @@ public class Candidat {
 		return nicknames;
 	}
 
-	public static enum CandidatName {
-		SARKOZY, HOLLANDE, LEPEN;
-	}
-
 	public CandidatName getName() {
 		return name;
 	}
@@ -59,16 +56,8 @@ public class Candidat {
 		this.name = name;
 	}
 
-	public HashMap<Long, DailyReport> getDailyReports() {
-		return dailyReports;
-	}
-
 	public void setNicknames(List<String> nicknames) {
 		this.nicknames = nicknames;
-	}
-
-	public void setDailyReports(HashMap<Long, DailyReport> dailyReports) {
-		this.dailyReports = dailyReports;
 	}
 
 	public HashMap<Region, Integer> getGeoReport() {
@@ -77,6 +66,22 @@ public class Candidat {
 
 	public void setGeoReport(HashMap<Region, Integer> geoLocReport) {
 		this.geoReport = geoLocReport;
+	}
+
+	public String getDisplayName() {
+		return displayName;
+	}
+
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
+	}
+
+	public static enum CandidatName {
+		SARKOZY, HOLLANDE, LEPEN;
+	}
+
+	public List<DailyReport> getDailyReports() {
+		return dailyReports;
 	}
 
 }

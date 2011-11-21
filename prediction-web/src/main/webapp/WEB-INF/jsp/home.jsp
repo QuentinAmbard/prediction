@@ -7,6 +7,8 @@
 	<link href="./resources/styles/default.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="./resources/js/mootools.js"></script>
 	<script type="text/javascript" src="./resources/js/prediction/dataHandler.js"></script>
+	<script type="text/javascript" src="./resources/js/prediction/pie.js"></script>
+	<script type="text/javascript" src="./resources/js/prediction/chart.js"></script>
 	<script type="text/javascript" src="./resources/js/highcharts/adapters/mootools-adapter.js"></script>
 	<script type="text/javascript" src="./resources/js/highcharts/highcharts.src.js"></script>
 		<!-- 1a) Optional: add a theme file -->
@@ -17,6 +19,7 @@
 
 <body>
 	<div id="containerPie" style="width: 800px; height: 400px; margin: 0 auto"></div>
+	<div id="containerChart" style="width: 1000px; height: 400px; margin: 0 auto"></div>
 </body> 
 		<!-- 2. Add the JavaScript to initialize the chart on document ready -->
 		<script type="text/javascript">

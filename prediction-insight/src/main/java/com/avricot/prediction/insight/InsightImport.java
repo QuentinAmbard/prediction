@@ -68,10 +68,7 @@ public class InsightImport {
 		} catch (IOException e) {
 			LOGGER.error("can't read next line of the csv.", e);
 		} finally {
-			// Save the candidates
-			for (Candidat candidat : candidats) {
-				candidatRepository.save(candidat);
-			}
+			candidatRepository.save(candidats);
 		}
 	}
 
@@ -172,19 +169,24 @@ public class InsightImport {
 		}
 		try {
 			Date date = dateFormat.parse(line[0]);
-			Long timestamp = DateUtils.getMidnightTimestamp(date);
+			long timestamp = DateUtils.getMidnightTimestamp(date);
 			for (int i = 0; i < candidats.size(); i++) {
 				Candidat candidat = candidats.get(i);
 				try {
 					int value = Integer.valueOf(line[i + 1]);
-					DailyReport dailyReport;
-					if (!candidat.getDailyReports().containsKey(timestamp)) {
-						dailyReport = new DailyReport();
-						candidat.getDailyReports().put(timestamp, dailyReport);
-					} else {
-						dailyReport = candidat.getDailyReports().get(timestamp);
+					DailyReport dailyReport = null;
+					for (DailyReport d : candidat.getDailyReports()) {
+						if (d != null && d.getTimestamp() == timestamp) {
+							dailyReport = d;
+							break;
+						}
+					}
+					if (dailyReport == null) {
+						dailyReport = new DailyReport(timestamp);
+						candidat.getDailyReports().add(dailyReport);
 					}
 					dailyReport.setInsight(value);
+					LOGGER.info("add " + value + " for " + timestamp + " (candidat:" + candidat.getName());
 				} catch (NumberFormatException e) {
 					LOGGER.error("error scanning generic line" + i + "value=" + line.toString(), e);
 				}

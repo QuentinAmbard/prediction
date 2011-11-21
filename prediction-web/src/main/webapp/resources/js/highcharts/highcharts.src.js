@@ -958,10 +958,10 @@ defaultOptions = {
 	symbols: ['circle', 'diamond', 'square', 'triangle', 'triangle-down'],
 	lang: {
 		loading: 'Loading...',
-		months: ['January', 'February', 'March', 'April', 'May', 'June', 'July',
-				'August', 'September', 'October', 'November', 'December'],
-		shortMonths: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-		weekdays: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+		months: ['Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet',
+				'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre'],
+		shortMonths: ['Janv.', 'Fev', 'Mars', 'Avr.', 'Mai', 'Juin', 'Juil.', 'Aout', 'Sept.', 'Oct.', 'Nov.', 'Dec.'],
+		weekdays: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
 		decimalPoint: '.',
 		resetZoom: 'Reset zoom',
 		resetZoomTitle: 'Reset zoom level 1:1',
@@ -1213,7 +1213,7 @@ var defaultXAxisOptions =  {
 		second: '%H:%M:%S',
 		minute: '%H:%M',
 		hour: '%H:%M',
-		day: '%e. %b',
+		day: '%e %b',
 		week: '%e. %b',
 		month: '%b \'%y',
 		year: '%Y'
@@ -6114,9 +6114,10 @@ function Chart(options, callback) {
 				s;
 
 			// build the header
+			//Quentin change date format
 			s = useHeader ?
 				['<span style="font-size: 10px">' +
-				(isDateTime ? dateFormat('%A, %b %e, %Y', x) :  x) +
+				(isDateTime ? dateFormat('%A %e %b %Y', x) :  x) +
 				'</span>'] : [];
 
 			// build the values
@@ -8706,10 +8707,10 @@ Point.prototype = {
 	tooltipFormatter: function (useHeader) {
 		var point = this,
 			series = point.series;
-
+		//Quentin rajoute %
 		return ['<span style="color:' + series.color + '">', (point.name || series.name), '</span>: ',
 			(!useHeader ? ('<b>x = ' + (point.name || point.x) + ',</b> ') : ''),
-			'<b>', (!useHeader ? 'y = ' : ''), point.y, '</b>'].join('');
+			'<b>', (!useHeader ? 'y = ' : ''), point.y, ' %</b>'].join('');
 
 	},
 
@@ -10968,6 +10969,7 @@ var PieSeries = extendClass(Series, {
 	translate: function () {
 		var total = 0,
 			series = this,
+			//Quentin
 			cumulative = -1, // -0.25 start at top
 			precision = 1000, // issue #172
 			options = series.options,
@@ -11026,8 +11028,10 @@ var PieSeries = extendClass(Series, {
 			fraction = total ? point.y / total : 0;
 			console.log(fraction);
 			start = mathRound(cumulative * circ * precision) / precision;
+			console.log("start:"+start*180/Math.PI);
 			cumulative += fraction;
 			end = mathRound(cumulative * circ * precision) / precision;
+			console.log("end:"+end*180/Math.PI);
 
 			// set the shape
 			point.shapeType = 'arc';
@@ -11065,9 +11069,18 @@ var PieSeries = extendClass(Series, {
 				positions[1] + radiusY, // a/a
 				labelDistance < 0 ? // alignment
 					'center' :
-					angle < circ / 4 ? 'left' : 'right', // alignment
-				angle // center angle
+					angle > -Math.PI/2 ? 'left' : 'right', // alignment
+				angle// center angle
 			];
+			console.log(angle*180/Math.PI)
+			//point.labelPos = [228.08852261990546, 135.09777127793825, 236.66661413673168, 137.8210681638753, 256.68216100932614, 144.17542756439508, "right", 3.449] ;
+			/*
+				[531.1560478621403, 91.98817123269086, 523.6775817502388, 96.99542043890591, 506.2278274891354, 108.67900192007437, "left", -0.59]
+				[437.3206883828311, 349.6510590709573, 434.8136320446679, 341.00729435196615, 428.963833922287, 320.83851000765355, "left", 1.2885]
+				[228.08852261990546, 135.09777127793825, 236.66661413673168, 137.8210681638753, 256.68216100932614, 144.17542756439508, "right", 3.449]
+
+			 */
+			console.log(point.labelPos);
 			// API properties
 			point.percentage = fraction * 100;
 			point.total = total;
@@ -11217,7 +11230,8 @@ var PieSeries = extendClass(Series, {
 		each(data, function (point) {
 			if (point.dataLabel) { // it may have been cancelled in the base method (#407)
 				halves[
-					point.labelPos[7] < mathPI / 2 ? 0 : 1
+					//Quentin point.labelPos[7] < mathPI / 2 ? 0 : 1
+					point.labelPos[7] < -mathPI / 2 ? 1 : 0
 				].push(point);
 			}
 		});

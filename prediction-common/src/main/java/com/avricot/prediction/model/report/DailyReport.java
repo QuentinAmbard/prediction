@@ -3,6 +3,7 @@ package com.avricot.prediction.model.report;
 import com.avricot.prediction.model.report.tweeter.TweetReport;
 
 public class DailyReport {
+	private long timestamp;
 	private TweetReport tweetReport;
 	private float insight;
 	private float buzz;
@@ -10,7 +11,13 @@ public class DailyReport {
 	private PolarityReport negativePolarity;
 	private PolarityReport positivePolarity;
 
-	// YoutubeReport,
+	public DailyReport() {
+
+	}
+
+	public DailyReport(long timestamp) {
+		this.timestamp = timestamp;
+	}
 
 	public TweetReport getTweetReport() {
 		return tweetReport;
@@ -58,6 +65,14 @@ public class DailyReport {
 
 	public void setPositivePolarity(PolarityReport positivePolarity) {
 		this.positivePolarity = positivePolarity;
+	}
+
+	public long getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
 	}
 
 }
