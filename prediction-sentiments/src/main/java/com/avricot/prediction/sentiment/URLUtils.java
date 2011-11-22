@@ -15,21 +15,26 @@ public class URLUtils {
 	 * @param stringToScan
 	 * @return
 	 */
-	public static List<URL> URLInString(String stringToScan) {
+	public static List<String> URLInString(String stringToScan) {
 		String[] parts = stringToScan.split("\\s");
-		List<URL> foundUrl = new ArrayList<URL>();
+		List<String> foundUrl = new ArrayList<String>();
 		
 		/* On essaye de convertir en URL */
 		for (String string : parts) {
 			try {
 				URL url = new URL(string);
-				foundUrl.add(url);
+				foundUrl.add(string);
 			} catch (MalformedURLException e) {
 				/* Ce n'est pas une URL*/
 			}
 		}
 		
 		return foundUrl;
+	}
+	
+	public static String url2String(URL url) {
+		return null;
+		
 	}
 	
 }
