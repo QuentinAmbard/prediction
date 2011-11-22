@@ -3,6 +3,7 @@ package com.avricot.prediction.model.tweet;
 import java.util.Date;
 
 import org.bson.types.ObjectId;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -20,9 +21,6 @@ public class Tweet {
 	private float score;
 	private boolean checked = false; // True when manually checked.
 
-	public ObjectId getId() {
-		return id;
-	}
 
 	public void setId(ObjectId id) {
 		this.id = id;
@@ -82,5 +80,18 @@ public class Tweet {
 
 	public void setScore(float score) {
 		this.score = score;
+	}
+	
+	public String getId() {
+		return id.toStringMongod();
+	}
+
+	@JsonIgnore
+	public ObjectId getObjectId() {
+		return id;
+	}
+
+	public void setObjectId(ObjectId id) {
+		this.id = id;
 	}
 }
