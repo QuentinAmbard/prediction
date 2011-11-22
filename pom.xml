@@ -31,7 +31,7 @@
 		<!-- versions -->
 		<inject-api.version>1</inject-api.version>
 		<spring.version>3.0.5.RELEASE</spring.version>
-		<slf4j.version>1.5.6</slf4j.version>
+		<slf4j.version>1.6.1</slf4j.version>
 		<powermock.version>1.4.8</powermock.version>
 	</properties>
 	<dependencies>
