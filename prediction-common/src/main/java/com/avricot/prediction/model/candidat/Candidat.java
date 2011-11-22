@@ -84,10 +84,6 @@ public class Candidat {
 		this.displayName = displayName;
 	}
 
-	public static enum CandidatName {
-		SARKOZY, HOLLANDE, LEPEN;
-	}
-
 	public List<DailyReport> getDailyReports() {
 		return dailyReports;
 	}
@@ -146,6 +142,10 @@ public class Candidat {
 
 	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
+	}
+
+	public static enum CandidatName {
+		SARKOZY, HOLLANDE, LEPEN, BOUTIN, NIHOUS, MELENCHON, JOLY, LEPAGE, BAYROU, CHEVENEMENT;
 	}
 
 }
