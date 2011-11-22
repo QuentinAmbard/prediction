@@ -24,5 +24,9 @@
 		    <artifactId>jsoup</artifactId>
 		    <version>1.6.1</version>
 		</dependency>
+		<dependency>
+			<groupId>com.avricot</groupId>
+			<artifactId>prediction-common</artifactId>
+		</dependency>
 	</dependencies>
 </project>
