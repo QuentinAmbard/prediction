@@ -5,13 +5,16 @@
 <title>Polarity</title>
 <script type="text/javascript" src="./js/mootools.js"></script>
 <style>
-
-input{
-margin: 3px;
+input {
+	margin: 3px;
+	padding-top: 15px;
+	padding-bottom: 15px;
 }
 
-#candidat{
-font-weight: bold;
+#candidat {
+	font-weight: bold;
+	padding-top: 15px;
+	padding-bottom: 15px;
 }
 </style>
 
@@ -21,10 +24,15 @@ font-weight: bold;
 	<div id="candidat"></div>
 	<div id="tweet"></div>
 	<div id="buttons">
-		<input style="background-color: #BFB;" type="button" value="POSITIVE" onclick="go('positive')">
-		<input style="background-color: #BBF;" type="button" value="NEUTRAL" onclick="go('neutral')">
-		<input style="background-color: #FBB;" type="button" value="NEGATIVE" onclick="go('negative')">
-		<input type="button" value="DELETE" onclick="go('delete')">
+		<input style="background-color: #BFB;" type="button" value="POSITIVE"
+			onclick="go('positive')"> <input
+			style="background-color: #BBF;" type="button" value="NEUTRAL"
+			onclick="go('neutral')"> <input
+			style="background-color: #FBB;" type="button" value="NEGATIVE"
+			onclick="go('negative')"> <input
+			style="background-color: #FFB;" type="button" value="INVALID"
+			onclick="go('invalid')"> <input type="button"
+			value="NOT FRENCH" onclick="go('not_french')">
 	</div>
 
 	<script type="text/javascript">
@@ -36,10 +44,12 @@ font-weight: bold;
 					$('candidat').innerHTML = tNc.candidat.name;
 					$('tweet').innerHTML = tNc.tweet.value;
 					tweetId = tNc.tweet.id;
+					$('buttons').style.display = 'block';
 				}
 			}).get();
 		}
 		function go(val) {
+			$('buttons').style.display = 'none';
 			var jsonRequest = new Request({
 				url : '../addPolarity',
 				onSuccess : function() {

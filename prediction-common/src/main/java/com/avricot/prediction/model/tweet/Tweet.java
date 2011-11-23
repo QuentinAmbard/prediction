@@ -5,6 +5,7 @@ import java.util.Date;
 import org.bson.types.ObjectId;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.avricot.prediction.report.Polarity;
@@ -13,6 +14,7 @@ import com.avricot.prediction.report.Polarity;
 public class Tweet {
 	@Id
 	private ObjectId id;
+	@Indexed
 	private String value;
 	private ObjectId candidatId;
 	private String userId;
@@ -89,9 +91,5 @@ public class Tweet {
 	@JsonIgnore
 	public ObjectId getObjectId() {
 		return id;
-	}
-
-	public void setObjectId(ObjectId id) {
-		this.id = id;
 	}
 }
