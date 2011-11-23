@@ -18,7 +18,7 @@ public class TweetRepositoryImpl implements TweetRepositoryCustom {
 	@Override
 	public List<Tweet> getTweetNotChecked(int size) {
 		Query query = new Query();
-		query.addCriteria(Criteria.where("checked").is(true));
+		query.addCriteria(Criteria.where("checked").is(false));
 		query.limit(size);
         return mongoTemplate.find(query, Tweet.class);
 	}

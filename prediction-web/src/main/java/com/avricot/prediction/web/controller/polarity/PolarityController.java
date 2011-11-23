@@ -36,10 +36,10 @@ public class PolarityController {
 
 		TweetAndCandidat tweetAndCandidat = new TweetAndCandidat();
 		List<Tweet> findByChecked = tweetRepository.getTweetNotChecked(20);
-		
-		int i = (int)(Math.random()*20L);
+
+		int i = (int) (Math.random() * 20L);
 		tweetAndCandidat.tweet = findByChecked.get(i);
-		
+
 		tweetAndCandidat.candidat = candidatRespository.findOne(tweetAndCandidat.tweet.getCandidatId());
 		return tweetAndCandidat;
 	}
@@ -62,12 +62,11 @@ public class PolarityController {
 		} else if (val.equals("not_french")) {
 			p = Polarity.NOT_FRENCH;
 		}
-		
-		findOne.setChecked(true);
-		findOne.setPolarity(p);
-		tweetRepository.save(findOne);
-		
-		
+
+//		findOne.setChecked(true);
+//		findOne.setPolarity(p);
+//		tweetRepository.save(findOne);
+
 		updateTweets(p, findOne.getValue(), findOne.getCandidatId());
 	}
 
