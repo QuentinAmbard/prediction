@@ -23,6 +23,7 @@ public class Tweet {
 	private float score;
 	private boolean checked = false; // True when manually checked.
 
+	private Geolocation geolocation;
 
 	public void setId(ObjectId id) {
 		this.id = id;
@@ -83,7 +84,7 @@ public class Tweet {
 	public void setScore(float score) {
 		this.score = score;
 	}
-	
+
 	public String getId() {
 		return id.toStringMongod();
 	}
@@ -91,5 +92,43 @@ public class Tweet {
 	@JsonIgnore
 	public ObjectId getObjectId() {
 		return id;
+	}
+
+	public Geolocation getGeolocation() {
+		return geolocation;
+	}
+
+	public void setGeolocation(Geolocation geolocation) {
+		this.geolocation = geolocation;
+	}
+
+	public static class Geolocation {
+		private double lat;
+		private double lng;
+
+		public Geolocation() {
+		}
+
+		public Geolocation(double lat, double lng) {
+			super();
+			this.lat = lat;
+			this.lng = lng;
+		}
+
+		public double getLat() {
+			return lat;
+		}
+
+		public void setLat(double lat) {
+			this.lat = lat;
+		}
+
+		public double getLng() {
+			return lng;
+		}
+
+		public void setLng(double lng) {
+			this.lng = lng;
+		}
 	}
 }
