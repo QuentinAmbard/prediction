@@ -18,7 +18,10 @@ import com.aliasi.classify.Classified;
 import com.aliasi.classify.DynamicLMClassifier;
 import com.aliasi.lm.NGramProcessLM;
 import com.avricot.prediction.model.candidat.Candidat;
+import com.avricot.prediction.model.tweet.Tweet;
 import com.avricot.prediction.repository.candidat.CandidatRespository;
+import com.avricot.prediction.repository.tweet.TweetRepository;
+import com.avricot.prediction.sentiment.services.URLUtils;
 import com.google.common.base.Charsets;
 
 @Service
@@ -27,9 +30,13 @@ public class AnalysePolarite {
 	@Inject
 	CandidatRespository candidatRespository;
 	
+	@Inject
+	TweetRepository tweeterRepository;
+	
 	private static Logger LOG = Logger.getLogger(AnalysePolarite.class);
 	
 	private static final String DATA_TXT_SENTOKEN_LINGPIPE = "D:\\Dev\\2012\\workspace\\lingpipe\\data\\txt_sentoken";
+	
 	
 	String[] tweet1 = {"J'aime bien le candidat Sarkozy qui tient un grand meeting pour dénoncer la fraude, en le finançant sur le budget du président Sarkozy.",
 	"L'#UMP, premier parti de France, avec des militants déterminés à faire réélire Nicolas #Sarkozy http://bit.ly/skqpUb",
@@ -46,17 +53,19 @@ public class AnalysePolarite {
 	private DynamicLMClassifier<NGramProcessLM> mClassifier;
 	
 	public void run() throws ClassNotFoundException, IOException {
-
 		mPolarityDir = new File(DATA_TXT_SENTOKEN_LINGPIPE);
 		mCategories = mPolarityDir.list();
 		int nGram = 8;
 		mClassifier = DynamicLMClassifier.createNGramProcess(mCategories, nGram);
 		
-//		train();
-//		evaluatePolarite("http://www.liberation.fr/politiques/01012372674-presidentielle-hollande-et-sarkozy-au-coude-a-coude-au-1er-tour-sondage-lh2");
-		evaluate();
+		train();
+		evaluateTweets();
 	}
 
+	/**
+	 * Entraine le détecteur de polarité
+	 * @throws IOException
+	 */
 	void train() throws IOException {
 	    for (int i = 0; i < mCategories.length; ++i) {
 	        String category = mCategories[i];
@@ -66,45 +75,70 @@ public class AnalysePolarite {
 	        for (int j = 0; j < trainFiles.length; ++j) {
             	File trainFile = trainFiles[j];
             	String review = com.google.common.io.Files.toString(trainFile, Charsets.ISO_8859_1);
-                Classified<CharSequence> classified = new Classified<CharSequence>(review,classification);
+                Classified<CharSequence> classified = new Classified<CharSequence>(review, classification);
                 mClassifier.handle(classified);
 	        }
 	    }
 	}
 	
-	void evaluate() throws IOException {
+	/**
+	 * Evalue la polarité de tweets
+	 * @throws IOException
+	 */
+	void evaluateTweets() throws IOException {
+		
+		List<Tweet> tweetList = tweeterRepository.findAllByChecked(false);
+		
 		Classification classification = null;
-		for (int i = 0; i < tweet1.length ; i++) {
-			classification = mClassifier.classify(tweet1[i]);
-			List<String> Urls = URLUtils.URLInString(tweet1[i]);
+		for (Tweet tweet : tweetList) {
+			final String tweetValue = tweet.getValue();
+			classification = mClassifier.classify(tweetValue);
+			LOG.info(tweetValue +" => " + classification.bestCategory());
+			List<String> Urls = URLUtils.URLInString(tweetValue);
 			if(!Urls.isEmpty()) {
 				for (String url : Urls) {
 					/* SCANNER L'ARTICLE */
-					evaluatePolarite(url);
+					evaluateURLPolarite(url);
 				}
 			} 
 			System.out.println("CAT = " + classification.bestCategory());	
 		}
     }
 	
-	String evaluatePolarite(String currentUrl) throws IOException {
+	/**
+	 * Permet de récupérer la polarité d'un string
+	 * @param s
+	 * @return
+	 * @throws IOException
+	 */
+	Classification evaluate(String s) throws IOException {
+		Classification classification = null;
+		classification = mClassifier.classify(s);
+		return classification;	
+    }
+
+	/**
+	 * Analyse la polarité d'une URL en scannant la page et en traitant
+	 * une par une les phrase contenant le nom d'un candidat
+	 * @param currentUrl
+	 * @return
+	 * @throws IOException
+	 */
+	void evaluateURLPolarite(String currentUrl) throws IOException {
 		
 		candidats = candidatRespository.findAll();
 		
 		LOG.info("URL scannée : " + currentUrl);
 		Document doc = Jsoup.connect(currentUrl).get();
-		String[] splittedArticle = (doc.body().text()).split(".");
+		String[] splittedArticle = (doc.body().text()).split("\\.");
 		for (String phrase : splittedArticle) {
 			for (Candidat candidat : candidats) {
 				//TODO Gérer les surnoms
-//				LOG.info("Phrase sur " + candidat.getName().toString() + " =>> " + phrase);
-				if(phrase.indexOf(candidat.getName().toString()) != -1) {
+				if(phrase.toLowerCase().indexOf(candidat.getName().toString().toLowerCase()) != -1) {
+					LOG.info("Phrase sur " + candidat.getName().toString() + " =>> " + phrase);
 				}
 			}
 		}
-		
-//		Classification classification = mClassifier.classify(tweet1[i]);
-		return null;
 	}
 	
 }

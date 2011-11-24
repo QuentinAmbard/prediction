@@ -13,4 +13,6 @@ public interface TweetRepository extends MongoRepository<Tweet, ObjectId>, Tweet
 	public List<Tweet> findByChecked(boolean checked);
 	
 	public List<Tweet> findByValueAndCandidatId(String value, ObjectId candidatId);
+	
+	public List<Tweet> findAllByChecked(boolean checked);
 }
