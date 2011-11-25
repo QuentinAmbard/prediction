@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.avricot.prediction.model.candidat.Candidat;
+import com.avricot.prediction.model.candidat.Candidat.CandidatName;
 import com.avricot.prediction.model.tweet.Tweet;
 import com.avricot.prediction.report.Polarity;
 import com.avricot.prediction.repository.candidat.CandidatRespository;
@@ -40,7 +41,7 @@ public class PolarityController {
 		int i = (int) (Math.random() * 20L);
 		tweetAndCandidat.tweet = findByChecked.get(i);
 
-		tweetAndCandidat.candidat = candidatRespository.findOne(tweetAndCandidat.tweet.getCandidatId());
+		tweetAndCandidat.candidat = candidatRespository.findByCandidatName(tweetAndCandidat.tweet.getCandidatName());
 		return tweetAndCandidat;
 	}
 
@@ -63,15 +64,15 @@ public class PolarityController {
 			p = Polarity.NOT_FRENCH;
 		}
 
-//		findOne.setChecked(true);
-//		findOne.setPolarity(p);
-//		tweetRepository.save(findOne);
+		// findOne.setChecked(true);
+		// findOne.setPolarity(p);
+		// tweetRepository.save(findOne);
 
-		updateTweets(p, findOne.getValue(), findOne.getCandidatId());
+		updateTweets(p, findOne.getValue(), findOne.getCandidatName());
 	}
 
-	private void updateTweets(Polarity polarity, String value, ObjectId candidatId) {
-		List<Tweet> findByValueAndCandidatId = tweetRepository.findByValueAndCandidatId(value, candidatId);
+	private void updateTweets(Polarity polarity, String value, CandidatName candidat) {
+		List<Tweet> findByValueAndCandidatId = tweetRepository.findByValueAndCandidatName(value, candidat);
 		for (Tweet t : findByValueAndCandidatId) {
 			t.setChecked(true);
 			t.setPolarity(polarity);

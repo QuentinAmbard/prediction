@@ -12,5 +12,5 @@ public interface CandidatRespository extends MongoRepository<Candidat, ObjectId>
 	 * @param name
 	 * @return the candidat with the given name.
 	 */
-	Candidat findByName(CandidatName name);
+	Candidat findByCandidatName(CandidatName name);
 }

@@ -38,14 +38,14 @@ public class AnalysePolarite {
 	private static final String DATA_TXT_SENTOKEN_LINGPIPE = "D:\\Dev\\2012\\workspace\\lingpipe\\data\\txt_sentoken";
 	
 	
-	String[] tweet1 = {"J'aime bien le candidat Sarkozy qui tient un grand meeting pour dénoncer la fraude, en le finançant sur le budget du président Sarkozy.",
-	"L'#UMP, premier parti de France, avec des militants déterminés à faire réélire Nicolas #Sarkozy http://bit.ly/skqpUb",
-	"Allaitement : Barthès, chargé de com' de Sarkozy http://goo.gl/6gQnA",
-	"Union européenne : dans la crise de la dette, les bouffons se succèdent. Après #Berlusconi, c'est au tour de #Sarkozy : http://bit.ly/tioir9",
-	"Chasse aux fraudeurs, rigueur, vote des étrangers: Nicolas Sarkozy et l'UMP à droite toute pour la présidentielle http://ow.ly/7uZig",
+	String[] tweet1 = {"J'aime bien le candidat Sarkozy qui tient un grand meeting pour dï¿½noncer la fraude, en le finanï¿½ant sur le budget du prï¿½sident Sarkozy.",
+	"L'#UMP, premier parti de France, avec des militants dï¿½terminï¿½s ï¿½ faire rï¿½ï¿½lire Nicolas #Sarkozy http://bit.ly/skqpUb",
+	"Allaitement : Barthï¿½s, chargï¿½ de com' de Sarkozy http://goo.gl/6gQnA",
+	"Union europï¿½enne : dans la crise de la dette, les bouffons se succï¿½dent. Aprï¿½s #Berlusconi, c'est au tour de #Sarkozy : http://bit.ly/tioir9",
+	"Chasse aux fraudeurs, rigueur, vote des ï¿½trangers: Nicolas Sarkozy et l'UMP ï¿½ droite toute pour la prï¿½sidentielle http://ow.ly/7uZig",
 	"Sarkozy est incroyable, je l'aime",
 	"S est excellent",
-	"Francois Hollande est le candidat idéal"};
+	"Francois Hollande est le candidat idï¿½al"};
 	
 	private List<Candidat> candidats;
 	private File mPolarityDir;
@@ -63,7 +63,7 @@ public class AnalysePolarite {
 	}
 
 	/**
-	 * Entraine le détecteur de polarité
+	 * Entraine le dï¿½tecteur de polaritï¿½
 	 * @throws IOException
 	 */
 	void train() throws IOException {
@@ -82,7 +82,7 @@ public class AnalysePolarite {
 	}
 	
 	/**
-	 * Evalue la polarité de tweets
+	 * Evalue la polaritï¿½ de tweets
 	 * @throws IOException
 	 */
 	void evaluateTweets() throws IOException {
@@ -106,7 +106,7 @@ public class AnalysePolarite {
     }
 	
 	/**
-	 * Permet de récupérer la polarité d'un string
+	 * Permet de rï¿½cupï¿½rer la polaritï¿½ d'un string
 	 * @param s
 	 * @return
 	 * @throws IOException
@@ -118,7 +118,7 @@ public class AnalysePolarite {
     }
 
 	/**
-	 * Analyse la polarité d'une URL en scannant la page et en traitant
+	 * Analyse la polaritï¿½ d'une URL en scannant la page et en traitant
 	 * une par une les phrase contenant le nom d'un candidat
 	 * @param currentUrl
 	 * @return
@@ -128,14 +128,14 @@ public class AnalysePolarite {
 		
 		candidats = candidatRespository.findAll();
 		
-		LOG.info("URL scannée : " + currentUrl);
+		LOG.info("URL scannï¿½e : " + currentUrl);
 		Document doc = Jsoup.connect(currentUrl).get();
 		String[] splittedArticle = (doc.body().text()).split("\\.");
 		for (String phrase : splittedArticle) {
 			for (Candidat candidat : candidats) {
-				//TODO Gérer les surnoms
-				if(phrase.toLowerCase().indexOf(candidat.getName().toString().toLowerCase()) != -1) {
-					LOG.info("Phrase sur " + candidat.getName().toString() + " =>> " + phrase);
+				//TODO Gï¿½rer les surnoms
+				if(phrase.toLowerCase().indexOf(candidat.getCandidatName().toString().toLowerCase()) != -1) {
+					LOG.info("Phrase sur " + candidat.getCandidatName().toString() + " =>> " + phrase);
 				}
 			}
 		}

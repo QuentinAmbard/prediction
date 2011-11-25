@@ -23,7 +23,7 @@ public class Candidat {
 	private String siteUrl;
 	private String partiFullName;
 	private String parti;
-	private CandidatName name;
+	private CandidatName candidatName;
 	private String displayName;
 	private List<String> nicknames = new ArrayList<String>();
 	private HashMap<Region, Integer> geoReport = new HashMap<Region, Integer>();
@@ -32,7 +32,7 @@ public class Candidat {
 	}
 
 	public Candidat(CandidatName name) {
-		this.name = name;
+		this.candidatName = name;
 		this.id = new ObjectId();
 	}
 
@@ -54,12 +54,12 @@ public class Candidat {
 		return nicknames;
 	}
 
-	public CandidatName getName() {
-		return name;
+	public CandidatName getCandidatName() {
+		return candidatName;
 	}
 
-	public void setName(CandidatName name) {
-		this.name = name;
+	public void setCandidatName(CandidatName name) {
+		this.candidatName = name;
 	}
 
 	public void setNicknames(List<String> nicknames) {

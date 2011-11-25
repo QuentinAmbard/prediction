@@ -98,9 +98,9 @@ public class InsightImport {
 		Candidat sarkozy = null;
 		Candidat hollande = null;
 		for (Candidat candidat : candidats) {
-			if (candidat.getName().equals(CandidatName.SARKOZY)) {
+			if (candidat.getCandidatName().equals(CandidatName.SARKOZY)) {
 				sarkozy = candidat;
-			} else if (candidat.getName().equals(CandidatName.HOLLANDE)) {
+			} else if (candidat.getCandidatName().equals(CandidatName.HOLLANDE)) {
 				hollande = candidat;
 			}
 		}
@@ -115,7 +115,7 @@ public class InsightImport {
 	}
 
 	private void addCandidatToUrl(StringBuilder url, Candidat candidat) {
-		LOGGER.info(candidat.getName().toString());
+		LOGGER.info(candidat.getCandidatName().toString());
 		for (int j = 0; j < candidat.getNicknames().size(); j++) {
 			String nickname = candidat.getNicknames().get(j);
 			if (j > 0) {
@@ -163,7 +163,7 @@ public class InsightImport {
 				try {
 					int value = Integer.valueOf(line[i + 1]);
 					candidats.get(i).getGeoReport().put(region, value);
-					LOGGER.debug(candidats.get(i).getName() + "-" + region + "=" + value);
+					LOGGER.debug(candidats.get(i).getCandidatName() + "-" + region + "=" + value);
 				} catch (NumberFormatException e) {
 					LOGGER.error("ca deconne" + line[i + 1], e);
 				}
@@ -200,7 +200,7 @@ public class InsightImport {
 						// candidat.getDailyReports().add(dailyReport);
 					}
 					dailyReport.setInsight(value);
-					LOGGER.info("add " + value + " for " + timestamp + " (candidat:" + candidat.getName());
+					LOGGER.info("add " + value + " for " + timestamp + " (candidat:" + candidat.getCandidatName());
 				} catch (NumberFormatException e) {
 					LOGGER.error("error scanning generic line" + i + "value=" + line.toString(), e);
 				}

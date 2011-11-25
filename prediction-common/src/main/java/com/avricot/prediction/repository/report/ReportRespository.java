@@ -14,6 +14,6 @@ public interface ReportRespository extends MongoRepository<Report, ObjectId> {
 	 * @param name
 	 * @return the daily report with the given name.
 	 */
-	List<Report> findByName(CandidatName name);
+	List<Report> findByCandidatName(CandidatName candidatName);
 
 }

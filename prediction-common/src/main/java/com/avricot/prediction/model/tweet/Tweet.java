@@ -18,7 +18,7 @@ public class Tweet {
 	@Indexed
 	private String value;
 	@Indexed
-	private CandidatName candidat;
+	private CandidatName candidatName;
 	private String userId;
 	private Date date;
 	private Polarity polarity;
@@ -55,12 +55,12 @@ public class Tweet {
 		this.date = date;
 	}
 
-	public CandidatName getCandidat() {
-		return candidat;
+	public CandidatName getCandidatName() {
+		return candidatName;
 	}
 
-	public void setCandidat(CandidatName candidat) {
-		this.candidat = candidat;
+	public void setCandidatName(CandidatName candidat) {
+		this.candidatName = candidat;
 	}
 
 	public boolean isChecked() {

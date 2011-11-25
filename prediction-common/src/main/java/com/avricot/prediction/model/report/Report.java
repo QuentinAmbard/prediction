@@ -4,6 +4,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.avricot.prediction.model.candidat.Candidat.CandidatName;
 import com.avricot.prediction.model.report.tweeter.TweetReport;
 
 @Document(collection = "report")
@@ -17,6 +18,7 @@ public class Report {
 	private float tendance;
 	private PolarityReport negativePolarity;
 	private PolarityReport positivePolarity;
+	private CandidatName candidatName;
 
 	public Report() {
 
