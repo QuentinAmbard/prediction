@@ -1,4 +1,4 @@
-package com.avricot.prediction.sentiment;
+package com.avricot.prediction.sentiment.services;
 
 import java.net.MalformedURLException;
 import java.net.URL;

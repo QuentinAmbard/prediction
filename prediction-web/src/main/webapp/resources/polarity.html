@@ -1,0 +1,67 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>Polarity</title>
+<script type="text/javascript" src="./js/mootools.js"></script>
+<style>
+input {
+	margin: 3px;
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+
+#candidat {
+	font-weight: bold;
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+</style>
+
+</head>
+
+<body style="width: 300px; text-align: center;">
+	<div id="candidat"></div>
+	<div id="tweet"></div>
+	<div id="buttons">
+		<input style="background-color: #BFB;" type="button" value="POSITIVE"
+			onclick="go('positive')"> <input
+			style="background-color: #BBF;" type="button" value="NEUTRAL"
+			onclick="go('neutral')"> <input
+			style="background-color: #FBB;" type="button" value="NEGATIVE"
+			onclick="go('negative')"> <input
+			style="background-color: #FFB;" type="button" value="INVALID"
+			onclick="go('invalid')"> <input type="button"
+			value="NOT FRENCH" onclick="go('not_french')">
+	</div>
+
+	<script type="text/javascript">
+		var tweetId;
+		function getNewTweet() {
+			var jsonRequest = new Request.JSON({
+				url : '../polarity',
+				onSuccess : function(tNc) {
+					$('candidat').innerHTML = tNc.candidat.name;
+					$('tweet').innerHTML = tNc.tweet.value;
+					tweetId = tNc.tweet.id;
+					$('buttons').style.display = 'block';
+				}
+			}).get();
+		}
+		function go(val) {
+			$('buttons').style.display = 'none';
+			var jsonRequest = new Request({
+				url : '../addPolarity',
+				onSuccess : function() {
+					getNewTweet();
+				}
+			}).post({
+				'tweetId' : tweetId,
+				'val' : val
+			});
+		}
+		getNewTweet();
+	</script>
+</body>
+
+</html>

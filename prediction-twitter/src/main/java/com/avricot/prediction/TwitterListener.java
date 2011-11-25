@@ -16,6 +16,7 @@ import twitter4j.UserStreamListener;
 
 import com.avricot.prediction.model.candidat.Candidat;
 import com.avricot.prediction.model.tweet.Tweet;
+import com.avricot.prediction.model.tweet.Tweet.Geolocation;
 import com.avricot.prediction.repository.candidat.CandidatRespository;
 import com.avricot.prediction.repository.tweet.TweetRepository;
 
@@ -81,6 +82,9 @@ public class TwitterListener {
 		tweet.setValue(status.getText());
 		tweet.setDate(new Date());
 		tweet.setUserId(status.getUser().getScreenName());
+		if (status.getGeoLocation() != null) {
+			tweet.setGeolocation(new Geolocation(status.getGeoLocation().getLatitude(), status.getGeoLocation().getLongitude()));
+		}
 
 		tweeterRepository.save(tweet);
 
