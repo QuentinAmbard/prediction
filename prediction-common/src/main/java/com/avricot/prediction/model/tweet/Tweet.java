@@ -6,6 +6,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.avricot.prediction.model.candidat.Candidat.CandidatName;
 import com.avricot.prediction.report.Polarity;
 
 @Document(collection = "tweet")
@@ -13,7 +14,7 @@ public class Tweet {
 	@Id
 	private ObjectId id;
 	private String value;
-	private ObjectId candidatId;
+	private CandidatName candidat;
 	private String userId;
 	private Date date;
 	private Polarity polarity;
@@ -52,12 +53,12 @@ public class Tweet {
 		this.date = date;
 	}
 
-	public ObjectId getCandidatId() {
-		return candidatId;
+	public CandidatName getCandidat() {
+		return candidat;
 	}
 
-	public void setCandidatId(ObjectId candidatId) {
-		this.candidatId = candidatId;
+	public void setCandidat(CandidatName candidat) {
+		this.candidat = candidat;
 	}
 
 	public boolean isChecked() {

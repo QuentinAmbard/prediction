@@ -8,11 +8,11 @@ public enum Region {
 	AUVERGNE("Auvergne", 1341863), //
 	BOURGOGNE("Bourgogne", 1638588), //
 	BRETAGNE("Bretagne", 3149701), //
-	CENTRE("centre", 2531588), //
+	CENTRE("Centre", 2531588), //
 	CHAMPAGNE_ARDENNE("Champagne-Ardenne", 1338004), //
-	CORSE("corse", 302966), //
-	FRANCHE_COMPTE("Franche-Compté", 1163931), //
-	ILE_DE_FRANCE("Ile-de-France", 11659260), //
+	CORSE("Corse", 302966), //
+	FRANCHE_COMPTE("Franche-Comté", 1163931), //
+	ILE_DE_FRANCE("Île-de-France", 11659260), //
 	LANGUEDOC_ROUSSILLON("Languedoc-Roussillon", 2581718), //
 	LIMOUSIN("Limousin", 740743), //
 	LORRAINE("Lorraine", 2346361), //

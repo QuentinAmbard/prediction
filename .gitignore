@@ -3,3 +3,4 @@
 */eclipse-target
 *.settings
 *.project
+/build

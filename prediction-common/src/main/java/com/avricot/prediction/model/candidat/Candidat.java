@@ -10,7 +10,6 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.avricot.prediction.model.report.DailyReport;
 import com.avricot.prediction.model.report.Region;
 
 @Document(collection = "candidat")
@@ -27,7 +26,6 @@ public class Candidat {
 	private CandidatName name;
 	private String displayName;
 	private List<String> nicknames = new ArrayList<String>();
-	private final List<DailyReport> dailyReports = new ArrayList<DailyReport>();
 	private HashMap<Region, Integer> geoReport = new HashMap<Region, Integer>();
 
 	public Candidat() {
@@ -82,10 +80,6 @@ public class Candidat {
 
 	public void setDisplayName(String displayName) {
 		this.displayName = displayName;
-	}
-
-	public List<DailyReport> getDailyReports() {
-		return dailyReports;
 	}
 
 	public String getSiteUrl() {
@@ -145,7 +139,7 @@ public class Candidat {
 	}
 
 	public static enum CandidatName {
-		SARKOZY, HOLLANDE, LEPEN, BOUTIN, NIHOUS, MELENCHON, JOLY, LEPAGE, BAYROU, CHEVENEMENT;
+		SARKOZY, HOLLANDE, LEPEN, BOUTIN, NIHOUS, MELENCHON, JOLY, LEPAGE, BAYROU, CHEVENEMENT, DUPONT_AIGNAN, VILLEPIN, MORIN, ARTHAUD, POUTOU;
 	}
 
 }

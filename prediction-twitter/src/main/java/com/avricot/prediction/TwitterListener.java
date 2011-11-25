@@ -77,7 +77,7 @@ public class TwitterListener {
 	private void saveTweet(Status status, Candidat candidat) {
 		Tweet tweet = new Tweet();
 
-		tweet.setCandidatId(candidat.getObjectId());
+		tweet.setCandidat(candidat.getName());
 		tweet.setValue(status.getText());
 		tweet.setDate(new Date());
 		tweet.setUserId(status.getUser().getScreenName());

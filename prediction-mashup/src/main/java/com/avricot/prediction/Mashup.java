@@ -6,23 +6,20 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import com.avricot.prediction.model.candidat.Candidat;
-import com.avricot.prediction.model.report.DailyReport;
-import com.avricot.prediction.repository.candidat.CandidatRespository;
+import com.avricot.prediction.model.report.Report;
+import com.avricot.prediction.repository.report.ReportRespository;
 
 @Service
 public class Mashup {
 	@Inject
-	private CandidatRespository candidatRepository;
+	private ReportRespository reportRepository;
 
 	public void mashup() {
-		List<Candidat> candidats = candidatRepository.findAll();
-		for (Candidat candidat : candidats) {
-			for (DailyReport dailyReport : candidat.getDailyReports()) {
-				dailyReport.setBuzz((float) (dailyReport.getInsight() + Math.random() * 10));
-				dailyReport.setTendance((float) (dailyReport.getInsight() + Math.random() * 10));
-			}
+		List<Report> report = reportRepository.findAll();
+		for (Report dailyReport : report) {
+			dailyReport.setBuzz(dailyReport.getInsight());
+			dailyReport.setTendance(dailyReport.getInsight());
 		}
-		candidatRepository.save(candidats);
+		reportRepository.save(report);
 	}
 }

@@ -1,8 +1,15 @@
 package com.avricot.prediction.model.report;
 
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import com.avricot.prediction.model.report.tweeter.TweetReport;
 
-public class DailyReport {
+@Document(collection = "report")
+public class Report {
+	@Id
+	private ObjectId id;
 	private long timestamp;
 	private TweetReport tweetReport;
 	private float insight;
@@ -11,11 +18,11 @@ public class DailyReport {
 	private PolarityReport negativePolarity;
 	private PolarityReport positivePolarity;
 
-	public DailyReport() {
+	public Report() {
 
 	}
 
-	public DailyReport(long timestamp) {
+	public Report(long timestamp) {
 		this.timestamp = timestamp;
 	}
 
@@ -73,6 +80,14 @@ public class DailyReport {
 
 	public void setTimestamp(long timestamp) {
 		this.timestamp = timestamp;
+	}
+
+	public ObjectId getId() {
+		return id;
+	}
+
+	public void setId(ObjectId id) {
+		this.id = id;
 	}
 
 }

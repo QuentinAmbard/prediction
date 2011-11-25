@@ -21,7 +21,8 @@ import au.com.bytecode.opencsv.CSVReader;
 
 import com.avricot.prediction.context.ApplicationContextHolder;
 import com.avricot.prediction.model.candidat.Candidat;
-import com.avricot.prediction.model.report.DailyReport;
+import com.avricot.prediction.model.candidat.Candidat.CandidatName;
+import com.avricot.prediction.model.report.Report;
 import com.avricot.prediction.model.report.Region;
 import com.avricot.prediction.repository.candidat.CandidatRespository;
 import com.avricot.prediction.utils.DateUtils;
@@ -31,7 +32,7 @@ import com.avricot.prediction.utils.UrlUtils;
 public class InsightImport {
 
 	private static Logger LOGGER = LoggerFactory.getLogger(InsightImport.class);
-
+	private static String URL_BASE = "http://www.google.com/insights/search/overviewReport?geo=FR&date=today%203-m&cmpt=q&content=1&export=1&q=";
 	@Inject
 	private CandidatRespository candidatRepository;
 	private final SimpleDateFormat dateFormat;
@@ -44,9 +45,9 @@ public class InsightImport {
 
 	public void importInsight() {
 
-		List<Candidat> candidats = candidatRepository.findAllNoReports();
-		String url = buildExportUrl(candidats);
-		LOGGER.info(url);
+		List<Candidat> candidats = null;// candidatRepository.findAllNoReports();
+		buildExportUrl(candidats);
+
 		CSVReader csvReader = getCSVReader();
 
 		String[] nextLine;
@@ -87,27 +88,41 @@ public class InsightImport {
 	}
 
 	/**
-	 * Return the url for the export, using the {@link Candidat} nicknames in
-	 * the search.
+	 * log the urls for the export, using the {@link Candidat} nicknames in the
+	 * search.
 	 * 
 	 * @param candidats
 	 */
-	private String buildExportUrl(List<Candidat> candidats) {
-		StringBuilder url = new StringBuilder("");
-		for (int i = 0; i < candidats.size(); i++) {
-			Candidat candidat = candidats.get(i);
-			if (i > 0) {
-				url.append(",");
-			}
-			for (int j = 0; j < candidat.getNicknames().size(); j++) {
-				String nickname = candidat.getNicknames().get(j);
-				if (j > 0) {
-					url.append("+");
-				}
-				url.append(nickname);
+	private void buildExportUrl(List<Candidat> candidats) {
+		// Get sarkozy and holland because it's the max.
+		Candidat sarkozy = null;
+		Candidat hollande = null;
+		for (Candidat candidat : candidats) {
+			if (candidat.getName().equals(CandidatName.SARKOZY)) {
+				sarkozy = candidat;
+			} else if (candidat.getName().equals(CandidatName.HOLLANDE)) {
+				hollande = candidat;
 			}
 		}
-		return "http://www.google.com/insights/search/overviewReport?geo=FR&date=today%203-m&cmpt=q&content=1&export=1&q=" + UrlUtils.encodeUrl(url.toString());
+		StringBuilder url = new StringBuilder("");
+		for (Candidat candidat : candidats) {
+			url.setLength(0);
+			addCandidatToUrl(url, sarkozy);
+			addCandidatToUrl(url, hollande);
+			addCandidatToUrl(url, candidat);
+			LOGGER.info(URL_BASE + UrlUtils.encodeUrl(url.toString()));
+		}
+	}
+
+	private void addCandidatToUrl(StringBuilder url, Candidat candidat) {
+		LOGGER.info(candidat.getName().toString());
+		for (int j = 0; j < candidat.getNicknames().size(); j++) {
+			String nickname = candidat.getNicknames().get(j);
+			if (j > 0) {
+				url.append("+");
+			}
+			url.append(nickname);
+		}
 	}
 
 	/**
@@ -123,7 +138,7 @@ public class InsightImport {
 		Resource ressource = ApplicationContextHolder.getApplicationContext().getResource(csvPath);
 		try {
 			reader = new FileReader(ressource.getFile());
-			csvReader = new CSVReader(reader, ',', '"', 5);
+			csvReader = new CSVReader(reader, '\t', '"', 5);
 		} catch (FileNotFoundException e) {
 			LOGGER.error("can't open file" + csvPath, e);
 		} catch (IOException e) {
@@ -158,7 +173,7 @@ public class InsightImport {
 
 	/**
 	 * Scan a line and update the {@link Candidat}
-	 * {@link DailyReport#getInsight()} value.
+	 * {@link Report#getInsight()} value.
 	 * 
 	 * @param line
 	 * @param candidats
@@ -174,16 +189,15 @@ public class InsightImport {
 				Candidat candidat = candidats.get(i);
 				try {
 					int value = Integer.valueOf(line[i + 1]);
-					DailyReport dailyReport = null;
-					for (DailyReport d : candidat.getDailyReports()) {
-						if (d != null && d.getTimestamp() == timestamp) {
-							dailyReport = d;
-							break;
-						}
-					}
+					Report dailyReport = null;
+					/*
+					 * for (DailyReport d : candidat.getDailyReports()) { if (d
+					 * != null && d.getTimestamp() == timestamp) { dailyReport =
+					 * d; break; } }
+					 */
 					if (dailyReport == null) {
-						dailyReport = new DailyReport(timestamp);
-						candidat.getDailyReports().add(dailyReport);
+						dailyReport = new Report(timestamp);
+						// candidat.getDailyReports().add(dailyReport);
 					}
 					dailyReport.setInsight(value);
 					LOGGER.info("add " + value + " for " + timestamp + " (candidat:" + candidat.getName());
