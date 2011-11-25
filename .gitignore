@@ -2,5 +2,6 @@
 */target
 */eclipse-target
 *.settings
+*.pydevproject
 *.project
 /build

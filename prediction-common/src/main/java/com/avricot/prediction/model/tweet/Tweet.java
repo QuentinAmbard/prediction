@@ -17,6 +17,7 @@ public class Tweet {
 	private ObjectId id;
 	@Indexed
 	private String value;
+	@Indexed
 	private CandidatName candidat;
 	private String userId;
 	private Date date;
