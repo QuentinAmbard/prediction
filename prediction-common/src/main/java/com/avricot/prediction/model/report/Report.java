@@ -1,24 +1,21 @@
 package com.avricot.prediction.model.report;
 
+import java.util.HashMap;
+
 import org.bson.types.ObjectId;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.avricot.prediction.model.candidat.Candidat;
 import com.avricot.prediction.model.candidat.Candidat.CandidatName;
-import com.avricot.prediction.model.report.tweeter.TweetReport;
 
 @Document(collection = "report")
 public class Report {
 	@Id
 	private ObjectId id;
 	private long timestamp;
-	private TweetReport tweetReport;
-	private float insight;
-	private float buzz;
-	private float tendance;
-	private PolarityReport negativePolarity;
-	private PolarityReport positivePolarity;
-	private CandidatName candidatName;
+	private final HashMap<CandidatName, DailyReport> candidats = new HashMap<Candidat.CandidatName, DailyReport>();
 
 	public Report() {
 
@@ -28,52 +25,13 @@ public class Report {
 		this.timestamp = timestamp;
 	}
 
-	public TweetReport getTweetReport() {
-		return tweetReport;
+	@JsonIgnore
+	public ObjectId getId() {
+		return id;
 	}
 
-	public void setTweetReport(TweetReport tweetReport) {
-		this.tweetReport = tweetReport;
-	}
-
-	public float getInsight() {
-		return insight;
-	}
-
-	public void setInsight(float insight) {
-		this.insight = insight;
-	}
-
-	public float getBuzz() {
-		return buzz;
-	}
-
-	public void setBuzz(float buzz) {
-		this.buzz = buzz;
-	}
-
-	public float getTendance() {
-		return tendance;
-	}
-
-	public void setTendance(float tendance) {
-		this.tendance = tendance;
-	}
-
-	public PolarityReport getNegativePolarity() {
-		return negativePolarity;
-	}
-
-	public void setNegativePolarity(PolarityReport negativePolarity) {
-		this.negativePolarity = negativePolarity;
-	}
-
-	public PolarityReport getPositivePolarity() {
-		return positivePolarity;
-	}
-
-	public void setPositivePolarity(PolarityReport positivePolarity) {
-		this.positivePolarity = positivePolarity;
+	public void setId(ObjectId id) {
+		this.id = id;
 	}
 
 	public long getTimestamp() {
@@ -84,12 +42,8 @@ public class Report {
 		this.timestamp = timestamp;
 	}
 
-	public ObjectId getId() {
-		return id;
-	}
-
-	public void setId(ObjectId id) {
-		this.id = id;
+	public HashMap<CandidatName, DailyReport> getCandidats() {
+		return candidats;
 	}
 
 }

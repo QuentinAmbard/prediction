@@ -19,15 +19,15 @@ var DataHandler = new Class({
 			headers:{'Content-type':'application/json'},
 			urlEncoded: false,
 			method: "get",
-			onSuccess: function(candidats){
-				that.candidats = candidats ;
-				that.firstTimestamp = candidats[0].dailyReports[0].timestamp ;
-				that.lastTimestamp = candidats[0].dailyReports[candidats[0].dailyReports.length-1].timestamp ;
+			onSuccess: function(data){
+				that.candidats = data.candidats ;
+				that.firstTimestamp = data.reports[0].timestamp ;
+				that.lastTimestamp = data.reports[data.reports.length-1].timestamp ;
 				
-				var data = [];
+				var dataPie = [];
 				for(var i =0;i<that.candidats.length;i++) {
 					var candidat = that.candidats[i];
-					data.push([candidat.displayName, candidat.dailyReports[candidat.dailyReports.length-1].tendance])
+					data.push([candidat.displayName, data.reports[data.reports.length-1].tendance])
 				}
 				that.pie.initChart(data);
 				that.chart.initChart(that.getSeriesForChart(), that.firstTimestamp);

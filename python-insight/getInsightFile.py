@@ -45,15 +45,16 @@ connector = pyGTrends('avricot.team','table87table')
 connection = Connection('localhost', 27017)
 db = connection.prediction
 for candidat in db.candidat.find({}):
-    if candidat['name'] == "SARKOZY":
+    if candidat['candidatName'] == "SARKOZY":
         sarkozy_query = build_query(candidat)
-    if candidat['name'] == "HOLLANDE":
+    if candidat['candidatName'] == "HOLLANDE":
         hollande_query = build_query(candidat)        
         
 j=0
 for candidat in db.candidat.find({}):
     if j>1:
-        break
+        #break
+        time.sleep(15)
     j=j+1
     queries = [sarkozy_query, hollande_query]
     queries.append(build_query(candidat))
@@ -67,28 +68,35 @@ for candidat in db.candidat.find({}):
     for row in spamReader:
         #skip the 3 first lines
         if i>5:
-            print ', '.join(row)
             if len(row) ==0 or row[0] == "" or row[0] == " ":
                 in_main = False
                 if in_region:
                     break
             if in_main:
+                print ', '.join(row)
                 date=time.strptime(row[0],"%Y-%m-%d")
                 timestamp = long(time.mktime(date)*1000)
-                value=row[3]
-                reports = db.candidat.find({"timestamp": timestamp, "candidat": candidat['name']})
-                print(value)
-                print(timestamp)
-                if reports.count() >0:
-                    report = reports[0]
-                    report['insight'] = value
-                    db.report.update({"_id": report['_id']}, report)
+                if len(row) <4:
+                    value = "0"
                 else :
-                    report = {}
-                    report['candidat'] = candidat['name']
-                    report['insight'] = value
-                    report['timestamp'] = timestamp
-                    db.report.save(report)
+                    value=row[3]
+                reports = db.report.find({"timestamp": timestamp})
+                print(value)
+                if value != "" and value != " ":
+                    print(timestamp)
+                    if reports.count() >0:
+                        report = reports[0]
+                        if candidat['candidatName'] not in report['candidats']:
+                            report['candidats'][candidat['candidatName']] = {}
+                        report['candidats'][candidat['candidatName']]['insight'] = int(value)
+                        report['timestamp'] = timestamp
+                        db.report.update({"_id": report['_id']}, report)
+                    else :
+                        report = {}
+                        report['candidats'] = {candidat['candidatName']: {}}
+                        report['timestamp'] = timestamp
+                        report['candidats'][candidat['candidatName']]['insight'] = int(value)
+                        db.report.save(report)
             if in_region:
                 region = regions[row[0]]
                 value = int(row[1])
