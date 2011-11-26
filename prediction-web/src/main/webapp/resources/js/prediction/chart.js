@@ -9,7 +9,6 @@ var Chart = new Class({
 		this.chartOptions = {
 			chart : {
 				renderTo : 'containerChart',
-				defaultSeriesType : 'spline',
 				plotBackgroundColor : null,
 				plotBorderWidth : null,
 				plotShadow : false

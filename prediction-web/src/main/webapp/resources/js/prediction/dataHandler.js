@@ -21,49 +21,55 @@ var DataHandler = new Class({
 			method: "get",
 			onSuccess: function(data){
 				that.candidats = data.candidats ;
-				that.firstTimestamp = data.reports[0].timestamp ;
-				that.lastTimestamp = data.reports[data.reports.length-1].timestamp ;
-				
+				that.reports = data.reports ;
+				that.firstTimestamp = that.reports[0].timestamp ;
+				that.lastTimestamp = that.reports[that.reports.length-1].timestamp ;
 				var dataPie = [];
-				for(var i =0;i<that.candidats.length;i++) {
-					var candidat = that.candidats[i];
-					data.push([candidat.displayName, data.reports[data.reports.length-1].tendance])
+				var lastReport = that.reports[that.reports.length-1] ;
+				console.log(that.reports[0])
+				console.log(lastReport)
+				for(var candidat in lastReport.candidats) {
+					var candidatReport = lastReport.candidats[candidat];
+					dataPie.push([candidat, candidatReport.tendance])
 				}
-				that.pie.initChart(data);
+				that.pie.initChart(dataPie);
 				that.chart.initChart(that.getSeriesForChart(), that.firstTimestamp);
 				
 			}
 		}).send();
 	}, 
+	/**
+	 * Return the series given a specific type.
+	 */
 	getSeriesForChart: function (type) {
 		type = type || "tendance" ;
 		var series = []
-		for(var i =0;i<this.candidats.length;i++) {
+		for(var i =0;i<this.reports.length;i++) {
 			var data = [];
-			var candidat = this.candidats[i];
-			for (var j=0;j<candidat.dailyReports.length;j++) {
-				data.push(Math.round(candidat.dailyReports[j][type]*10)/10);
+			var report = this.reports[i];
+			for (candidat in report.candidats) {
+				var serie = null;
+				for(var j=0;j<series.length;j++) {
+					if(series[j].name == candidat) {
+						serie = series[j] ;
+						break;
+					} 
+				}
+				if(serie == null) {
+					serie = {name: candidat, lineWidth: 2, data: []};
+					series.push(serie);
+				}
+				serie.data.push(Math.round(report.candidats[candidat][type]*10)/10);
 			}
-			series.push({name: candidat.displayName, lineWidth: 2, data: data});
 		}
 		return series ;
 	},
 	updatePie: function(date, type) {
 		type = type || "tendance" ;
-		var data = []
-		var k=0;
-		for(var i =0;i<this.candidats[0].dailyReports.length;i++) {
-			if(this.candidats[0].dailyReports[i].timestamp == date) {
-				k = i;
-				break;
-			}
-		}
-		for(i =0;i<this.candidats.length;i++) {
-			var candidat = this.candidats[i];
-			data.push([candidat.displayName, candidat.dailyReports[k][type]])
-		}
-		for(i=0;i<data.length;i++) {
-			this.pie.chart.series[0].data[i].update(data[i]);
+		var data = this.pie.chart.series[0].data ;
+		for(i =0;i<data.length;i++) {
+			var name = data[i].name;
+			data[i].update(this.reports[date].candidats[name][type]);
 		}
 	}
 

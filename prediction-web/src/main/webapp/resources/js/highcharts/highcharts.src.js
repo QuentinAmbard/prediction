@@ -11026,12 +11026,9 @@ var PieSeries = extendClass(Series, {
 		each(data, function (point) {
 			// set start and end angle
 			fraction = total ? point.y / total : 0;
-			console.log(fraction);
 			start = mathRound(cumulative * circ * precision) / precision;
-			console.log("start:"+start*180/Math.PI);
 			cumulative += fraction;
 			end = mathRound(cumulative * circ * precision) / precision;
-			console.log("end:"+end*180/Math.PI);
 
 			// set the shape
 			point.shapeType = 'arc';
@@ -11072,7 +11069,6 @@ var PieSeries = extendClass(Series, {
 					angle > -Math.PI/2 ? 'left' : 'right', // alignment
 				angle// center angle
 			];
-			console.log(angle*180/Math.PI)
 			//point.labelPos = [228.08852261990546, 135.09777127793825, 236.66661413673168, 137.8210681638753, 256.68216100932614, 144.17542756439508, "right", 3.449] ;
 			/*
 				[531.1560478621403, 91.98817123269086, 523.6775817502388, 96.99542043890591, 506.2278274891354, 108.67900192007437, "left", -0.59]
@@ -11080,7 +11076,6 @@ var PieSeries = extendClass(Series, {
 				[228.08852261990546, 135.09777127793825, 236.66661413673168, 137.8210681638753, 256.68216100932614, 144.17542756439508, "right", 3.449]
 
 			 */
-			console.log(point.labelPos);
 			// API properties
 			point.percentage = fraction * 100;
 			point.total = total;

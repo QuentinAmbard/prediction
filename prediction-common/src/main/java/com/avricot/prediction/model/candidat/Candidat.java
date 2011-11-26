@@ -23,6 +23,8 @@ public class Candidat {
 	private String siteUrl;
 	private String partiFullName;
 	private String parti;
+	private int positionValue;
+	private Position position;
 	private CandidatName candidatName;
 	private String displayName;
 	private List<String> nicknames = new ArrayList<String>();
@@ -138,8 +140,40 @@ public class Candidat {
 		this.birthday = birthday;
 	}
 
+	public void setId(ObjectId id) {
+		this.id = id;
+	}
+
+	public int getPositionValue() {
+		return positionValue;
+	}
+
+	public void setPositionValue(int positionValue) {
+		this.positionValue = positionValue;
+	}
+
+	public void setPosition(Position position) {
+		this.position = position;
+	}
+
+	public Position getPosition() {
+		return position;
+	}
+
 	public static enum CandidatName {
 		SARKOZY, HOLLANDE, LEPEN, BOUTIN, NIHOUS, MELENCHON, JOLY, LEPAGE, BAYROU, CHEVENEMENT, DUPONT_AIGNAN, VILLEPIN, MORIN, ARTHAUD, POUTOU;
 	}
 
+	public static enum Position {
+		EXTREME_GAUCHE("Extrême gauche"), GAUCHE("Gauche"), CENTRE("Centre"), DROITE("Droite"), EXTREME_DROITE("Extrême droite");
+		private String description;
+
+		private Position(String description) {
+			this.description = description;
+		}
+
+		public String getDescription() {
+			return description;
+		}
+	}
 }
