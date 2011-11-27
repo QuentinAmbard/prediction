@@ -2,16 +2,15 @@ package com.avricot.prediction.sentiment;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
-import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import com.aliasi.classify.Classification;
 import com.aliasi.classify.Classified;
@@ -35,17 +34,7 @@ public class AnalysePolarite {
 	
 	private static Logger LOG = Logger.getLogger(AnalysePolarite.class);
 	
-	private static final String DATA_TXT_SENTOKEN_LINGPIPE = "D:\\Dev\\2012\\workspace\\lingpipe\\data\\txt_sentoken";
-	
-	
-	String[] tweet1 = {"J'aime bien le candidat Sarkozy qui tient un grand meeting pour d�noncer la fraude, en le finan�ant sur le budget du pr�sident Sarkozy.",
-	"L'#UMP, premier parti de France, avec des militants d�termin�s � faire r��lire Nicolas #Sarkozy http://bit.ly/skqpUb",
-	"Allaitement : Barth�s, charg� de com' de Sarkozy http://goo.gl/6gQnA",
-	"Union europ�enne : dans la crise de la dette, les bouffons se succ�dent. Apr�s #Berlusconi, c'est au tour de #Sarkozy : http://bit.ly/tioir9",
-	"Chasse aux fraudeurs, rigueur, vote des �trangers: Nicolas Sarkozy et l'UMP � droite toute pour la pr�sidentielle http://ow.ly/7uZig",
-	"Sarkozy est incroyable, je l'aime",
-	"S est excellent",
-	"Francois Hollande est le candidat id�al"};
+	private static final String DATA_TXT_SENTOKEN_LINGPIPE = "C:\\Users\\Jeremy\\Dropbox\\2012\\workspace\\lingpipe\\data\\txt_sentoken";
 	
 	private List<Candidat> candidats;
 	private File mPolarityDir;
@@ -63,7 +52,7 @@ public class AnalysePolarite {
 	}
 
 	/**
-	 * Entraine le d�tecteur de polarit�
+	 * Entraine le détecteur de polarité
 	 * @throws IOException
 	 */
 	void train() throws IOException {
@@ -82,31 +71,36 @@ public class AnalysePolarite {
 	}
 	
 	/**
-	 * Evalue la polarit� de tweets
+	 * Evalue la polarité de tweets
 	 * @throws IOException
 	 */
 	void evaluateTweets() throws IOException {
 		
 		List<Tweet> tweetList = tweeterRepository.findAllByChecked(false);
-		
+		Classification tmpClass = null;
 		Classification classification = null;
 		for (Tweet tweet : tweetList) {
 			final String tweetValue = tweet.getValue();
-			classification = mClassifier.classify(tweetValue);
-			LOG.info(tweetValue +" => " + classification.bestCategory());
 			List<String> Urls = URLUtils.URLInString(tweetValue);
 			if(!Urls.isEmpty()) {
+				List<Classification> classListe = new ArrayList<Classification>();
 				for (String url : Urls) {
-					/* SCANNER L'ARTICLE */
-					evaluateURLPolarite(url);
+					tmpClass = evaluateURLPolarite(url);
+					if(tmpClass != null) {
+						/* Comment on exploite cette liste ? */
+						classListe.add(evaluateURLPolarite(url));
+					}
+					LOG.info("URL SCANNEE");
 				}
-			} 
-			System.out.println("CAT = " + classification.bestCategory());	
+			} else {
+				classification = mClassifier.classify(tweetValue);	
+				LOG.info(tweetValue +" => " + classification.bestCategory());
+			}			
 		}
     }
 	
 	/**
-	 * Permet de r�cup�rer la polarit� d'un string
+	 * Permet de récupérer la polarité d'un string
 	 * @param s
 	 * @return
 	 * @throws IOException
@@ -118,26 +112,36 @@ public class AnalysePolarite {
     }
 
 	/**
-	 * Analyse la polarit� d'une URL en scannant la page et en traitant
+	 * Analyse la polarité d'une URL en scannant la page et en traitant
 	 * une par une les phrase contenant le nom d'un candidat
 	 * @param currentUrl
 	 * @return
 	 * @throws IOException
 	 */
-	void evaluateURLPolarite(String currentUrl) throws IOException {
+	Classification evaluateURLPolarite(String currentUrl) throws IOException {
 		
 		candidats = candidatRespository.findAll();
+		StringBuffer toAnalyse = new StringBuffer("");
 		
-		LOG.info("URL scann�e : " + currentUrl);
-		Document doc = Jsoup.connect(currentUrl).get();
-		String[] splittedArticle = (doc.body().text()).split("\\.");
-		for (String phrase : splittedArticle) {
-			for (Candidat candidat : candidats) {
-				//TODO G�rer les surnoms
-				if(phrase.toLowerCase().indexOf(candidat.getCandidatName().toString().toLowerCase()) != -1) {
-					LOG.info("Phrase sur " + candidat.getCandidatName().toString() + " =>> " + phrase);
+		LOG.info("URL scannée : " + currentUrl);
+		try {
+			Document doc = Jsoup.connect(currentUrl).timeout(0).get();
+			String[] splittedArticle = (doc.body().text()).split("\\.");
+			for (String phrase : splittedArticle) {
+				for (Candidat candidat : candidats) {
+					if(phrase.toLowerCase().indexOf(candidat.getCandidatName().toString().toLowerCase()) != -1) {
+						LOG.info("Phrase sur " + candidat.getCandidatName().toString() + " =>> " + phrase);
+						toAnalyse.append(phrase);
+					}
 				}
 			}
+		} catch (IOException e) {
+			LOG.error("ERREUR EN SCANNANT URL : " + currentUrl);
+		}
+		if(!toAnalyse.equals("")) {
+			return evaluate(toAnalyse.toString());
+		} else {
+			return null;
 		}
 	}
 	
