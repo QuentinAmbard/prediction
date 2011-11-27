@@ -33,16 +33,12 @@ public class PolarityController {
 
 	@ResponseBody
 	@RequestMapping(value = "polarity", method = RequestMethod.GET)
-	public TweetAndCandidat getRandomTweet() {
+	public Tweet getRandomTweet() {
 
-		TweetAndCandidat tweetAndCandidat = new TweetAndCandidat();
 		List<Tweet> findByChecked = tweetRepository.getTweetNotChecked(20);
 
 		int i = (int) (Math.random() * 20L);
-		tweetAndCandidat.tweet = findByChecked.get(i);
-
-		tweetAndCandidat.candidat = candidatRespository.findByCandidatName(tweetAndCandidat.tweet.getCandidatName());
-		return tweetAndCandidat;
+		return findByChecked.get(i);
 	}
 
 	@ResponseBody
@@ -78,10 +74,5 @@ public class PolarityController {
 			t.setPolarity(polarity);
 			tweetRepository.save(t);
 		}
-	}
-
-	private class TweetAndCandidat {
-		public Tweet tweet;
-		public Candidat candidat;
 	}
 }
