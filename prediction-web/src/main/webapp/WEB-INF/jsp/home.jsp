@@ -9,26 +9,34 @@
 	<script type="text/javascript" src="./resources/js/prediction/dataHandler.js"></script>
 	<script type="text/javascript" src="./resources/js/prediction/pie.js"></script>
 	<script type="text/javascript" src="./resources/js/prediction/chart.js"></script>
+	<script type="text/javascript" src="./resources/js/prediction/barChart.js"></script>
 	<script type="text/javascript" src="./resources/js/highcharts/adapters/mootools-adapter.js"></script>
 	<script type="text/javascript" src="./resources/js/highcharts/highcharts.src.js"></script>
 		<!-- 1a) Optional: add a theme file -->
-		<!-- <script type="text/javascript" src="./resources/js/highcharts/themes/gray.js"></script> -->
+		<script type="text/javascript" src="./resources/js/highcharts/themes/gray.js"></script>
 		<!-- 1b) Optional: the exporting module 
 		<script type="text/javascript" src="./resources/js/highcharts/modules/exporting.js"></script>-->
 </head>
-
 <body>
-	<div id="containerPie" style="width: 800px; height: 400px; margin: 0 auto"></div>
-	<div id="containerChart" style="width: 1000px; height: 400px; margin: 0 auto"></div>
-</body> 
-		<!-- 2. Add the JavaScript to initialize the chart on document ready -->
-		<script type="text/javascript">
-		window.addEvent('domready', function() {
-			var dataHandler = new DataHandler ();
-			dataHandler.getData();
-		});
-			//voir pour décaler les labels, ligne 1050
+	<select id="selectType" style="z-index: 5000">
+		<option value="tendance">Tendance</option>
+		<option value="buzz">Buzz</option>
+		<option value="pos">Avis positifs</option>
+		<option value="neg">Avis négatifs</option>
+		<option value="none">Désinteressés</option>
+	</select>
+	
+	<div id="containerPie" style="position: absolute; width: 800px; height: 400px; margin: 0 auto"></div>
+	<div id="containerPiePosition" style="position: absolute; top: 145px; left: 330px; width: 140px; height: 145px; margin: 0 auto"></div>
+	<div id="containerChart" style="position: absolute; top: 300px; left: 200px; width: 1000px; height: 400px; margin: 0 auto"></div>
+	<div id="containerChartDetails" style="position: absolute; top: 400px;width: 200px; height: 200px; margin: 0 auto"></div>
 
-				
-		</script>
+	
+</body> 
+<script type="text/javascript">
+window.addEvent('domready', function() {
+	var dataHandler = new DataHandler ();
+	dataHandler.getData();
+});
+</script>
 </html>

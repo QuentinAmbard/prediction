@@ -3,12 +3,14 @@ var Chart = new Class({
 	chartOptions : null,
 	chart : null,
 	options : {},
-	initialize : function(options) {
+	initialize : function(divId, options) {
 		this.setOptions(options);
 		var that = this ;
 		this.chartOptions = {
 			chart : {
-				renderTo : 'containerChart',
+				renderTo : divId,
+				backgroundColor: 'rgba(255,255,255,0)',
+				//defaultSeriesType : 'spline',
 				plotBackgroundColor : null,
 				plotBorderWidth : null,
 				plotShadow : false
@@ -17,9 +19,6 @@ var Chart = new Class({
 				text : ''
 			},
 			xAxis : {
-				title : {
-					text : 'Date'
-				},
 				type : 'datetime',
 				tickInterval : 24 * 3600 * 1000, // one day
 				labels : {
@@ -31,6 +30,8 @@ var Chart = new Class({
 			},
 
 			yAxis : [ {
+				min : -0,
+				max: 100,
 				title : {
 					text : 'Tendance'
 				},
@@ -84,6 +85,9 @@ var Chart = new Class({
 						}
 					}
 				}
+			},
+			credits : {
+				enabled : false
 			}
 		}
 	},

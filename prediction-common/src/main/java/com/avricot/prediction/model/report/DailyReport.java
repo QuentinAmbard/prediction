@@ -10,6 +10,9 @@ public class DailyReport {
 	private float insight;
 	private float buzz;
 	private float tendance;
+	private float neg;
+	private float pos;
+	private float none;
 	private PolarityReport negativePolarity;
 	private PolarityReport positivePolarity;
 	private CandidatName candidatName;
@@ -47,6 +50,7 @@ public class DailyReport {
 		this.tendance = tendance;
 	}
 
+	@JsonIgnore
 	public PolarityReport getNegativePolarity() {
 		return negativePolarity;
 	}
@@ -55,6 +59,7 @@ public class DailyReport {
 		this.negativePolarity = negativePolarity;
 	}
 
+	@JsonIgnore
 	public PolarityReport getPositivePolarity() {
 		return positivePolarity;
 	}
@@ -69,6 +74,30 @@ public class DailyReport {
 
 	public void setCandidatName(CandidatName candidatName) {
 		this.candidatName = candidatName;
+	}
+
+	public float getNeg() {
+		return neg;
+	}
+
+	public void setNeg(float negative) {
+		this.neg = negative;
+	}
+
+	public float getPos() {
+		return pos;
+	}
+
+	public void setPos(float positive) {
+		this.pos = positive;
+	}
+
+	public float getNone() {
+		return none;
+	}
+
+	public void setNone(float none) {
+		this.none = none;
 	}
 
 }

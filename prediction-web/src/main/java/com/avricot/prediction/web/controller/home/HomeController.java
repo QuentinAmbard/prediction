@@ -34,7 +34,7 @@ public class HomeController {
 	@RequestMapping(value = "candidats", method = RequestMethod.GET)
 	public HashMap<String, List<?>> candidat() {
 		HashMap<String, List<?>> result = new HashMap<String, List<?>>();
-		result.put("candidats", candidatRepository.findAll());
+		result.put("candidats", candidatRepository.findAll(new Sort(Direction.ASC, "positionValue")));
 		result.put("reports", reportRepository.findAll(new Sort(Direction.ASC, "timestamp")));
 		return result;
 	}

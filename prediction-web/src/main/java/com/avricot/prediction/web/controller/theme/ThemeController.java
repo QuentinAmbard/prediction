@@ -6,7 +6,6 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
@@ -44,7 +43,7 @@ public class ThemeController {
 		Map<Theme, String[]> datas = new HashMap<Theme, String[]>();
 
 		datas.put(Theme.SECURITY, new String[] { "securite", "police" });
-		datas.put(Theme.ECONOMIC, new String[] { "economie", "pouvoir d'achat", "crise"});
+		datas.put(Theme.ECONOMIC, new String[] { "economie", "pouvoir d'achat", "crise" });
 		datas.put(Theme.ENERGY, new String[] { "nucleaire", "electricite", "electric", "vert" });
 
 		for (Theme theme : Theme.values()) {
@@ -70,7 +69,7 @@ public class ThemeController {
 			Page<Tweet> findAll = tweetRepository.findAll(pageRequest);
 			for (Tweet t : findAll) {
 				List<Theme> themes = themeService.getTheme(t.getValue());
-				if(themes.size()!=0){
+				if (themes.size() != 0) {
 					t.setThemes(themes);
 					tweetRepository.save(t);
 				}

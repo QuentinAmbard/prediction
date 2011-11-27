@@ -22,6 +22,9 @@ public class Mashup {
 		for (Report report : reports) {
 			for (Entry<CandidatName, DailyReport> e : report.getCandidats().entrySet()) {
 				e.getValue().setBuzz(e.getValue().getInsight());
+				e.getValue().setNone((float) (e.getValue().getInsight() * Math.random()));
+				e.getValue().setPos((float) (e.getValue().getInsight() * Math.random()));
+				e.getValue().setNeg((float) (e.getValue().getInsight() * Math.random()));
 				e.getValue().setTendance((float) (e.getValue().getInsight() * Math.random()));
 			}
 		}

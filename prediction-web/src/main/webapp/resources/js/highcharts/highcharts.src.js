@@ -7044,7 +7044,7 @@ function Chart(options, callback) {
 				series = item.series || item,
 				itemOptions = series.options,
 				strokeWidth = (itemOptions && itemOptions.borderWidth) || 0;
-
+			
 			if (!li) { // generate it once, later move it
 
 				// let these series types use a simple symbol
@@ -7192,7 +7192,7 @@ function Chart(options, callback) {
 				horizontal ? itemX - initialItemX : itemWidth,
 				offsetWidth
 			);
-
+			
 
 
 			// add it all to an array to use below

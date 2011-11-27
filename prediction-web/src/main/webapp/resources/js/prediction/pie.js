@@ -1,14 +1,18 @@
 var Pie = new Class({
 	Implements: [Options, Events],
+	pieOption: null,
 	options: {
+		dataLabelsEnabled: true,
+		innerSize: 160,
+		stickyTracking: true
 	},
-	initialize: function(options){
+	initialize: function(renderToId, options){
 		this.setOptions(options);
-	},
-	initChart: function (data) {
-		this.chart = new Highcharts.Chart({
+		var that = this ;
+		this.pieOption = {
 			chart: {
-				renderTo: 'containerPie',
+				renderTo: renderToId,
+				backgroundColor: 'rgba(255,255,255,0)',
 				plotBackgroundColor: null,
 				plotBorderWidth: null,
 				plotShadow: false
@@ -18,31 +22,39 @@ var Pie = new Class({
 			},
 			tooltip: {
 				formatter: function() {
-					return '<b>'+ this.point.name +'</b>: '+ Math.round(this.percentage*10)/10 +' %';
+					return '<b>'+ this.point.name +'</b>: '+ Math.round(this.percentage*10)/10 +' %<br />Cliquez pour afficher le détail';
 				}
 			},
 			plotOptions: {
 				pie: {
+					events: {
+						mouseOver: function () {
+							that.fireEvent('mouseOver');
+						},
+						mouseOut: function () {
+							that.fireEvent('mouseOut')
+						}
+					},
+					stickyTracking: this.options.stickyTracking,
 					circ: Math.PI,
-					innerSize: 150,
+					innerSize: this.options.innerSize,
 					allowPointSelect: true,
 					cursor: 'pointer',
-					//pointStart: 100,
 					dataLabels: {
-						enabled: true,
-						color: '#000000',
-						connectorColor: '#000000',
+						enabled: this.options.dataLabelsEnabled,
 						formatter: function() {
 							return '<b>'+ this.point.name +'</b>: '+ Math.round(this.percentage*10)/10 +' %';
 						}
 					}
 				}
 			},
-		    series: [{
-				type: 'pie',
-				name: 'Browser share',
-				data: data
-			}]
-		});
+			credits : {
+				enabled : false
+			}
+		}
+	},
+	initChart: function (series) {
+		this.pieOption.series = series ;
+		this.chart = new Highcharts.Chart(this.pieOption);
 	}
 });
