@@ -16,8 +16,6 @@ public interface TweetRepository extends MongoRepository<Tweet, ObjectId>, Tweet
 
 	public List<Tweet> findByValueAndCandidatName(String value, CandidatName candidatName);
 
-	public List<Tweet> findByCandidatName(CandidatName candidatName);
-
 	public List<Tweet> findAllByChecked(boolean checked);
 
 	@Query("{candidatName : {$exists: false}}")
