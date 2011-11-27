@@ -41,9 +41,9 @@ input {
 			var jsonRequest = new Request.JSON({
 				url : '../polarity',
 				onSuccess : function(tNc) {
-					$('candidat').innerHTML = tNc.candidat.name;
-					$('tweet').innerHTML = tNc.tweet.value;
-					tweetId = tNc.tweet.id;
+					$('candidat').innerHTML = tNc.candidatName;
+					$('tweet').innerHTML = tNc.value;
+					tweetId = tNc.id;
 					$('buttons').style.display = 'block';
 				}
 			}).get();
