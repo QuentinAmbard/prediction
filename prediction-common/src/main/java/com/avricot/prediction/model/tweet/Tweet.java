@@ -1,6 +1,7 @@
 package com.avricot.prediction.model.tweet;
 
 import java.util.Date;
+import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -9,6 +10,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.avricot.prediction.model.candidat.Candidat.CandidatName;
+import com.avricot.prediction.model.theme.Theme;
 import com.avricot.prediction.report.Polarity;
 
 @Document(collection = "tweet")
@@ -26,6 +28,15 @@ public class Tweet {
 	private boolean checked = false; // True when manually checked.
 
 	private Geolocation geolocation;
+	private List<Theme> themes;
+
+	public List<Theme> getThemes() {
+		return themes;
+	}
+
+	public void setThemes(List<Theme> themes) {
+		this.themes = themes;
+	}
 
 	public void setId(ObjectId id) {
 		this.id = id;
