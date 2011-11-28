@@ -3,6 +3,7 @@ package com.avricot.prediction.model.report;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.avricot.prediction.model.candidat.Candidat.CandidatName;
+import com.avricot.prediction.model.report.rss.RSSReport;
 import com.avricot.prediction.model.report.tweeter.TweetReport;
 
 public class DailyReport {
@@ -15,8 +16,10 @@ public class DailyReport {
 	private float none;
 	private PolarityReport negativePolarity;
 	private PolarityReport positivePolarity;
+	private RSSReport RSSPopularity;
 	private CandidatName candidatName;
 
+	
 	public TweetReport getTweetReport() {
 		return tweetReport;
 	}
@@ -100,4 +103,11 @@ public class DailyReport {
 		this.none = none;
 	}
 
+	public RSSReport getRSSPopularity() {
+		return RSSPopularity;
+	}
+
+	public void setRSSPopularity(RSSReport rSSPopularity) {
+		RSSPopularity = rSSPopularity;
+	}
 }
