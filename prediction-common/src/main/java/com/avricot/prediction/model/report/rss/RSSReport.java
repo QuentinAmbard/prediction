@@ -4,6 +4,10 @@ public class RSSReport {
 	private int score;
 	private String newspaperName;
 
+	public static enum NewspaperName {
+		LE_MONDE, LE_FIGARO, LIBERATION, VINGT_MINUTES
+	}
+	
 	public int getScore() {
 		return score;
 	}

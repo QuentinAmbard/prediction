@@ -105,6 +105,7 @@ public class DailyReport {
 		this.none = none;
 	}
 
+	@JsonIgnore
 	public RSSReport getRSSPopularity() {
 		return RSSPopularity;
 	}
