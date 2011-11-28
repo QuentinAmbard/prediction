@@ -39,19 +39,35 @@ public class NewsPopularity {
 	public void run() throws ClassNotFoundException, IOException {
 		candidats = candidatRespository.findAll();
 		
-		Document doc = Jsoup.connect(RSS_LEMONDE).timeout(0).get();
+		/* Le Monde */
+		LOG.info("Parsing du flux RSS du monde");
+		parseRSSLeMondeType(RSS_LEMONDE);
 		
+		/* 20 minutes */
+		LOG.info("Parsing du flux RSS de 20 minutes");
+		parseRSSLeMondeType(RSS_20MINUTES);
+	}
+	
+	/**
+	 * Parse les flux RSS de type de celui du monde (avec le lien dans <div class="entry">)
+	 * @param url
+	 * @return
+	 * @throws IOException
+	 */
+	private List<RSSCounter> parseRSSLeMondeType(String url) throws IOException {
+		List<RSSCounter> rssCounterListtmp = null;
+		Document doc = Jsoup.connect(RSS_LEMONDE).timeout(0).get();
 		Elements links = doc.getElementsByTag("guid");
 		for (Element link : links) {
-			LOG.info("URL => " + link.text());
 			Document article = Jsoup.connect(link.text()).timeout(0).get();
-			List<RSSCounter> rssCounterListtmp = parseForCandidatPopularity(article.body().text(), candidats);
+			rssCounterListtmp = parseForCandidatPopularity(article.body().text(), candidats);
 			if(rssCounterListtmp.size() > 0) {
 				for (RSSCounter rssCounter : rssCounterListtmp) {
 					LOG.info("IN => " + rssCounter.candidatName + rssCounter.score);
 				}
 			}
 		}
+		return rssCounterListtmp;
 	}
 	
 	/**
