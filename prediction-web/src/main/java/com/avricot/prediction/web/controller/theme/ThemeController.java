@@ -42,9 +42,11 @@ public class ThemeController {
 
 		Map<Theme, String[]> datas = new HashMap<Theme, String[]>();
 
-		datas.put(Theme.SECURITY, new String[] { "securite", "police" });
-		datas.put(Theme.ECONOMIC, new String[] { "economie", "pouvoir d'achat", "crise" });
-		datas.put(Theme.ENERGY, new String[] { "nucleaire", "electricite", "electric", "vert" });
+		datas.put(Theme.SECURITY, new String[] { "securite", "police", "insecurite" });
+		datas.put(Theme.ECONOMIC, new String[] { "economie", "pouvoir d'achat", "crise", "euro", "finance", "financier", "pauvre", "riche", "richesse", "smic" });
+		datas.put(Theme.GREEN, new String[] { "ecologie", "energie", "nucleaire", "electricite", "electric", "electrique" });
+		datas.put(Theme.IMIGRATION, new String[] { "immigration", "immigre", "etranger", "frontiere" });
+		datas.put(Theme.SOCIAL, new String[] { "social", "secu", "logement", "démunis", "aide", "pauvre", "repartition" });
 
 		for (Theme theme : Theme.values()) {
 			String[] strings = datas.get(theme);
