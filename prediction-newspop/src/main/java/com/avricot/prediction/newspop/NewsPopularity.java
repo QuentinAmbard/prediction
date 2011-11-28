@@ -30,9 +30,13 @@ public class NewsPopularity {
 	
 	private static final String RSS_LEMONDE = "http://rss.lemonde.fr/c/205/f/3050/index.rss";
 	private static final String RSS_20MINUTES = "http://flux.20minutes.fr/c/32497/f/479493/index.rss";
+	private static final String RSS_LCI = "http://rss.feedsportal.com/c/32788/f/524037/index.rss";
+	private static final String RSS_LEPARISIEN = "http://rss.leparisien.fr/leparisien/rss/une.xml";
 	
 	private static final String RSS_LEFIGARO = "http://rss.lefigaro.fr/lefigaro/laune";
 	private static final String RSS_LIBERATION = "http://rss.liberation.fr/rss/9/";
+	
+	private static final String RSS_OUESTFRANCE = "http://www.ouest-france.fr/dma-rss_-Toutes-les-DMA-RSS_6346--fils-tous_filDMA.Htm#xtor=RSS-3003";
 
 	private static Logger LOG = Logger.getLogger(NewsPopularity.class);
 	
@@ -46,6 +50,14 @@ public class NewsPopularity {
 		/* 20 minutes */
 		LOG.info("Parsing du flux RSS de 20 minutes");
 		parseRSSLeMondeType(RSS_20MINUTES);
+		
+		/* LCI */
+		LOG.info("Parsing du flux RSS de LCI");
+		parseRSSLeMondeType(RSS_LCI);
+		
+		/* Le Parisien */
+		LOG.info("Parsing du flux RSS de Le Parisien");
+		parseRSSLeMondeType(RSS_LEPARISIEN);
 	}
 	
 	/**
