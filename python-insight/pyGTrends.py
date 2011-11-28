@@ -75,6 +75,7 @@ class pyGTrends(object):
             'date': date,
             'geo': geo,
         })
+        print(self.url_Export+ params)
         self.raw_data = self.opener.open(self.url_Export+ params).read()
         if self.raw_data in ['You must be signed in to export data from Google Trends']:
             raise Exception(self.raw_data)

@@ -1,5 +1,7 @@
 package com.avricot.prediction.model.report;
 
+import java.util.HashMap;
+
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.avricot.prediction.model.candidat.Candidat.CandidatName;
@@ -18,8 +20,8 @@ public class DailyReport {
 	private PolarityReport positivePolarity;
 	private RSSReport RSSPopularity;
 	private CandidatName candidatName;
+	private final HashMap<Region, Integer> geoReport = new HashMap<Region, Integer>();
 
-	
 	public TweetReport getTweetReport() {
 		return tweetReport;
 	}
@@ -109,5 +111,10 @@ public class DailyReport {
 
 	public void setRSSPopularity(RSSReport rSSPopularity) {
 		RSSPopularity = rSSPopularity;
+	}
+
+	@JsonIgnore
+	public HashMap<Region, Integer> getGeoReport() {
+		return geoReport;
 	}
 }
