@@ -5,7 +5,6 @@ import java.util.HashMap;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.avricot.prediction.model.candidat.Candidat.CandidatName;
-import com.avricot.prediction.model.report.rss.RSSReport;
 import com.avricot.prediction.model.report.tweeter.TweetReport;
 
 public class DailyReport {
@@ -18,10 +17,19 @@ public class DailyReport {
 	private float none;
 	private PolarityReport negativePolarity;
 	private PolarityReport positivePolarity;
-	private RSSReport RSSPopularity;
+	private HashMap<String, Integer> rssResult; //<String newspaperName, Integer score>
 	private CandidatName candidatName;
 	private final HashMap<Region, Integer> geoReport = new HashMap<Region, Integer>();
 
+	@JsonIgnore
+	public HashMap<String, Integer> getRssResult() {
+		return rssResult;
+	}
+
+	public void setRssResult(HashMap<String, Integer> rssResult) {
+		this.rssResult = rssResult;
+	}
+	
 	public TweetReport getTweetReport() {
 		return tweetReport;
 	}
@@ -103,15 +111,6 @@ public class DailyReport {
 
 	public void setNone(float none) {
 		this.none = none;
-	}
-
-	@JsonIgnore
-	public RSSReport getRSSPopularity() {
-		return RSSPopularity;
-	}
-
-	public void setRSSPopularity(RSSReport rSSPopularity) {
-		RSSPopularity = rSSPopularity;
 	}
 
 	@JsonIgnore
