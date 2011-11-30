@@ -12,7 +12,9 @@ var DataHandler = new Class({
 	options: {
 	},
 	initialize: function(profile, options){
+		this.setOptions(options);
 		var that = this ;
+		this.geoDataHandler = new GeoDataHandler();
 		this.selectType = $('selectType')
 		this.selectType.addEvent('click', function () {
 			var type = this.getSelected().get("value");
@@ -20,7 +22,6 @@ var DataHandler = new Class({
 			that.updateGraph(type);
 			that.updateGraphDetails();
 		});
-		this.setOptions(options);
 		this.pie = new Pie("containerPie", {
 			stickyTracking: false
 		});
@@ -38,8 +39,8 @@ var DataHandler = new Class({
 			}
 		});
 		this.chart = new Chart("containerChart");
-		this.chart.addEvent('clickOnChart', function (x, y) {
-			that.updatePie(x, y);
+		this.chart.addEvent('clickOnChart', function (date, type) {
+			that.updatePie(date, type);
 		});
 		this.chartDetails = new BarChart("containerChartDetails", ["Buzz", "Avis Négatifs", "Avis positifs", "Désinteressé"]);
 	},
@@ -68,6 +69,7 @@ var DataHandler = new Class({
 				that.firstTimestamp = that.reports[0].timestamp ;
 				that.lastTimestamp = that.reports[that.reports.length-1].timestamp ;
 				that.selectedTimestamp = that.lastTimestamp ;
+				that.geoDataHandler.displayGeoReport(that.selectedTimestamp);
 				//Main pie serie
 				var dataPie = [];
 				var lastReport = that.reports[that.reports.length-1] ;
@@ -80,6 +82,8 @@ var DataHandler = new Class({
 			    			click:function () {
 			    				var candidat = this.selected ? undefined : that.getCandidat(this.name) ;
 			    				that.updateGraphDetails(candidat);
+			    				var candidatName = this.selected ? undefined : candidat.candidatName;
+			    				that.geoDataHandler.displayGeoReport(that.selectedTimestamp, candidatName);
 				    		}
 			    		}
 					});
