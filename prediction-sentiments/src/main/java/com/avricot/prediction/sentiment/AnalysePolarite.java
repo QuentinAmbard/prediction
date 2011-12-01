@@ -18,6 +18,7 @@ import com.aliasi.classify.DynamicLMClassifier;
 import com.aliasi.lm.NGramProcessLM;
 import com.avricot.prediction.model.candidat.Candidat;
 import com.avricot.prediction.model.tweet.Tweet;
+import com.avricot.prediction.report.Polarity;
 import com.avricot.prediction.repository.candidat.CandidatRespository;
 import com.avricot.prediction.repository.tweet.TweetRepository;
 import com.avricot.prediction.sentiment.services.URLUtils;
@@ -47,10 +48,20 @@ public class AnalysePolarite {
 		int nGram = 8;
 		mClassifier = DynamicLMClassifier.createNGramProcess(mCategories, nGram);
 		
-		train();
-		evaluateTweets();
+		prepareTweetsForTrain();
+		
+//		train();
+//		evaluateTweets();
 	}
 
+	void prepareTweetsForTrain() {
+		List<Tweet> positifs = tweeterRepository.findAllByChecked(true);
+		for (Tweet tweet : positifs) {
+			LOG.info(tweet.getValue());
+		}
+	}
+	
+	
 	/**
 	 * Entraine le détecteur de polarité
 	 * @throws IOException
@@ -59,6 +70,9 @@ public class AnalysePolarite {
 	    for (int i = 0; i < mCategories.length; ++i) {
 	        String category = mCategories[i];
 	        Classification classification = new Classification(category);
+	        
+	        //TODO LOAD TWEET TO EVALUATE HERE
+	        
 	        File dir = new File(mPolarityDir, mCategories[i]);
 	        File[] trainFiles = dir.listFiles();
 	        for (int j = 0; j < trainFiles.length; ++j) {

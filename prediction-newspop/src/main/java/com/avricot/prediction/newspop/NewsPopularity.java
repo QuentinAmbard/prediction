@@ -20,6 +20,7 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import com.avricot.prediction.model.candidat.Candidat;
+import com.avricot.prediction.model.report.DailyReport;
 import com.avricot.prediction.model.report.Report;
 import com.avricot.prediction.repository.candidat.CandidatRespository;
 import com.avricot.prediction.repository.report.ReportRespository;
@@ -35,7 +36,7 @@ public class NewsPopularity {
 	ReportRespository reportRepository;
 	
 	private List<Candidat> candidats;
-	private List<Report> todayReport;
+	private List<Report> reports;
 	
 	private HashMap<Candidat, Integer> scoreMap;
 	
@@ -57,38 +58,78 @@ public class NewsPopularity {
 		scoreMap = new HashMap<Candidat, Integer>();
 		
 		Date todayDate = DateUtils.getMidnightTimestampDate(new Date());
-		todayReport = reportRepository.findByTimestamp(DateUtils.getMidnightTimestamp(new Date()));
+		reports = reportRepository.findByTimestamp(DateUtils.getMidnightTimestamp(new Date()));
 		
 		/* Le Monde */
 		LOG.info("Parsing du flux RSS du monde");
-		parseRSSLeMondeType(RSS_LEMONDE, todayDate);
-
+		HashMap<Candidat, Integer> currentNewspaper = parseRSSLeMondeType(RSS_LEMONDE, todayDate);
+		addValuesToReport("Le Monde", currentNewspaper);
+		
 		/* 20 minutes */
 		LOG.info("Parsing du flux RSS de 20 minutes");
-		parseRSSLeMondeType(RSS_20MINUTES, todayDate);
+		currentNewspaper = parseRSSLeMondeType(RSS_20MINUTES, todayDate);
+		addValuesToReport("20 Minutes", currentNewspaper);
 		
 		/* LCI */
 		LOG.info("Parsing du flux RSS de LCI");
-		parseRSSLeMondeType(RSS_LCI, todayDate);
+		currentNewspaper = parseRSSLeMondeType(RSS_LCI, todayDate);
+		addValuesToReport("LCI", currentNewspaper);
 		
 		/* Le Parisien */
 		LOG.info("Parsing du flux RSS de Le Parisien");
-		parseRSSLeMondeType(RSS_LEPARISIEN, todayDate);
+		currentNewspaper = parseRSSLeMondeType(RSS_LEPARISIEN, todayDate);
+		addValuesToReport("Le Parisien", currentNewspaper);
 		
 		/* Le Journal du Dimanche */
 		LOG.info("Parsing du flux RSS de Le Journal du dimanche");
-		parseRSSLeMondeType(RSS_JDD, todayDate);
+		currentNewspaper = parseRSSLeMondeType(RSS_JDD, todayDate);
+		addValuesToReport("Le Journal Du Dimanche", currentNewspaper);
+		
+		
+	}
+	
+	/**
+	 * Permet de remplir les dailyreports
+	 * @param newspaper
+	 * @param currentNewspaper
+	 */
+	private void addValuesToReport(String newspaper, HashMap<Candidat, Integer> currentNewspaper) {
+		DailyReport dailyReport;
+		
+		//TODO SAVE
+		
+		if(reports.isEmpty()) {
+			reports.add(new Report(DateUtils.getMidnightTimestamp(new Date())));
+		}
+		for (Report report : reports) {
+					if(report.getCandidats().isEmpty()) {
+						dailyReport = new DailyReport();
+					} else {
+//						for (CandidatName key : report.getCandidats().keySet()) {
+//							dailyReport = report.getCandidats().get(key)
+//						}
+					}
+					for (Candidat keyNews : currentNewspaper.keySet()) {
+//					if(key.toString().equalsIgnoreCase(keyNews.getCandidatName().toString())) {
+						
+//						report.getCandidats().get(key).getRssResult().put(newspaper, currentNewspaper.get(keyNews));
+//					}
+				}
+//			}
+		}
 	}
 	
 	/**
 	 * Parse les flux RSS de type de celui du Monde (avec le lien dans <div class="entry">)
 	 * @param url
+	 * @return 
 	 * @return
 	 * @throws IOException
 	 */
-	private void parseRSSLeMondeType(String url, Date todayDate) throws IOException {
+	private HashMap<Candidat, Integer> parseRSSLeMondeType(String url, Date todayDate) throws IOException {
 		Document doc = Jsoup.connect(url).timeout(0).get();
 		Elements items = doc.getElementsByTag("item");
+		HashMap<Candidat, Integer> rssCounterMap = new HashMap<Candidat, Integer>();
 		SimpleDateFormat sdf = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z", Locale.US);
 		for (Element item : items) {
 			Date dateArticle = null;
@@ -103,9 +144,11 @@ public class NewsPopularity {
 			if(dateArticle.after(todayDate)) {
 				Elements link = item.getElementsByTag("guid");
 				Document article = Jsoup.connect(link.text()).timeout(0).get();
-				parseForCandidatPopularity(article.body().text());
+				parseForCandidatPopularity(article.body().text(), rssCounterMap);
 			}
 		}
+		
+		return rssCounterMap;
 	}
 	
 	/**
@@ -114,20 +157,22 @@ public class NewsPopularity {
 	 * @param articleText
 	 * @param candidats
 	 */
-	private void parseForCandidatPopularity(String articleText) {
+	private void parseForCandidatPopularity(String articleText, HashMap<Candidat, Integer> rssCounterMap) {
 		int counter = 0;
 		int score;
-		HashMap<Candidat, Integer> rssCounterMap = new HashMap<Candidat, Integer>();
+//		HashMap<Candidat, Integer> rssCounterMap = new HashMap<Candidat, Integer>();
 		
 		for (Candidat candidat : candidats) {
 			counter = 0;
 			counter = stringOccur(articleText.toLowerCase(), candidat.getCandidatName().toString().toLowerCase());
 			if(counter != 0) {
-				if(!scoreMap.containsKey(candidat))
+				if(!scoreMap.containsKey(candidat)) {
 					scoreMap.put(candidat, counter);
-				else {
+					rssCounterMap.put(candidat, counter);
+				} else {
 					score = scoreMap.get(candidat);
 					scoreMap.put(candidat, counter + score);
+					rssCounterMap.put(candidat, counter + score);
 				}
 			}
 		}

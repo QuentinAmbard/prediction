@@ -1,5 +1,6 @@
 package com.avricot.prediction.model.theme;
 
+<<<<<<< HEAD
 import java.util.HashSet;
 import java.util.Set;
 
@@ -41,4 +42,8 @@ public class Theme {
 	public static enum ThemeName {
 		SECURITY, EUROPE, ECONOMIC, GREEN, IMIGRATION, SOCIAL, ENERGY;
 	}
+=======
+public enum Theme {
+	SECURITY, ECONOMIC, GREEN, IMIGRATION, SOCIAL, ENERGY;
+>>>>>>> 91d09caa53dab842a884fc2223b19e38736e2a28
 }
