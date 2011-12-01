@@ -13,7 +13,7 @@ import com.avricot.prediction.model.theme.Theme;
 import com.avricot.prediction.model.theme.Theme.ThemeName;
 import com.avricot.prediction.repository.theme.ThemeRepository;
 import com.avricot.prediction.utils.Normalizer;
-import com.avricot.prediction.utils.OpinionSteemer;
+import com.avricot.prediction.utils.Steemer;
 
 @Service
 public class ThemeService {
@@ -23,7 +23,7 @@ public class ThemeService {
 	@Inject
 	private Normalizer normalizer;
 	@Inject
-	private OpinionSteemer opinionSteemer;
+	private Steemer opinionSteemer;
 
 	private volatile List<Theme> cachedThemes;
 	private volatile long cacheDate = System.currentTimeMillis();
