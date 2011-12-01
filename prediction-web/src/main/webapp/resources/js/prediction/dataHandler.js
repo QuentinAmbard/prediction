@@ -9,11 +9,14 @@ var DataHandler = new Class({
 	chart: null,
 	selectType: null,
 	piePosition: null,
+	threeMap: null,
 	options: {
 	},
 	initialize: function(profile, options){
 		this.setOptions(options);
 		var that = this ;
+		this.threeMap = new ThreeMap("treeMap");
+		this.threeMap.draw([20,50,10,10,5,5]);
 		this.geoDataHandler = new GeoDataHandler();
 		this.selectType = $('selectType')
 		this.selectType.addEvent('click', function () {

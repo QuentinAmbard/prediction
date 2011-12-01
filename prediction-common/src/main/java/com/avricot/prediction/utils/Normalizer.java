@@ -1,18 +1,15 @@
 package com.avricot.prediction.utils;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-
 import org.springframework.stereotype.Service;
 
 @Service
 public class Normalizer {
 
 	public String normalize(String text) {
-//		try {
-//			text = URLDecoder.decode(text, "UTF8");
-//		} catch (UnsupportedEncodingException e) {
-//		}
+		// try {
+		// text = URLDecoder.decode(text, "UTF8");
+		// } catch (UnsupportedEncodingException e) {
+		// }
 
 		text = replaceChars(text, "èéêë", "e");
 		text = replaceChars(text, "ûù", "e");

@@ -11,6 +11,7 @@
 	<script type="text/javascript" src="./resources/js/prediction/dataHandler.js"></script>
 	<script type="text/javascript" src="./resources/js/prediction/geoDataHandler.js"></script>
 	<script type="text/javascript" src="./resources/js/prediction/utils.js"></script>
+	<script type="text/javascript" src="./resources/js/prediction/threemap.js"></script>
 	<script type="text/javascript" src="./resources/js/prediction/pie.js"></script>
 	<script type="text/javascript" src="./resources/js/prediction/chart.js"></script>
 	<script type="text/javascript" src="./resources/js/prediction/barChart.js"></script>
@@ -33,6 +34,7 @@
 	<div id="containerPiePosition" style="position: absolute; top: 145px; left: 330px; width: 140px; height: 145px; margin: 0 auto"></div>
 	<div id="containerChart" style="position: absolute; top: 300px; left: 200px; width: 1000px; height: 400px; margin: 0 auto"></div>
 	<div id="containerChartDetails" style="position: absolute; top: 400px;width: 200px; height: 200px; margin: 0 auto"></div>
+	<div id="treeMap" style="position: absolute; top: 300px; left: 200 ;width: 200px; height: 200px; margin: 0 auto"></div>
 
 <svg style="position: absolute; left:800px; margin: 0 auto" xmlns="http://www.w3.org/2000/svg" version="1.1">
 	<g transform="scale(0.8)">
