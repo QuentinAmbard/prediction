@@ -42,32 +42,36 @@ def build_query(candidat):
     return query[1:]
 
 def update_report(candidat, value, timestamp, regionName):
-    reports = db.report.find({"timestamp": timestamp})
-    print(value)
     if value != "" and value != " ":
-        print(timestamp)
-        if reports.count() >0:
-            report = reports[0]
-            if candidat['candidatName'] not in report['candidats']:
-                report['candidats'][candidat['candidatName']] = {}
-            if regionName=="":
-                report['candidats'][candidat['candidatName']]['insight'] = int(value)
-            else:
-                if "geoReport" not in report['candidats'][candidat['candidatName']]:
-                    report['candidats'][candidat['candidatName']]['geoReport'] = {}
-                report['candidats'][candidat['candidatName']]['geoReport'][regionName] = int(value)
-            report['timestamp'] = timestamp
-            db.report.update({"_id": report['_id']}, report)
-        else :
-            report = {}
-            report['candidats'] = {candidat['candidatName']: {}}
-            report['timestamp'] = timestamp
-            if regionName=="":
-                report['candidats'][candidat['candidatName']]['insight'] = int(value)
+        if regionName=="":
+            reports = db.report.find({"timestamp": timestamp})
+            print(value)
+            print(timestamp)
+            if reports.count() >0:
+                report = reports[0]
+                if candidat['candidatName'] not in report['candidats']:
+                    report['candidats'][candidat['candidatName']] = {}
+                if regionName=="":
+                    report['candidats'][candidat['candidatName']]['insight'] = int(value)
+                db.report.update({"_id": report['_id']}, report)
             else :
-                report['candidats'][candidat['candidatName']]['geoReport'] = {regionName: int(value)}
-            db.report.save(report)
-            
+                report = {}
+                report['candidats'] = {candidat['candidatName']: {}}
+                report['timestamp'] = timestamp
+                report['candidats'][candidat['candidatName']]['insight'] = int(value)
+                db.report.save(report)
+        else:
+            reports = db.georeport.find({"timestamp": timestamp, "candidatName": candidat['candidatName']})
+            if reports.count() >0:
+                report = reports[0]
+                report['report'][regionName] =  int(value)
+                db.georeport.update({"_id": report['_id']}, report)
+            else:
+                report = {}
+                report['candidatName'] = candidat['candidatName']
+                report['timestamp'] = timestamp
+                report['report'] = {regionName: int(value)}
+                db.georeport.save(report)
             
 def get_timestamp (date_str):
     date=time.strptime(date_str,"%Y-%m-%d")

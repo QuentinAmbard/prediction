@@ -10,6 +10,7 @@
 	<script type="text/javascript" src="./resources/js/mootools-more.js"></script>
 	<script type="text/javascript" src="./resources/js/prediction/dataHandler.js"></script>
 	<script type="text/javascript" src="./resources/js/prediction/geoDataHandler.js"></script>
+	<script type="text/javascript" src="./resources/js/prediction/utils.js"></script>
 	<script type="text/javascript" src="./resources/js/prediction/pie.js"></script>
 	<script type="text/javascript" src="./resources/js/prediction/chart.js"></script>
 	<script type="text/javascript" src="./resources/js/prediction/barChart.js"></script>

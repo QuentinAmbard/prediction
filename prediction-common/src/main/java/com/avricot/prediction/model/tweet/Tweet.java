@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.avricot.prediction.model.candidat.Candidat.CandidatName;
-import com.avricot.prediction.model.theme.Theme;
+import com.avricot.prediction.model.theme.Theme.ThemeName;
 import com.avricot.prediction.report.Polarity;
 
 @Document(collection = "tweet")
@@ -28,13 +28,13 @@ public class Tweet {
 	private boolean checked = false; // True when manually checked.
 
 	private Geolocation geolocation;
-	private List<Theme> themes;
+	private List<ThemeName> themes;
 
-	public List<Theme> getThemes() {
+	public List<ThemeName> getThemes() {
 		return themes;
 	}
 
-	public void setThemes(List<Theme> themes) {
+	public void setThemes(List<ThemeName> themes) {
 		this.themes = themes;
 	}
 

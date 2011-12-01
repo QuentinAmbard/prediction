@@ -17,3 +17,14 @@ db.candidat.insert({"_class" : "com.avricot.prediction.model.candidat.Candidat",
 db.candidat.insert({"_class" : "com.avricot.prediction.model.candidat.Candidat", positionValue: 140, position: "DROITE", "schemeUrl": "", "tendancy": "", "description": "", "birthday": new Date(2010, 3, 1), "siteUrl": "http://www.debout-la-republique.fr", "partiFullName": "Debout la République", "parti": "DLR", "displayName": "Nicolas Dupont-Aignan",  "candidatName" : "DUPONT_AIGNAN", "nicknames" : ["Nicolas Dupont-Aignan", "Nicolas Dupont Aignan", "Dupont-Aignan", "Dupont Aignan", "Dupont-Aignan", "N Dupont-Aignan", "Nicolas DA" ], "geoReport" : { } })
 
 db.candidat.insert({"_class" : "com.avricot.prediction.model.candidat.Candidat", positionValue: 150, position: "EXTREME_DROITE", "schemeUrl": "", "tendancy": "", "description": "", "birthday": new Date(2010, 3, 1), "siteUrl": "http://www.frontnational.com", "partiFullName": "Front National", "parti": "FN", "displayName": "Marine Lepen",  "candidatName" : "LEPEN", "nicknames" : [ "Lepen", "Marine Lepen", "Marine L", "mlepen", "lepenm"], "geoReport" : { } })
+
+
+
+
+
+db.theme.insert({"_class" : "com.avricot.prediction.model.theme.Theme", themeName: "SECURITY", words: ["tranquillité", "ordre", "crainte", "securite", "police", "insecurite", "danger", "meutre", "crs", "flic", "flicage", "gendarme", "gendarmerie" ]});
+db.theme.insert({"_class" : "com.avricot.prediction.model.theme.Theme", themeName: "ECONOMIC", words: ["emploi", "economie", "economique", "pouvoir achat", "pouvoir d'achat", "crise", "argent", "salaire", "remuneration", "rsa", "finance", "financier", "pauvre", "riche", "chomage", "richesse", "smic" ]});
+db.theme.insert({"_class" : "com.avricot.prediction.model.theme.Theme", themeName: "EUROPE", words: ["Maastricht", "europe", "federal", "europeen", "parlement", "euro", "monnaie unique" ]});
+db.theme.insert({"_class" : "com.avricot.prediction.model.theme.Theme", themeName: "GREEN", words: ["environnement", "environemental", "carburant", "petroel", "ecologie", "energie", "nucleaire", "electricite", "electric", "electrique", "polution", "pollution", "contamination", "ecologie" ]});
+db.theme.insert({"_class" : "com.avricot.prediction.model.theme.Theme", themeName: "IMIGRATION", words: ["immigration", "immigran", "immigre", "etranger", "frontiere", "ouverture", "raciste" ]});
+db.theme.insert({"_class" : "com.avricot.prediction.model.theme.Theme", themeName: "SOCIAL", words: ["social", "secu", "logement", "hebergement", "démunis", "aide", "pauvre", "repartition", "sdf"]}); 

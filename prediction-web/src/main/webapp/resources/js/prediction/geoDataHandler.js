@@ -15,20 +15,24 @@ var GeoDataHandler = new Class({
 	 */
 	drawMap: function (regions) {
 		var regionsEl = this.regions;
+		var max  = 0;
 		var update = function () {
 			for(var i=0,ii=regionsEl.length;i<ii;i++) {
 				var id = regionsEl[i].id;
 				var value = regions[id] || 0;
 				console.log(this.percent);
-				regionsEl[i].setProperty('fill', this.percent*value);
+				var color = UTILS.color.getColor(this.percent*value/max, "#1212e0", "#dbdbdb");
+				regionsEl[i].setProperty('fill', color);
 			}
 		}
-		var tween = new TWEEN.Tween({percent: 0}).to({percent: 100}, 1000).onUpdate(update).start();
 		for(var i=0,ii=regionsEl.length;i<ii;i++) {
 			var id = regionsEl[i].id;
 			var value = regions[id] || 0;
+			max =Math.max(value, max);
 			regionsEl[i].store('tip:text', 'Valeur : '+value+'%');
+			regionsEl[i].initialColor = regionsEl[i].getProperty('fill');
 		}
+		var tween = new TWEEN.Tween({percent: 0}).to({percent: 100}, 1000).onUpdate(update).start();
 	},
 	/**
 	 * Display the given report.
