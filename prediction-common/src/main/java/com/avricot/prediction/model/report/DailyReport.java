@@ -6,6 +6,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.avricot.prediction.model.candidat.Candidat.CandidatName;
 import com.avricot.prediction.model.report.tweeter.TweetReport;
+import com.avricot.prediction.model.theme.Theme;
 
 public class DailyReport {
 	private TweetReport tweetReport;
@@ -17,9 +18,11 @@ public class DailyReport {
 	private float none;
 	private PolarityReport negativePolarity;
 	private PolarityReport positivePolarity;
-	private HashMap<String, Integer> rssResult; //<String newspaperName, Integer score>
+	private HashMap<String, Integer> rssResult; // <String newspaperName,
+												// Integer score>
 	private CandidatName candidatName;
 	private final HashMap<Region, Integer> geoReport = new HashMap<Region, Integer>();
+	private final HashMap<Theme.ThemeName, Integer> themes = new HashMap<Theme.ThemeName, Integer>();
 
 	@JsonIgnore
 	public HashMap<String, Integer> getRssResult() {
@@ -29,7 +32,7 @@ public class DailyReport {
 	public void setRssResult(HashMap<String, Integer> rssResult) {
 		this.rssResult = rssResult;
 	}
-	
+
 	public TweetReport getTweetReport() {
 		return tweetReport;
 	}
@@ -116,5 +119,9 @@ public class DailyReport {
 	@JsonIgnore
 	public HashMap<Region, Integer> getGeoReport() {
 		return geoReport;
+	}
+
+	public HashMap<Theme.ThemeName, Integer> getThemes() {
+		return themes;
 	}
 }
