@@ -23,4 +23,7 @@ public interface TweetRepository extends MongoRepository<Tweet, ObjectId>, Tweet
 
 	@Query("{candidatName : {$exists: false}}")
 	public List<Tweet> findNoCandidat();
+	
+	@Query("{polarity : {$exists: false}}")
+	public List<Tweet> findNoPolarity();
 }
