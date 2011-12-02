@@ -20,7 +20,6 @@ var GeoDataHandler = new Class({
 			for(var i=0,ii=regionsEl.length;i<ii;i++) {
 				var id = regionsEl[i].id;
 				var value = regions[id] || 0;
-				console.log(this.percent);
 				var color = UTILS.color.getColor(this.percent*value/max, "#1212e0", "#dbdbdb");
 				regionsEl[i].setProperty('fill', color);
 			}

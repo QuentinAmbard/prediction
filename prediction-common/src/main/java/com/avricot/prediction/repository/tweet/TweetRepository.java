@@ -8,11 +8,14 @@ import org.springframework.data.mongodb.repository.Query;
 
 import com.avricot.prediction.model.candidat.Candidat.CandidatName;
 import com.avricot.prediction.model.tweet.Tweet;
+import com.avricot.prediction.report.Polarity;
 
 public interface TweetRepository extends MongoRepository<Tweet, ObjectId>, TweetRepositoryCustom {
 	public Tweet findOneByChecked(boolean checked);
 
 	public List<Tweet> findByChecked(boolean checked);
+
+	public List<Tweet> findByCandidatNameAndPolarity(CandidatName candidatName, Polarity polarity);
 
 	public List<Tweet> findByValueAndCandidatName(String value, CandidatName candidatName);
 

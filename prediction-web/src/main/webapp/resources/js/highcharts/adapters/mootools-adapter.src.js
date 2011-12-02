@@ -120,12 +120,10 @@ win.HighchartsAdapter = {
 
 	/**
 	 * MooTool's each function
-	 *
+	 * Quentin: fix mootools 1.4.1
 	 */
 	each: function (arr, fn) {
-		return legacy ?
-			$each(arr, fn) :
-			arr.each(fn);
+		return legacy ? $each(arr, fn) : Array.each(arr, fn);
 	},
 
 	/**
