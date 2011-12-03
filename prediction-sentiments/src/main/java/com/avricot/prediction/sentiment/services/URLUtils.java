@@ -23,7 +23,8 @@ public class URLUtils {
 		for (String string : parts) {
 			try {
 				URL url = new URL(string);
-				foundUrl.add(string);
+				if(string.length() > 9)
+					foundUrl.add(string);
 			} catch (MalformedURLException e) {
 				/* Ce n'est pas une URL*/
 			}
@@ -31,10 +32,4 @@ public class URLUtils {
 		
 		return foundUrl;
 	}
-	
-	public static String url2String(URL url) {
-		return null;
-		
-	}
-	
 }

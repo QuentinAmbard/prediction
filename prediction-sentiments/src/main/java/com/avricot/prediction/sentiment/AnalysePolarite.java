@@ -1,8 +1,6 @@
 package com.avricot.prediction.sentiment;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -22,7 +20,6 @@ import com.avricot.prediction.report.Polarity;
 import com.avricot.prediction.repository.candidat.CandidatRespository;
 import com.avricot.prediction.repository.tweet.TweetRepository;
 import com.avricot.prediction.sentiment.services.URLUtils;
-import com.google.common.base.Charsets;
 
 @Service
 public class AnalysePolarite {
@@ -35,30 +32,66 @@ public class AnalysePolarite {
 	
 	private static Logger LOG = Logger.getLogger(AnalysePolarite.class);
 	
-	private static final String DATA_TXT_SENTOKEN_LINGPIPE = "C:\\Users\\Jeremy\\Dropbox\\2012\\workspace\\lingpipe\\data\\txt_sentoken";
+	private StringBuffer positiveTweets = new StringBuffer(); 
+	private StringBuffer negativeTweets = new StringBuffer();
+	private StringBuffer neutralTweets = new StringBuffer();
 	
 	private List<Candidat> candidats;
-	private File mPolarityDir;
-	private String[] mCategories;
+	private String[] mCategories = {"positive", "negative", "neutral"};
 	private DynamicLMClassifier<NGramProcessLM> mClassifier;
-	
+
 	public void run() throws ClassNotFoundException, IOException {
-		mPolarityDir = new File(DATA_TXT_SENTOKEN_LINGPIPE);
-		mCategories = mPolarityDir.list();
 		int nGram = 8;
 		mClassifier = DynamicLMClassifier.createNGramProcess(mCategories, nGram);
+		candidats = candidatRespository.findAll();
 		
-		prepareTweetsForTrain();
-		
-//		train();
-//		evaluateTweets();
+		List<Tweet> tweetsToEvaluate = tweeterRepository.findNoPolarity();
+		LOG.info("\n\n\n>>>>>>>>>>>>>>>>> SIZE = " +  tweetsToEvaluate.size() + "<<<<<<<<<<<<<<<<<\n\n");
+	
+		train();
+		evaluateTweets(tweetsToEvaluate);
 	}
 
+	/**
+	 * 
+	 */
 	void prepareTweetsForTrain() {
 		List<Tweet> positifs = tweeterRepository.findAllByChecked(true);
 		for (Tweet tweet : positifs) {
-			LOG.info(tweet.getValue());
+			if(tweet.getPolarity() == Polarity.POSITIVE)
+				positiveTweets.append(tweet.getValue());
+			else if(tweet.getPolarity() == Polarity.NEGATIVE)
+				negativeTweets.append(tweet.getValue());
+			else if(tweet.getPolarity() == Polarity.NEUTRAL)
+				neutralTweets.append(tweet.getValue());
 		}
+		
+		tweetCleaner(neutralTweets.toString());
+		tweetCleaner(positiveTweets.toString());
+		tweetCleaner(negativeTweets.toString());
+	}
+	
+	/**
+	 * Nettoie les tweets avant de les injecter dans l'entrainement du détecteur
+	 * @param tweet
+	 * @return
+	 */
+	String tweetCleaner(String tweet) {
+		for (Candidat candidat : candidats) {
+			tweet = tweet.replaceAll("(?i)"+candidat.getDisplayName(), "");
+			tweet = tweet.replaceAll("(?i)"+candidat.getCandidatName().toString(), "");
+			for (String nickname : candidat.getNicknames()) {
+				tweet = tweet.replaceAll("(?i)"+nickname, "");
+			}
+			tweet = tweet.replaceAll("RT", "");
+			/* Pseudos Twitter */
+			tweet = tweet.replaceAll("/[@]\\w+/", "");
+			tweet = tweet.replaceAll("\\#", "");
+			//TODO GERER LES URLS
+//			tweet = tweet.replaceAll("(.*://)", "");
+		}
+		
+		return tweet;
 	}
 	
 	
@@ -67,49 +100,47 @@ public class AnalysePolarite {
 	 * @throws IOException
 	 */
 	void train() throws IOException {
-	    for (int i = 0; i < mCategories.length; ++i) {
-	        String category = mCategories[i];
-	        Classification classification = new Classification(category);
-	        
-	        //TODO LOAD TWEET TO EVALUATE HERE
-	        
-	        File dir = new File(mPolarityDir, mCategories[i]);
-	        File[] trainFiles = dir.listFiles();
-	        for (int j = 0; j < trainFiles.length; ++j) {
-            	File trainFile = trainFiles[j];
-            	String review = com.google.common.io.Files.toString(trainFile, Charsets.ISO_8859_1);
-                Classified<CharSequence> classified = new Classified<CharSequence>(review, classification);
-                mClassifier.handle(classified);
-	        }
-	    }
+		prepareTweetsForTrain();
+		
+        Classification classificationPos = new Classification("positive");
+        Classification classificationNeg = new Classification("negative");
+        Classification classificationNeu = new Classification("neutral");
+        
+        Classified<CharSequence> classifiedPos = new Classified<CharSequence>(positiveTweets, classificationPos);
+        Classified<CharSequence> classifiedNeg = new Classified<CharSequence>(negativeTweets, classificationNeg);
+        Classified<CharSequence> classifiedNeu = new Classified<CharSequence>(neutralTweets, classificationNeu);
+        
+        mClassifier.handle(classifiedPos);
+        mClassifier.handle(classifiedNeg);
+        mClassifier.handle(classifiedNeu);
 	}
 	
 	/**
 	 * Evalue la polarité de tweets
 	 * @throws IOException
 	 */
-	void evaluateTweets() throws IOException {
-		
-		List<Tweet> tweetList = tweeterRepository.findAllByChecked(false);
-		Classification tmpClass = null;
+	void evaluateTweets(List<Tweet> tweetList) throws IOException {
 		Classification classification = null;
 		for (Tweet tweet : tweetList) {
 			final String tweetValue = tweet.getValue();
-			List<String> Urls = URLUtils.URLInString(tweetValue);
-			if(!Urls.isEmpty()) {
-				List<Classification> classListe = new ArrayList<Classification>();
-				for (String url : Urls) {
-					tmpClass = evaluateURLPolarite(url);
-					if(tmpClass != null) {
-						/* Comment on exploite cette liste ? */
-						classListe.add(evaluateURLPolarite(url));
-					}
-					LOG.info("URL SCANNEE");
-				}
+			List<String> urls = URLUtils.URLInString(tweetValue);
+			
+			if(!urls.isEmpty()) {
+				classification = evaluateURLPolarite(urls);
 			} else {
 				classification = mClassifier.classify(tweetValue);	
-				LOG.info(tweetValue +" => " + classification.bestCategory());
-			}			
+			}
+			
+			final String bestCategory = classification.bestCategory();
+			LOG.info(tweetValue +" => " + bestCategory);
+			if(bestCategory.equalsIgnoreCase("positive"))
+				tweet.setPolarity(Polarity.POSITIVE);
+			else if(bestCategory.equalsIgnoreCase("negative"))
+				tweet.setPolarity(Polarity.NEGATIVE);
+			else if(bestCategory.equalsIgnoreCase("neutral"))
+				tweet.setPolarity(Polarity.NEUTRAL);
+			
+			tweeterRepository.save(tweet);
 		}
     }
 	
@@ -120,8 +151,7 @@ public class AnalysePolarite {
 	 * @throws IOException
 	 */
 	Classification evaluate(String s) throws IOException {
-		Classification classification = null;
-		classification = mClassifier.classify(s);
+		Classification classification = mClassifier.classify(s);
 		return classification;	
     }
 
@@ -132,25 +162,23 @@ public class AnalysePolarite {
 	 * @return
 	 * @throws IOException
 	 */
-	Classification evaluateURLPolarite(String currentUrl) throws IOException {
-		
-		candidats = candidatRespository.findAll();
+	Classification evaluateURLPolarite(List<String> urls) throws IOException {
 		StringBuffer toAnalyse = new StringBuffer("");
-		
-		LOG.info("URL scannée : " + currentUrl);
-		try {
-			Document doc = Jsoup.connect(currentUrl).timeout(0).get();
-			String[] splittedArticle = (doc.body().text()).split("\\.");
-			for (String phrase : splittedArticle) {
-				for (Candidat candidat : candidats) {
-					if(phrase.toLowerCase().indexOf(candidat.getCandidatName().toString().toLowerCase()) != -1) {
-						LOG.info("Phrase sur " + candidat.getCandidatName().toString() + " =>> " + phrase);
-						toAnalyse.append(phrase);
+		for (String currentUrl : urls) {
+			LOG.info("URL scannée : " + currentUrl);
+			try {
+				Document doc = Jsoup.connect(currentUrl).timeout(0).get();
+				String[] splittedArticle = (doc.body().text()).split("\\.");
+				for (String phrase : splittedArticle) {
+					for (Candidat candidat : candidats) {
+						if(phrase.toLowerCase().indexOf(candidat.getCandidatName().toString().toLowerCase()) != -1) {
+							toAnalyse.append(phrase);
+						}
 					}
 				}
+			} catch (IOException e) {
+				LOG.error("ERREUR EN SCANNANT URL : " + currentUrl);
 			}
-		} catch (IOException e) {
-			LOG.error("ERREUR EN SCANNANT URL : " + currentUrl);
 		}
 		if(!toAnalyse.equals("")) {
 			return evaluate(toAnalyse.toString());
@@ -158,6 +186,4 @@ public class AnalysePolarite {
 			return null;
 		}
 	}
-	
-	
 }
