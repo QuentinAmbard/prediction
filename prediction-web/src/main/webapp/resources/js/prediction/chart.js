@@ -30,8 +30,8 @@ var Chart = new Class({
 			},
 
 			yAxis : [ {
-				min : -10,
-				max: 100,
+				min : 0,
+				max: 101,
 				title : {
 					text : 'Tendance'
 				},

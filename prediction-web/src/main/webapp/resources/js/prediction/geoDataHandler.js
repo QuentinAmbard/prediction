@@ -20,7 +20,9 @@ var GeoDataHandler = new Class({
 			for(var i=0,ii=regionsEl.length;i<ii;i++) {
 				var id = regionsEl[i].id;
 				var value = regions[id] || 0;
-				var color = UTILS.color.getColor(this.percent*value/max, "#1212e0", "#dbdbdb");
+				var percent;
+				max == 0 ? percent = 0 : percent = this.percent*value/max; 
+				var color = UTILS.color.getColor(percent, "#1212e0", "#dbdbdb");
 				regionsEl[i].setProperty('fill', color);
 			}
 		}

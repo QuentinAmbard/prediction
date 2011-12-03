@@ -22,7 +22,7 @@ var Pie = new Class({
 			},
 			tooltip: {
 				formatter: function() {
-					return '<b>'+ this.point.name +'</b>: '+ Math.round(this.percentage*10)/10 +' %<br />Cliquez pour afficher le détail';
+					return '<b>'+ this.point.name +'</b>: '+ Math.round(this.percentage*10)/10 +' %<br />Parti : '+this.point.partiFullName+'<br/>Cliquez pour afficher le détail';
 				}
 			},
 			plotOptions: {
@@ -43,7 +43,7 @@ var Pie = new Class({
 					dataLabels: {
 						enabled: this.options.dataLabelsEnabled,
 						formatter: function() {
-							return '<b>'+ this.point.name +'</b>: '+ Math.round(this.percentage*10)/10 +' %';
+							return '<b>'+ this.point.parti +'</b>';
 						}
 					}
 				}

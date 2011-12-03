@@ -35,10 +35,10 @@ var DataHandler = new Class({
 		//svg Z-index hack.
 		this.pie.addEvents({
 			'mouseOver': function() {
-				$('containerPie').setStyle('z-index', 100);
+				$('containerPie').setStyle('z-index', 3);
 			},
 			'mouseOut': function() {
-				$('containerPie').setStyle('z-index', -1);
+				$('containerPie').setStyle('z-index', 1);
 			}
 		});
 		this.chart = new Chart("containerChart");
@@ -78,7 +78,9 @@ var DataHandler = new Class({
 				var lastReport = that.reports[that.reports.length-1] ;
 				for(candidat in that.candidats) {
 					var candidatReport = lastReport.candidats[candidat];
-					dataPie.push({name: that.candidats[candidat].displayName, 
+					dataPie.push({parti: that.candidats[candidat].parti,
+						partiFullName: that.candidats[candidat].partiFullName,
+						name: that.candidats[candidat].displayName, 
 						y:candidatReport.tendance,
 						events:{
 							//Click on a point on the main pie
@@ -149,7 +151,8 @@ var DataHandler = new Class({
 			if(typeof(candidat) != "undefined") {
 				title += " pour "+candidat.displayName;
 			}
-			var percent = themes[theme]/total*100 ;
+			var percent;
+			total == 0 ? percent = 0 : percent=themes[theme]/total*100 ;
 			var text = "Plus le carré est important, plus la préoccupation est grande.<br /> Valeur :"+Math.round(percent*10)/10+"%";
 			values.push({id: theme, value: percent, title: title, text: text});
 		}
