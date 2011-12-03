@@ -15,7 +15,7 @@ public class Report {
 	@Id
 	private ObjectId id;
 	private long timestamp;
-	private final HashMap<CandidatName, DailyReport> candidats = new HashMap<Candidat.CandidatName, DailyReport>();
+	private final HashMap<CandidatName, CandidatReport> candidats = new HashMap<Candidat.CandidatName, CandidatReport>();
 
 	public Report() {
 
@@ -42,7 +42,7 @@ public class Report {
 		this.timestamp = timestamp;
 	}
 
-	public HashMap<CandidatName, DailyReport> getCandidats() {
+	public HashMap<CandidatName, CandidatReport> getCandidats() {
 		return candidats;
 	}
 

@@ -8,7 +8,7 @@ import com.avricot.prediction.model.candidat.Candidat.CandidatName;
 import com.avricot.prediction.model.report.tweeter.TweetReport;
 import com.avricot.prediction.model.theme.Theme;
 
-public class DailyReport {
+public class CandidatReport {
 	private TweetReport tweetReport;
 	private float insight;
 	private float buzz;
@@ -121,7 +121,6 @@ public class DailyReport {
 		return geoReport;
 	}
 
-	@JsonIgnore
 	public HashMap<Theme.ThemeName, Integer> getThemes() {
 		return themes;
 	}

@@ -8,7 +8,7 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 
 import com.avricot.prediction.model.candidat.Candidat;
-import com.avricot.prediction.model.report.DailyReport;
+import com.avricot.prediction.model.report.CandidatReport;
 import com.avricot.prediction.model.report.Report;
 import com.avricot.prediction.model.theme.Theme.ThemeName;
 import com.avricot.prediction.repository.candidat.CandidatRespository;
@@ -63,7 +63,7 @@ public class MashupTheme {
 		List<Candidat> candidats = candidatRepository.findAll();
 
 		for (Candidat candidat : candidats) {
-			DailyReport dailyReport = report.getCandidats().get(candidat.getCandidatName());
+			CandidatReport dailyReport = report.getCandidats().get(candidat.getCandidatName());
 			for (ThemeName theme : ThemeName.values()) {
 				long value = tweetRepository.count(candidat.getCandidatName(), startDate, endDate, theme);
 				dailyReport.getThemes().put(theme, (int) value);

@@ -11,12 +11,12 @@ var DataHandler = new Class({
 	piePosition: null,
 	threeMap: null,
 	options: {
+		themeDescrition: {"SECURITY": "la Sécurité", "EUROPE": "l'Europe", "ECONOMIC": "l'Economie", "GREEN": "l'Ecologie", "IMIGRATION": "l'Immigration", "SOCIAL": "le Social"}
 	},
 	initialize: function(profile, options){
 		this.setOptions(options);
 		var that = this ;
 		this.threeMap = new ThreeMap("treeMap");
-		this.threeMap.draw([20,50,10,10,5,5]);
 		this.geoDataHandler = new GeoDataHandler();
 		this.selectType = $('selectType')
 		this.selectType.addEvent('click', function () {
@@ -87,6 +87,7 @@ var DataHandler = new Class({
 			    				that.updateGraphDetails(candidat);
 			    				var candidatName = this.selected ? undefined : candidat.candidatName;
 			    				that.geoDataHandler.displayGeoReport(that.selectedTimestamp, candidatName);
+			    				that.updateThemes(that.selectedTimestamp, candidatName);
 				    		}
 			    		}
 					});
@@ -114,9 +115,46 @@ var DataHandler = new Class({
 				
 				//details chart
 				that.chartDetails.initChart(that.getSeriesForChartDetails(that.lastTimestamp));
+				
+				//Theme threemap
+				that.updateThemes(that.lastTimestamp);
 			}
 		}).send();
 	}, 
+	/**
+	 * Update the theme threechart.
+	 */
+	updateThemes: function(timestamp, candidatName) {
+		var themes ;
+		var report = this.getReport(timestamp);
+		if(typeof(candidatName) == "undefined") {
+			themes = {};
+			for(candidatReport in report.candidats){
+				for(theme in report.candidats[candidatReport].themes) {
+					value = themes[theme] || 0 ;
+					value += report.candidats[candidatReport].themes[theme] ;
+					themes[theme] = value ;
+				}
+			}
+		} else {
+			themes = report.candidats[candidatName].themes;
+		}
+		var values = [];
+		var total = 0;
+		for(theme in themes) {
+			total += themes[theme] ;
+		}
+		for(theme in themes) {
+			var title = "Préoccupation des français pour "+this.options.themeDescrition[theme];
+			if(typeof(candidat) != "undefined") {
+				title += " pour "+candidat.displayName;
+			}
+			var percent = themes[theme]/total*100 ;
+			var text = "Plus le carré est important, plus la préoccupation est grande.<br /> Valeur :"+Math.round(percent*10)/10+"%";
+			values.push({id: theme, value: percent, title: title, text: text});
+		}
+		this.threeMap.draw(values);
+	},
 	/**
 	 * Return the series given a specific type.
 	 */

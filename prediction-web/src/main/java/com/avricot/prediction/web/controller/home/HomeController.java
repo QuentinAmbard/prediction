@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.avricot.prediction.model.candidat.Candidat;
 import com.avricot.prediction.model.candidat.Candidat.CandidatName;
-import com.avricot.prediction.model.report.DailyReport;
+import com.avricot.prediction.model.report.CandidatReport;
 import com.avricot.prediction.model.report.GeoReport;
 import com.avricot.prediction.model.report.Region;
 import com.avricot.prediction.model.report.Report;
@@ -48,7 +48,7 @@ public class HomeController {
 	public void map() {
 		List<Report> reports = reportRepository.findAll(new Sort(Direction.ASC, "timestamp"));
 		for (Report r : reports) {
-			for (Entry<CandidatName, DailyReport> entry : r.getCandidats().entrySet()) {
+			for (Entry<CandidatName, CandidatReport> entry : r.getCandidats().entrySet()) {
 				GeoReport g = new GeoReport();
 				g.setTimestamp(r.getTimestamp());
 				g.setCandidatName(entry.getKey());
@@ -121,7 +121,7 @@ public class HomeController {
 			return false;
 		}
 		int sum = 0;
-		for (Entry<CandidatName, DailyReport> entry : report.getCandidats().entrySet()) {
+		for (Entry<CandidatName, CandidatReport> entry : report.getCandidats().entrySet()) {
 			sum += entry.getValue().getBuzz();
 		}
 		return sum > 0;

@@ -20,7 +20,7 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import com.avricot.prediction.model.candidat.Candidat;
-import com.avricot.prediction.model.report.DailyReport;
+import com.avricot.prediction.model.report.CandidatReport;
 import com.avricot.prediction.model.report.Report;
 import com.avricot.prediction.repository.candidat.CandidatRespository;
 import com.avricot.prediction.repository.report.ReportRespository;
@@ -94,7 +94,7 @@ public class NewsPopularity {
 	 * @param currentNewspaper
 	 */
 	private void addValuesToReport(String newspaper, HashMap<Candidat, Integer> currentNewspaper) {
-		DailyReport dailyReport;
+		CandidatReport dailyReport;
 
 		// TODO SAVE
 
@@ -102,7 +102,7 @@ public class NewsPopularity {
 			report = new Report(DateUtils.getMidnightTimestamp(new Date()));
 		}
 		if (report.getCandidats().isEmpty()) {
-			dailyReport = new DailyReport();
+			dailyReport = new CandidatReport();
 		} else {
 			// for (CandidatName key : report.getCandidats().keySet()) {
 			// dailyReport = report.getCandidats().get(key)
