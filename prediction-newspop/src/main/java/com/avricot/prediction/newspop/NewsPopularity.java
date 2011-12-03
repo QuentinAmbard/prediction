@@ -20,7 +20,6 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import com.avricot.prediction.model.candidat.Candidat;
-import com.avricot.prediction.model.report.DailyReport;
 import com.avricot.prediction.model.report.Report;
 import com.avricot.prediction.repository.candidat.CandidatRespository;
 import com.avricot.prediction.repository.report.ReportRespository;
@@ -45,10 +44,9 @@ public class NewsPopularity {
 	private static final String RSS_LCI = "http://rss.feedsportal.com/c/32788/f/524037/index.rss";
 	private static final String RSS_LEPARISIEN = "http://rss.leparisien.fr/leparisien/rss/une.xml";
 	private static final String RSS_JDD = "http://rss.feedsportal.com/c/285/f/3637/index.rss";
-
 	private static final String RSS_LEFIGARO = "http://rss.lefigaro.fr/lefigaro/laune";
-	private static final String RSS_LIBERATION = "http://rss.liberation.fr/rss/9/";
 
+	private static final String RSS_LIBERATION = "http://rss.liberation.fr/rss/9/";
 	private static final String RSS_OUESTFRANCE = "http://www.ouest-france.fr/dma-rss_-Toutes-les-DMA-RSS_6346--fils-tous_filDMA.Htm#xtor=RSS-3003";
 
 	private static Logger LOG = Logger.getLogger(NewsPopularity.class);
@@ -60,63 +58,34 @@ public class NewsPopularity {
 		Date todayDate = DateUtils.getMidnightTimestampDate(new Date());
 		report = reportRepository.findByTimestamp(DateUtils.getMidnightTimestamp(new Date()));
 
+		LOG.info("Parsing du flux RSS du Figaro");
+		parseRSSLeMondeType(RSS_LEFIGARO, todayDate);
+		
 		/* Le Monde */
 		LOG.info("Parsing du flux RSS du monde");
-		HashMap<Candidat, Integer> currentNewspaper = parseRSSLeMondeType(RSS_LEMONDE, todayDate);
-		addValuesToReport("Le Monde", currentNewspaper);
-
+		parseRSSLeMondeType(RSS_LEMONDE, todayDate);
+		
 		/* 20 minutes */
 		LOG.info("Parsing du flux RSS de 20 minutes");
-		currentNewspaper = parseRSSLeMondeType(RSS_20MINUTES, todayDate);
-		addValuesToReport("20 Minutes", currentNewspaper);
-
+		parseRSSLeMondeType(RSS_20MINUTES, todayDate);
+		
 		/* LCI */
 		LOG.info("Parsing du flux RSS de LCI");
-		currentNewspaper = parseRSSLeMondeType(RSS_LCI, todayDate);
-		addValuesToReport("LCI", currentNewspaper);
-
+		parseRSSLeMondeType(RSS_LCI, todayDate);
+		
 		/* Le Parisien */
 		LOG.info("Parsing du flux RSS de Le Parisien");
-		currentNewspaper = parseRSSLeMondeType(RSS_LEPARISIEN, todayDate);
-		addValuesToReport("Le Parisien", currentNewspaper);
-
+		parseRSSLeMondeType(RSS_LEPARISIEN, todayDate);
+		
 		/* Le Journal du Dimanche */
 		LOG.info("Parsing du flux RSS de Le Journal du dimanche");
-		currentNewspaper = parseRSSLeMondeType(RSS_JDD, todayDate);
-		addValuesToReport("Le Journal Du Dimanche", currentNewspaper);
-
-	}
-
-	/**
-	 * Permet de remplir les dailyreports
-	 * 
-	 * @param newspaper
-	 * @param currentNewspaper
-	 */
-	private void addValuesToReport(String newspaper, HashMap<Candidat, Integer> currentNewspaper) {
-		DailyReport dailyReport;
-
-		// TODO SAVE
-
-		if (report == null) {
-			report = new Report(DateUtils.getMidnightTimestamp(new Date()));
+		parseRSSLeMondeType(RSS_JDD, todayDate);
+		
+		/* Enregistrement des valeurs */
+		for (Candidat key : scoreMap.keySet()) {
+			report.getCandidats().get(key.getCandidatName()).setRssCountResult(scoreMap.get(key));
 		}
-		if (report.getCandidats().isEmpty()) {
-			dailyReport = new DailyReport();
-		} else {
-			// for (CandidatName key : report.getCandidats().keySet()) {
-			// dailyReport = report.getCandidats().get(key)
-			// }
-		}
-		for (Candidat keyNews : currentNewspaper.keySet()) {
-			// if(key.toString().equalsIgnoreCase(keyNews.getCandidatName().toString()))
-			// {
-
-			// report.getCandidats().get(key).getRssResult().put(newspaper,
-			// currentNewspaper.get(keyNews));
-			// }
-		}
-		// }
+		reportRepository.save(report);
 	}
 
 	/**
@@ -129,7 +98,7 @@ public class NewsPopularity {
 	 * @throws IOException
 	 */
 	private HashMap<Candidat, Integer> parseRSSLeMondeType(String url, Date todayDate) throws IOException {
-		Document doc = Jsoup.connect(url).timeout(0).get();
+		Document doc = Jsoup.connect(url).timeout(10000).get();
 		Elements items = doc.getElementsByTag("item");
 		HashMap<Candidat, Integer> rssCounterMap = new HashMap<Candidat, Integer>();
 		SimpleDateFormat sdf = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z", Locale.US);

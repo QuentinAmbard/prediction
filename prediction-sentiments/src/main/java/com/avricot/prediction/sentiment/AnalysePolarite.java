@@ -78,6 +78,7 @@ public class AnalysePolarite {
 	 */
 	String tweetCleaner(String tweet) {
 		for (Candidat candidat : candidats) {
+			tweet = tweet.replaceAll("\\#", "");
 			tweet = tweet.replaceAll("(?i)"+candidat.getDisplayName(), "");
 			tweet = tweet.replaceAll("(?i)"+candidat.getCandidatName().toString(), "");
 			for (String nickname : candidat.getNicknames()) {
@@ -86,7 +87,6 @@ public class AnalysePolarite {
 			tweet = tweet.replaceAll("RT", "");
 			/* Pseudos Twitter */
 			tweet = tweet.replaceAll("/[@]\\w+/", "");
-			tweet = tweet.replaceAll("\\#", "");
 			//TODO GERER LES URLS
 //			tweet = tweet.replaceAll("(.*://)", "");
 		}
@@ -167,12 +167,15 @@ public class AnalysePolarite {
 		for (String currentUrl : urls) {
 			LOG.info("URL scannée : " + currentUrl);
 			try {
-				Document doc = Jsoup.connect(currentUrl).timeout(0).get();
-				String[] splittedArticle = (doc.body().text()).split("\\.");
-				for (String phrase : splittedArticle) {
-					for (Candidat candidat : candidats) {
-						if(phrase.toLowerCase().indexOf(candidat.getCandidatName().toString().toLowerCase()) != -1) {
-							toAnalyse.append(phrase);
+				String[] splittedArticle;
+				Document doc = Jsoup.connect(currentUrl).timeout(5000).get();
+				if(doc.body() != null && !doc.body().text().isEmpty()) {
+					splittedArticle = (doc.body().text()).split("\\.");
+					for (String phrase : splittedArticle) {
+						for (Candidat candidat : candidats) {
+							if(phrase.toLowerCase().indexOf(candidat.getCandidatName().toString().toLowerCase()) != -1) {
+								toAnalyse.append(phrase);
+							}
 						}
 					}
 				}

@@ -18,19 +18,18 @@ public class DailyReport {
 	private float none;
 	private PolarityReport negativePolarity;
 	private PolarityReport positivePolarity;
-	private HashMap<String, Integer> rssResult; // <String newspaperName,
-												// Integer score>
+	private int rssCountResult;
 	private CandidatName candidatName;
 	private final HashMap<Region, Integer> geoReport = new HashMap<Region, Integer>();
 	private final HashMap<Theme.ThemeName, Integer> themes = new HashMap<Theme.ThemeName, Integer>();
-
+	
 	@JsonIgnore
-	public HashMap<String, Integer> getRssResult() {
-		return rssResult;
+	public int getRssCountResult() {
+		return rssCountResult;
 	}
 
-	public void setRssResult(HashMap<String, Integer> rssResult) {
-		this.rssResult = rssResult;
+	public void setRssCountResult(int rssCountResult) {
+		this.rssCountResult = rssCountResult;
 	}
 
 	public TweetReport getTweetReport() {
