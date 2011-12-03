@@ -123,7 +123,7 @@ def handle_data (raw_data, candidat, regionName=""):
     
     
 connector = pyGTrends('avricot.team','table87table')
-connection = Connection('localhost', 27017)
+connection = Connection('serv.avricot.com', 27017)
 db = connection.prediction
 for candidat in db.candidat.find({}):
     if candidat['candidatName'] == "SARKOZY":

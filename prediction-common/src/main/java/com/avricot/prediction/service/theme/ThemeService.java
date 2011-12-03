@@ -33,6 +33,7 @@ public class ThemeService {
 	 */
 	public synchronized void updateCache() {
 		cachedThemes = themeRepository.findAll();
+		cacheDate = System.currentTimeMillis();
 	}
 
 	/**

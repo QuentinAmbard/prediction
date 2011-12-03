@@ -6,6 +6,8 @@ import java.util.List;
 import org.bson.types.ObjectId;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -14,6 +16,7 @@ import com.avricot.prediction.model.theme.Theme.ThemeName;
 import com.avricot.prediction.report.Polarity;
 
 @Document(collection = "tweet")
+@CompoundIndexes(value = { @CompoundIndex(name = "candidatDate", def = "{'candidatName': 1, 'date': 1, 'theme': 1}") })
 public class Tweet {
 	@Id
 	private ObjectId id;
@@ -22,6 +25,7 @@ public class Tweet {
 	@Indexed
 	private CandidatName candidatName;
 	private String userId;
+	@Indexed
 	private Date date;
 	private Polarity polarity;
 	private float score;

@@ -13,7 +13,7 @@ var ThreeMap = new Class({
 		this.width = this.container.getSize().x;
 		this.height = this.container.getSize().y;
 	}, draw: function (values) {
-		//Get the hightest value
+		//Order by the highest value
 		values = values.sort(function (a, b) {
 			return b-a;
 		});

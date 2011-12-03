@@ -1,5 +1,6 @@
 package com.avricot.prediction.model.theme;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -38,7 +39,7 @@ public class Theme {
 		this.themeName = themeName;
 	}
 
-	public static enum ThemeName {
+	public static enum ThemeName implements Serializable {
 		SECURITY, EUROPE, ECONOMIC, GREEN, IMIGRATION, SOCIAL, ENERGY;
 	}
 }

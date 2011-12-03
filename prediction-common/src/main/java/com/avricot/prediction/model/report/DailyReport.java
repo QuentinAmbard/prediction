@@ -121,6 +121,7 @@ public class DailyReport {
 		return geoReport;
 	}
 
+	@JsonIgnore
 	public HashMap<Theme.ThemeName, Integer> getThemes() {
 		return themes;
 	}

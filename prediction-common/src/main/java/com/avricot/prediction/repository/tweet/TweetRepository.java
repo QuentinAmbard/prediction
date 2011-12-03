@@ -1,5 +1,6 @@
 package com.avricot.prediction.repository.tweet;
 
+import java.util.Date;
 import java.util.List;
 
 import org.bson.types.ObjectId;
@@ -16,6 +17,9 @@ public interface TweetRepository extends MongoRepository<Tweet, ObjectId>, Tweet
 	public List<Tweet> findByChecked(boolean checked);
 
 	public List<Tweet> findByCandidatNameAndPolarity(CandidatName candidatName, Polarity polarity);
+
+	@Query("{candidatName: ?0, date: {$gte: ?1, $lt: ?2}")
+	public List<Tweet> findByCandidatNameAndBetween(CandidatName candidatName, Date startDate, Date endDate);
 
 	public List<Tweet> findByValueAndCandidatName(String value, CandidatName candidatName);
 

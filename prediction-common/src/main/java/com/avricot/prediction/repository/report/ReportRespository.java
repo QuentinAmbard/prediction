@@ -1,7 +1,5 @@
 package com.avricot.prediction.repository.report;
 
-import java.util.List;
-
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
@@ -11,8 +9,8 @@ public interface ReportRespository extends MongoRepository<Report, ObjectId> {
 	/**
 	 * 
 	 * @param name
-	 * @return the daily report with the given name.
+	 * @return the report with the given name.
 	 */
-	List<Report> findByTimestamp(long timestamp);
+	Report findByTimestamp(long timestamp);
 
 }
