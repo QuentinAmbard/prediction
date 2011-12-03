@@ -23,7 +23,7 @@ public class URLUtils {
 		for (String string : parts) {
 			try {
 				URL url = new URL(string);
-				if(string.length() > 9)
+				if(string.length() > 10)
 					foundUrl.add(string);
 			} catch (MalformedURLException e) {
 				/* Ce n'est pas une URL*/
