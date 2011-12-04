@@ -1,6 +1,7 @@
 package com.avricot.prediction;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -8,19 +9,16 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 
 import com.avricot.prediction.model.candidat.Candidat;
+import com.avricot.prediction.model.candidat.Candidat.CandidatName;
 import com.avricot.prediction.model.report.CandidatReport;
-import com.avricot.prediction.model.report.PolarityReport;
 import com.avricot.prediction.model.report.Report;
-import com.avricot.prediction.model.report.tweeter.TweetReport;
-import com.avricot.prediction.model.tweet.Tweet;
-import com.avricot.prediction.report.Polarity;
 import com.avricot.prediction.repository.candidat.CandidatRespository;
 import com.avricot.prediction.repository.report.ReportRespository;
 import com.avricot.prediction.repository.tweet.TweetRepository;
 import com.avricot.prediction.utils.DateUtils;
 
 @Service
-public class MashupTweet {
+public class MashupBuzz {
 	@Inject
 	private ReportRespository reportRepository;
 	@Inject
@@ -31,7 +29,7 @@ public class MashupTweet {
 	/**
 	 * Mashup all the days.
 	 */
-	public void mashupAllTweets() {
+	public void mashupAllBuzz() {
 		List<Report> reports = reportRepository.findAll();
 		for (Report report : reports) {
 			mashup(report.getTimestamp());
@@ -64,21 +62,32 @@ public class MashupTweet {
 		Date endDate = new Date(midnight + 60 * 60 * 24 * 1000);
 		Report report = reportRepository.findByTimestamp(midnight);
 		List<Candidat> candidats = candidatRepository.findAll();
-
+		HashMap<CandidatName, Long> tweetCountMap = new HashMap<CandidatName, Long>();
+		HashMap<CandidatName, Long> rssCountMap = new HashMap<CandidatName, Long>();
+		long totalTweet = 0;
+		long totalRss = 0;
+		
 		for (Candidat candidat : candidats) {
-			 CandidatReport dailyReport = report.getCandidats().get(candidat.getCandidatName());
-			 TweetReport dailyTweetReport = new TweetReport();
- 			 long negativeTweets = tweetRepository.count(candidat.getCandidatName(), startDate, endDate, Polarity.NEGATIVE);
-			 long positiveTweets = tweetRepository.count(candidat.getCandidatName(), startDate, endDate, Polarity.POSITIVE);
-			 /* Score =  tweets de la polarité / nombre de tweet total */
-			 long tweetNumber = tweetRepository.count(candidat.getCandidatName(), startDate, endDate);
-			 PolarityReport negativeReport = new PolarityReport(negativeTweets/tweetNumber, negativeTweets);
-			 PolarityReport positiveReport = new PolarityReport(positiveTweets/tweetNumber, positiveTweets);
-			 dailyTweetReport.setNegativePolarity(negativeReport);
-			 dailyTweetReport.setPositivePolarity(positiveReport);
-			 dailyTweetReport.setTweetNumber(tweetNumber);
-			 dailyReport.setTweetReport(dailyTweetReport);
+			CandidatReport dailyReport = report.getCandidats().get(candidat.getCandidatName());
+			long todayTweets = tweetRepository.count(candidat.getCandidatName(), startDate, endDate);
+			tweetCountMap.put(candidat.getCandidatName(), todayTweets);
+			totalTweet += todayTweets;
+			
+			//Test de la valeur ?
+			long todayRSS = (long) dailyReport.getRssCountResult();
+		 	rssCountMap.put(candidat.getCandidatName(), todayRSS);
+		 	totalRss += todayRSS;
 		}
+		
+		/* Calcul du tweetscore = nombre de tweets pour un candidat / tous les tweets de la journée parlant des candidats */
+		for (CandidatName key : tweetCountMap.keySet()) {
+			CandidatReport dailyReport = report.getCandidats().get(key);
+			dailyReport.setTweetScore((tweetCountMap.get(key) / totalTweet)); //TODO multiplié par 100 ?
+			dailyReport.setRssScore((rssCountMap.get(key) / totalRss));
+			dailyReport.setBuzz(dailyReport.getRssScore() + dailyReport.getTweetScore() / 2);
+			//TODO Ajouter le insight dans ce calcul
+		}
+		
 		reportRepository.save(report);
 	}
 }

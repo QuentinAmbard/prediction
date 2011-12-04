@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import com.avricot.prediction.model.candidat.Candidat.CandidatName;
 import com.avricot.prediction.model.theme.Theme.ThemeName;
 import com.avricot.prediction.model.tweet.Tweet;
+import com.avricot.prediction.report.Polarity;
 
 public class TweetRepositoryImpl implements TweetRepositoryCustom {
 
@@ -24,6 +25,30 @@ public class TweetRepositoryImpl implements TweetRepositoryCustom {
 		query.addCriteria(Criteria.where("candidatName").is(candidatName.name()));
 		query.addCriteria(Criteria.where("date").gt(startDate).lt(endDate));
 		query.addCriteria(Criteria.where("themes").in(theme.name()));
+		return mongoTemplate.count(query, Tweet.class);
+	}
+	
+	@Override
+	public long count(CandidatName candidatName, Date startDate, Date endDate) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("candidatName").is(candidatName.name()));
+		query.addCriteria(Criteria.where("date").gt(startDate).lt(endDate));
+		return mongoTemplate.count(query, Tweet.class);
+	}
+	
+	@Override
+	public long count(CandidatName candidatName, Date startDate, Date endDate, Polarity polarity) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("candidatName").is(candidatName.name()));
+		query.addCriteria(Criteria.where("date").gt(startDate).lt(endDate));
+		query.addCriteria(Criteria.where("polarity").is(polarity));
+		return mongoTemplate.count(query, Tweet.class);
+	}
+	
+	@Override
+	public long countNoPolarity() {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("polarity").is(null));
 		return mongoTemplate.count(query, Tweet.class);
 	}
 

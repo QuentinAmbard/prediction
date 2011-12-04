@@ -12,10 +12,12 @@ public class CandidatReport {
 	private TweetReport tweetReport;
 	private float insight;
 	private float buzz;
+	private float tweetScore;
+	private float rssScore;
 	private float tendance;
 	private float neg;
 	private float pos;
-	private float none;
+	private float none; //Désintérr
 	private PolarityReport negativePolarity;
 	private PolarityReport positivePolarity;
 	private int rssCountResult;
@@ -122,5 +124,23 @@ public class CandidatReport {
 
 	public HashMap<Theme.ThemeName, Integer> getThemes() {
 		return themes;
+	}
+
+	@JsonIgnore
+	public float getTweetScore() {
+		return tweetScore;
+	}
+
+	public void setTweetScore(float tweetScore) {
+		this.tweetScore = tweetScore;
+	}
+
+	@JsonIgnore
+	public float getRssScore() {
+		return rssScore;
+	}
+
+	public void setRssScore(float rssScore) {
+		this.rssScore = rssScore;
 	}
 }
