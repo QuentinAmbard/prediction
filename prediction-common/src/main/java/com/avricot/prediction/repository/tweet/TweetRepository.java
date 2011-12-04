@@ -21,6 +21,9 @@ public interface TweetRepository extends MongoRepository<Tweet, ObjectId>, Tweet
 	@Query("{candidatName: ?0, date: {$gte: ?1, $lt: ?2}")
 	public List<Tweet> findByCandidatNameAndBetween(CandidatName candidatName, Date startDate, Date endDate);
 
+	@Query("{candidatName: ?0, date: {$gte: ?1, $lt: ?2}, polarity: ?3")
+	public List<Tweet> findByCandidatNameAndBetweenAndPolarity(CandidatName candidatName, Date startDate, Date endDate, Polarity polarity);
+	
 	public List<Tweet> findByValueAndCandidatName(String value, CandidatName candidatName);
 
 	public List<Tweet> findAllByChecked(boolean checked);

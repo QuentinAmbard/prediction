@@ -35,21 +35,32 @@ public class AnalysePolarite {
 	private StringBuffer positiveTweets = new StringBuffer(); 
 	private StringBuffer negativeTweets = new StringBuffer();
 	private StringBuffer neutralTweets = new StringBuffer();
+	private StringBuffer notFrenchTweets = new StringBuffer();
 	
+	private List<Tweet> tweetsToEvaluate;
 	private List<Candidat> candidats;
-	private String[] mCategories = {"positive", "negative", "neutral"};
+	private String[] mCategories = {"positive", "negative", "neutral", "not_french"};
 	private DynamicLMClassifier<NGramProcessLM> mClassifier;
 
 	public void run() throws ClassNotFoundException, IOException {
 		int nGram = 8;
 		mClassifier = DynamicLMClassifier.createNGramProcess(mCategories, nGram);
 		candidats = candidatRespository.findAll();
+
+		//TODO : comprendre pourquoi  http://t.co/IrJVg85u fait completement péter le parseur
 		
-		List<Tweet> tweetsToEvaluate = tweeterRepository.findNoPolarity();
-		LOG.info("\n\n\n>>>>>>>>>>>>>>>>> SIZE = " +  tweetsToEvaluate.size() + "<<<<<<<<<<<<<<<<<\n\n");
-	
-		train();
-		evaluateTweets(tweetsToEvaluate);
+		do {
+			tweetsToEvaluate = tweeterRepository.findNoPolarity(300);
+			
+			if(!tweetsToEvaluate.isEmpty()) {
+				LOG.info("\n\n\n>>>>>>>>>>>>>>>>> SIZE = " +  tweetsToEvaluate.size() + "<<<<<<<<<<<<<<<<<\n\n");
+				train();
+				evaluateTweets();
+				
+				tweeterRepository.save(tweetsToEvaluate);
+				LOG.info(tweetsToEvaluate.size() + " tweets traités et sauvegardés.");
+			}
+		} while (tweeterRepository.count() > 0);
 	}
 
 	/**
@@ -64,11 +75,14 @@ public class AnalysePolarite {
 				negativeTweets.append(tweet.getValue());
 			else if(tweet.getPolarity() == Polarity.NEUTRAL)
 				neutralTweets.append(tweet.getValue());
+			else if(tweet.getPolarity() == Polarity.NOT_FRENCH)
+				notFrenchTweets.append(tweet.getValue());
 		}
 		
 		tweetCleaner(neutralTweets.toString());
 		tweetCleaner(positiveTweets.toString());
 		tweetCleaner(negativeTweets.toString());
+		tweetCleaner(notFrenchTweets.toString());
 	}
 	
 	/**
@@ -105,23 +119,26 @@ public class AnalysePolarite {
         Classification classificationPos = new Classification("positive");
         Classification classificationNeg = new Classification("negative");
         Classification classificationNeu = new Classification("neutral");
+        Classification classificationNotFrench = new Classification("not_french");
         
         Classified<CharSequence> classifiedPos = new Classified<CharSequence>(positiveTweets, classificationPos);
         Classified<CharSequence> classifiedNeg = new Classified<CharSequence>(negativeTweets, classificationNeg);
         Classified<CharSequence> classifiedNeu = new Classified<CharSequence>(neutralTweets, classificationNeu);
+        Classified<CharSequence> classifiedNotF = new Classified<CharSequence>(notFrenchTweets, classificationNotFrench);
         
         mClassifier.handle(classifiedPos);
         mClassifier.handle(classifiedNeg);
         mClassifier.handle(classifiedNeu);
+        mClassifier.handle(classifiedNotF);
 	}
 	
 	/**
 	 * Evalue la polarité de tweets
 	 * @throws IOException
 	 */
-	void evaluateTweets(List<Tweet> tweetList) throws IOException {
+	void evaluateTweets() throws IOException {
 		Classification classification = null;
-		for (Tweet tweet : tweetList) {
+		for (Tweet tweet : tweetsToEvaluate) {
 			final String tweetValue = tweet.getValue();
 			List<String> urls = URLUtils.URLInString(tweetValue);
 			
@@ -132,15 +149,15 @@ public class AnalysePolarite {
 			}
 			
 			final String bestCategory = classification.bestCategory();
-			LOG.info(tweetValue +" => " + bestCategory);
+//			LOG.info(tweetValue +" => " + bestCategory);
 			if(bestCategory.equalsIgnoreCase("positive"))
 				tweet.setPolarity(Polarity.POSITIVE);
 			else if(bestCategory.equalsIgnoreCase("negative"))
 				tweet.setPolarity(Polarity.NEGATIVE);
 			else if(bestCategory.equalsIgnoreCase("neutral"))
 				tweet.setPolarity(Polarity.NEUTRAL);
-			
-			tweeterRepository.save(tweet);
+			else if(bestCategory.equalsIgnoreCase("not_french"))
+				tweet.setPolarity(Polarity.NOT_FRENCH);
 		}
     }
 	
@@ -167,8 +184,8 @@ public class AnalysePolarite {
 		for (String currentUrl : urls) {
 			LOG.info("URL scannée : " + currentUrl);
 			try {
-				String[] splittedArticle;
-				Document doc = Jsoup.connect(currentUrl).timeout(5000).get();
+				String[] splittedArticle = null;
+				Document doc = Jsoup.connect(currentUrl).timeout(2500).get();
 				if(doc.body() != null && !doc.body().text().isEmpty()) {
 					splittedArticle = (doc.body().text()).split("\\.");
 					for (String phrase : splittedArticle) {
@@ -181,6 +198,8 @@ public class AnalysePolarite {
 				}
 			} catch (IOException e) {
 				LOG.error("ERREUR EN SCANNANT URL : " + currentUrl);
+			} catch (Exception e) {
+				LOG.error("EXCEPTION");
 			}
 		}
 		if(!toAnalyse.equals("")) {
