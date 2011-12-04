@@ -38,7 +38,7 @@ public class TweetRepositoryImpl implements TweetRepositoryCustom {
 	@Override
 	public List<Tweet> findByCandidatName(CandidatName candidatName, int size) {
 		Query query = new Query();
-		query.addCriteria(Criteria.where("candidatName").is(candidatName));
+		query.addCriteria(Criteria.where("candidatName").is(candidatName.name()));
 		query.limit(size);
 		return mongoTemplate.find(query, Tweet.class);
 	}

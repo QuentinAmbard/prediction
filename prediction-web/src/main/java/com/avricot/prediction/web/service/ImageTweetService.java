@@ -13,7 +13,6 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.avricot.prediction.model.candidat.Candidat;
@@ -27,7 +26,7 @@ public class ImageTweetService {
 	@Inject
 	TweetRepository tweetRepository;
 
-	private static final int HEIGHT = 10;
+	private static final int HEIGHT = 9;
 	private static final int WIDTH = 6;
 
 	private final HashMap<CandidatName, String> cachedData = new HashMap<Candidat.CandidatName, String>();
@@ -47,8 +46,7 @@ public class ImageTweetService {
 	public void initData(CandidatName candidatName) throws IOException {
 
 		String fileName = candidatName.toString().toLowerCase() + ".jpg";
-		PageRequest pageRequest = new PageRequest(0, 500);
-		List<Tweet> tweets = tweetRepository.findAll(pageRequest).getContent();
+		List<Tweet> tweets = tweetRepository.findByCandidatName(candidatName, 100);
 		String currentTweet = tweets.get(0).getValue().replaceAll(" ", "");
 		cachedData.put(candidatName, this.createString(currentTweet, tweets, fileName));
 	}
@@ -94,11 +92,10 @@ public class ImageTweetService {
 
 	private String buildString(int w, int h, int[] redArray, int[] greenArray, int[] blueArray, String currentTweet, List<Tweet> tweets) {
 		StringBuilder stringBuild = new StringBuilder();
-		stringBuild
-				.append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" /><p style=\"line-height:9px;font-size:9px;background-color:#000000;font-family:monospace;\">");
+		stringBuild.append("<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=ISO-8859-1\" /></head><body><p>");
 		int tweetIndex = 0;
 		int tweetOffset = 0;
-		stringBuild.append("<span id=" + tweetIndex + ">");
+		stringBuild.append("<a  target=\"_blank\" href=\"http://www.twitter.com/#!/" + tweets.get(tweetIndex).getUserId() + "\" id=" + tweetIndex + ">");
 		int red;
 		int green;
 		int blue;
@@ -131,15 +128,15 @@ public class ImageTweetService {
 					tweetIndex++;
 					currentTweet = tweets.get(tweetIndex).getValue().replaceAll(" ", "");
 					tweetOffset = j * (w / WIDTH) + i;
-					stringBuild.append("</span>");
-					stringBuild.append("<span id=" + tweetIndex + ">");
+					stringBuild.append("</a>");
+					stringBuild.append("<a id=" + tweetIndex + " target=\"_blank\" href=\"http://www.twitter.com/#!/" + tweets.get(tweetIndex).getUserId() + "\">");
 				}
 				stringBuild.append("<font color=#" + redString + greenString + blueString + ">" + String.valueOf(currentTweet.charAt(j * (w / WIDTH) + i - tweetOffset))
 						+ "</font>");
 			}
 			stringBuild.append("<br/>");
 		}
-		stringBuild.append("</p>");
+		stringBuild.append("</p></body></html>");
 		return stringBuild.toString();
 	}
 }

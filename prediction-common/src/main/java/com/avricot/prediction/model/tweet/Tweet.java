@@ -34,6 +34,7 @@ public class Tweet {
 	private Geolocation geolocation;
 	private List<ThemeName> themes;
 
+	@JsonIgnore
 	public List<ThemeName> getThemes() {
 		return themes;
 	}
@@ -78,6 +79,7 @@ public class Tweet {
 		this.candidatName = candidat;
 	}
 
+	@JsonIgnore
 	public boolean isChecked() {
 		return checked;
 	}
@@ -94,6 +96,7 @@ public class Tweet {
 		this.polarity = polarity;
 	}
 
+	@JsonIgnore
 	public float getScore() {
 		return score;
 	}
@@ -102,6 +105,7 @@ public class Tweet {
 		this.score = score;
 	}
 
+	@JsonIgnore
 	public String getId() {
 		return id.toStringMongod();
 	}
@@ -111,6 +115,7 @@ public class Tweet {
 		return id;
 	}
 
+	@JsonIgnore
 	public Geolocation getGeolocation() {
 		return geolocation;
 	}

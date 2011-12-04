@@ -4,13 +4,14 @@ var BarChart = new Class({
 	chart : null,
 	options : {},
 	initialize : function(divId, labels, options) {
-		var emptyLabel = [];
+		//No category name.
+		var emptyCategories = [];
 		for(label in labels) {
-			emptyLabel.push("");
+			emptyCategories.push("");
 		}
 		this.setOptions(options);
 		var that = this;
-		this.label = labels ;
+		this.labels = labels ;
 		var that = this ;
 		this.chartOptions = {
 			chart : {
@@ -22,7 +23,7 @@ var BarChart = new Class({
 				text : ''
 			},
 			xAxis : {
-				categories: emptyLabel,
+				categories: emptyCategories,
 				title : {
 					text : null
 				}
@@ -36,13 +37,25 @@ var BarChart = new Class({
 			},
 			tooltip : {
 				formatter : function() {
-					return '' + that.label[this.point.x]+ ': ' + this.y + ' % ';
+					return '<b>' + that.labels[this.point.x].title+ '</b><br/>'+that.labels[this.point.x].text+'<br />Valeur : ' + this.y + ' % ';
 				}
 			},
 			plotOptions : {
+				series: {
+		            cursor: 'pointer',
+		            allowPointSelect: true
+		        },
 				bar : {
 					dataLabels : {
-						enabled : true
+						enabled : true,
+						formatter: function() {
+							return this.y+" % ";
+						}
+					},
+					events: {
+						click: function (event) {
+							that.fireEvent('click', that.labels[event.point.x].id)
+						}
 					}
 				}
 			},

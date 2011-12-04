@@ -1,7 +1,7 @@
 <!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" />
 	<meta name="description" content="Prediction elections 2012">
 	<title>Prediction</title>
 	<link href="./resources/styles/default.css" rel="stylesheet" type="text/css" />
@@ -31,42 +31,53 @@
 					<div id="blue"></div>
 					<div id="red"></div>
 				</div>
-				<div class="left" style="width:300px;">
+				<div class="left" style="width:400px;">
 					<div class="selectBloc">
-						Affichage par 
-						<select id="selectType" style="z-index: 5000">
-							<option value="tendance">Tendance</option>
-							<option value="buzz">Buzz</option>
-							<option value="pos">Avis positifs</option>
-							<option value="neg">Avis négatifs</option>
-							<option value="none">Désinteressés</option>
-						</select>
+						Vous visualisez <span id="visualizationType" class="tooltips">la tendance</span> pour <span id="visualizationTarget">tous les candidats</span>.
+						<div class="details">
+							Résultats pour le <span id="visualizationDate" >jour des elections</span>. <br />
+							Evenements : <span id="visualizationEvent">Présidentielles !</span>
+						</div>
 					</div>
-				</div>
-				<div class="right">
-					<a class="blueButton" href="#">D'ou viennent les données?</a>
-					<a class="redButton" href="#">Faites parti des données</a>
 				</div>
 				<div class="clear;"></div>
 			</div>
 		<div class="left">
 			<div id="leftColomn">
-				<h2>Francois Hollande</h2>
-				<div class="candidateFrame">
-				<img src="image/hollande.jpg" />
+				<div id="help">
+					<h2>Que voyez vous ?</h2>
+					Voici les données résumées des elections 2012 sur internet (twitter, google, grand journaux etc.)<br /><br />
+					<div class="italic">
+						Selectionnez un type d'opinion ou un thème sur les menus de droite pour changer le type d'affichage.<br /><br />
+						Vous pouvez ensuite naviguer dans le temps et visualiser la répartition géographique.  <br /><br />
+						<a class="blueButton" href="#">D'ou viennent les données ?</a>
+						<a class="redButton" href="#">Faites parti des données</a>
+					</div>
 				</div>
-				<a href="#">Site officiel</a><a href="#">Programme</a>
-				<img class="parti" src="image/ps.jpg" />
+				<div id="candidatInfo">
+					<h2 id="candidatName">Francois Hollande</h2>
+					Né le : <span id="birthday"></span><br />
+					Idéologie : <span id="tendancy"></span><br />
+					Derniers tweets sur ce candidat :
+					<div id="candidatImage" class="candidateFrame">
+						
+					</div>
+					<a id="parti" src="image/ps.jpg">azesqd</a><br />
+					<img class="parti" id="partiImage" src="image/ps.jpg" /><a href="#">Voir le programme</a>
+				</div>				
 			</div>
 		</div>
 		<div id="middleColomn">
-			<div style="overflow: hidden; z-index:1000;width:900px; height: 205px; position: absolute; left: -200px; top: -40px;">
+			<div style="overflow: hidden; z-index:100;width:900px; height: 205px; position: absolute; left: -200px; top: -40px;">
 				<div id="containerPie" style=" width: 900px; height: 400px; margin: 0 auto"></div>
 			</div>
 			<div style="overflow: hidden; position: absolute;  top: 85px; left: 180px; ">
 				<div id="containerPiePosition" style="z-index: 2; width: 140px; height: 145px; margin: 0 auto"></div>
 			</div>
-			<div style="position: absolute; top: 120px; left: 20px; z-index: 0; width: 400px; margin: 0 auto">
+			<div style="position: absolute; top: 300px; left: 50px; z-index: 0; width: 400px; margin: 0 auto">
+				Répartition <br />géographique
+			</div>
+			<div style="position: absolute; top: 145px; left: 50px; z-index: 0; width: 400px; margin: 0 auto">
 			<svg xmlns="http://www.w3.org/2000/svg" version="1.1">
 				<g transform="scale(0.7)">
 					<path id="AUV" class="region" title="Auvergne" d="M290.9460702357899,163.7762780897072L286.028458364907,166.18380208400245L286.9023041733322,169.71929565340284L281.45414306161973,170.76701442869813L279.62397110060664,172.98282817900315L280.0207684319834,176.4469877041281L284.8113159888861,179.75956238516784L286.93574215069543,188.36200228700645L281.9601711190496,192.99425678714132L284.98073507419303,196.7103146561138L283.58748601739256,200.3728719918799L284.9785058757022,207.20087754236746L281.1108464940241,206.21334686692967L281.318161953676,208.64316275006098L275.43084873925994,217.50195937351444L276.40500847977484,219.47702072439003L274.7108176267055,220.00756767868847L277.93200944602813,231.3407639629453L279.66632587193334,229.74020634451568L284.0935140748225,230.24846140997798L289.76905343260484,221.11547455384093L290.53143931648606,223.8261682363068L292.495363186952,223.2376623710347L295.0522538559922,230.43571327620097L297.9011695273378,222.838637560869L299.8740101917672,223.60324934794616L303.90885946026134,220.03431794529172L306.3565194032484,225.31972478832336L309.6490455742792,223.01920186044111L315.5140668037864,227.09415913967433L324.8989924503943,220.12794387840313L328.8335277867988,212.2098649638319L323.08219568032655,206.96458352070505L315.765966233256,208.71449679433653L317.5515542244514,203.5851331731573L310.9575850884262,194.1378306844317L312.4177100999531,191.1150505582608L311.2340057012954,188.43110714239836L314.1497973273674,187.47478511133096L312.74986067509434,179.70383266307772L317.99739392262757,176.92180493633643L317.87032960864735,172.4834898690753L312.139060288593,170.07819506366357L308.88888888888886,162.7441636365972L306.33868581532136,166.44907556115177L304.99447912532025,164.40713854376796L300.0166788951836,165.51504541892038L295.9862880236712,161.60504811707418L290.9482994342807,163.77181971193997L290.9460702357899,163.7762780897072Z" stroke="#cccccc" stroke-width="1" fill="#dbdbdb"></path>
@@ -116,26 +127,27 @@
 			</div>
 		</div>
 		<div id="rightColomn">
-		
+			\|/ selectionnez un type d'opinion.
 			<div class="topColomn">
 				<h2>Opinions</h2>
 			</div>
 			<div class="middleColomn chartOpinions">
 			<div class="likeArea"></div>
-				<div id="containerChartDetails" style="z-index: 4; position: absolute; left:40px; width: 190px; height: 180px; margin: 0 auto"></div>
+				<div id="containerChartDetails" style="z-index: 400; position: absolute; top: -10px; left:40px; width: 180px; height: 180px; margin: 0 auto"></div>
 			</div>
 			<div class="bottomColomnLeft"></div>
 			
-			<div class="topColomn" style="margin-top: 5px;">
+			\|/ selectionnez un des thème suivants
+			<div class="topColomn" style="margin-top: 10px;">
 				<h2>Thèmes</h2>
 			</div>
-			<div class="middleColomn">
-			<div id="treeMap" style="z-index: 50;position: relative; top: 20px; width: 220px; height: 150px; margin: 0 auto"></div>
+			<div class="middleColomn treemapColumn">
+			<div id="treeMap" style="z-index: 50;position: relative; top: 5px; width: 220px; height: 150px; margin: 0px auto"></div>
 			</div>
 			<div class="bottomColomnLeft"></div>
 			
 		</div>
-		<div id="containerChart" style="position: absolute; z-index: 4; bottom:0px; left:0px;  width: 960px; height: 300px; margin: 0 auto"></div>
+		<div id="containerChart" style="position: absolute; z-index: 99999; bottom:0px; left:0px;  width: 960px; height: 300px; margin: 0 auto"></div>
 		<div class="historyContainer">
 			<!-- <div style="width:10%;  background-color:red;"></div>
 			<div style="width:20%; background-color:yellow;"></div>

@@ -16,6 +16,7 @@ import com.avricot.prediction.model.report.Region;
 public class Candidat {
 	@Id
 	private ObjectId id;
+	private Float tendance;
 	private String schemeUrl;
 	private String tendancy;
 	private String description;
@@ -175,5 +176,13 @@ public class Candidat {
 		public String getDescription() {
 			return description;
 		}
+	}
+
+	public Float getTendance() {
+		return tendance;
+	}
+
+	public void setTendance(Float tendance) {
+		this.tendance = tendance;
 	}
 }

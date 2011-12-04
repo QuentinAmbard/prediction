@@ -6,8 +6,8 @@ var GeoDataHandler = new Class({
 	},
 	initialize: function(options){
 		this.setOptions(options);
-		this.tips = new Tips('.region');
 		this.regions =$$('.region');
+		this.tips = new Tips(this.regions, {className: "tips"});
 	},
 
 	/**

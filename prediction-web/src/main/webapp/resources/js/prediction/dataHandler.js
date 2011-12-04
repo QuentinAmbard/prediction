@@ -5,26 +5,40 @@ var DataHandler = new Class({
 	firstTimestamp: null,
 	selectedTimestamp: null,
 	selectedType: "tendance",
+	selectedCandidat: undefined,
 	pie: null,
 	chart: null,
 	selectType: null,
 	piePosition: null,
 	threeMap: null,
+	tweets: [],
+	tweetsTimer: null,
 	options: {
-		themeDescrition: {"SECURITY": "la SÃ©curitÃ©", "EUROPE": "l'Europe", "ECONOMIC": "l'Economie", "GREEN": "l'Ecologie", "IMIGRATION": "l'Immigration", "SOCIAL": "le Social"}
+		themeDescrition: {"SECURITY": {title: "la Sécurité", text: "Représente l'importance du thème de la sécurité pour les français."}, 
+			"EUROPE": {title: "l'Europe", text: "Représente l'importance du thème de l'Europe pour les français."},
+			"ECONOMIC": {title: "l'Economie",  text: "Représente l'importance du thème de l'économie pour les français."},
+			"GREEN": {title: "l'Ecologie",  text: "Représente l'importance du thème de l'écologie pour les français."},
+			"IMIGRATION": {title: "l'Immigration",  text: "Représente l'importance du thème de l'immigration pour les français."},
+			"SOCIAL": {title: "le Social", text: "Représente l'importance du thème du social pour les français."}
+		},
+		opinionDescription: { "tendance": {title: "la tendance", text: "Représente le résultat prévisionnel des élections de 2012, avec les données du web."}, 
+			"buzz": {title: "le buzz", text: "Représente de combien on parle de ce candidat."}, 
+			"neg": {title: "les avis négatifs", text: "Représente de combien on parle en mauvais termes de ce candidat."}, 
+			"pos": {title: "les avis positifs", text: "Représente de combien on parle en bon termes de ce candidat."}, 
+			"none": {title: "les désinteressés", text: "Représente à quel point les français ne s'interessent pas à ce candidat."}
+		}
 	},
 	initialize: function(profile, options){
+		new Tips(".tooltips", {className: "tips"});
+		$('visualizationType').store('tip:title', this.options.opinionDescription["tendance"].title);
+		$('visualizationType').store('tip:text', this.options.opinionDescription["tendance"].text);
 		this.setOptions(options);
 		var that = this ;
 		this.threeMap = new ThreeMap("treeMap");
 		this.geoDataHandler = new GeoDataHandler();
 		this.selectType = $('selectType')
-		this.selectType.addEvent('click', function () {
-			var type = this.getSelected().get("value");
-			that.updatePie(that.selectedTimestamp, type);
-			that.updateGraph(type);
-			that.updateGraphDetails();
-		});
+		/*this.selectType.addEvent('click', function () {
+		});*/
 		this.pie = new Pie("containerPie", {
 			stickyTracking: false
 		});
@@ -43,9 +57,24 @@ var DataHandler = new Class({
 		});
 		this.chart = new Chart("containerChart");
 		this.chart.addEvent('clickOnChart', function (date, type) {
+			var day = new Date(date) ;
+			$('visualizationDate').set('html', day.getDate()+"/"+(day.getMonth()+1)+"/"+day.getFullYear());
 			that.updatePie(date, type);
 		});
-		this.chartDetails = new BarChart("containerChartDetails", ["Buzz", "Avis NÃ©gatifs", "Avis positifs", "DÃ©sinteressÃ©"]);
+		this.chartDetails = new BarChart("containerChartDetails", 
+				[{id: "tendance", title: "Tendance", text: "Le résultat de la prévision<br />des élections de 2012"}, 
+				 {id: "buzz", title: "Buzz", text: "De combien on parle<br />de ce candidat."}, 
+				 {id: "neg", title: "Avis Négatifs", text: "De combien on parle <br />en mauvais termes de <br />ce candidat."}, 
+				 {id: "pos", title: "Avis positifs", text: "De combien on parle en<br />bon termes de ce candidat."}, 
+				 {id: "none", title: "Désinteressé", text: "De combien les français <br />ne s'interessent pas à <br />ce candidat."}]);
+		this.chartDetails.addEvent('click', function (type) {
+			$('visualizationType').set('html', that.options.opinionDescription[type].title);
+			$('visualizationType').store('tip:title', that.options.opinionDescription[type].title);
+			$('visualizationType').store('tip:text', that.options.opinionDescription[type].text);
+
+			that.updatePie(that.selectedTimestamp, type);
+			that.updateGraph(type);
+		});
 	},
 	/**
 	 * Return the candidat with a displayedName (eg. Nicolas Sarkozy)
@@ -86,10 +115,16 @@ var DataHandler = new Class({
 							//Click on a point on the main pie
 			    			click:function () {
 			    				var candidat = this.selected ? undefined : that.getCandidat(this.name) ;
+			    				if(!candidat) {
+			    					$('visualizationTarget').set('html', 'tous les candidats');
+			    				} else {
+			    					$('visualizationTarget').set('html', candidat.displayName);
+			    				}
 			    				that.updateGraphDetails(candidat);
 			    				var candidatName = this.selected ? undefined : candidat.candidatName;
 			    				that.geoDataHandler.displayGeoReport(that.selectedTimestamp, candidatName);
 			    				that.updateThemes(that.selectedTimestamp, candidatName);
+			    				that.updateCandidatInfo(candidat);
 				    		}
 			    		}
 					});
@@ -124,6 +159,97 @@ var DataHandler = new Class({
 		}).send();
 	}, 
 	/**
+	 * Select and change a random tweet on the left picture.
+	 */
+	changeTweet: function () {
+		var id = Math.round((this.tweets.length-1)*Math.random()) ;
+		var tweet = this.tweets[id];
+		var spans = $$('#candidatImage p a') ;
+		var span = spans[Math.round((spans.length-1)*Math.random())];
+		var fx = new Fx.Morph(span, {
+		    duration: 500,
+		    transition: Fx.Transitions.Quart.easeOut
+		  });
+		fx.start({
+			opacity: 0
+		}).chain(function (){
+			var fonts = span.getElements('font');
+			span.setProperty('href', "http://www.twitter.com/#!/"+tweet.userId)
+			for(var i =0,ii=fonts.length;i++;i<ii) {
+				if(tweet.value.length<i) {
+					if(id == this.tweets.length) {
+						tweet.value+= tweet.value[id-1];
+					} else {
+						tweet.value+= tweet.value[id+1];
+					}
+				}
+				font.set('html', tweet.value[i]);
+			}
+			this.start({
+				opacity: 1
+			});
+		})
+		var that = this;
+		this.tweetsTimer = setTimeout(function () {that.changeTweet()}, 1000+3000*Math.random());
+	},
+	/**
+	 * Update the candidat infos, left part.
+	 * 
+	 */
+	updateCandidatInfo: function (candidat) {
+		var that = this ;
+		if(typeof(candidat) != "undefined") {
+			$('candidatName').set('html', candidat.displayName);
+			$('partiImage').setProperty('src', './resources/images/parti/'+candidat.parti+".jpg");
+			$('tendancy').set('html', candidat.tendancy);
+			var birth = new Date(candidat.birthday) ;
+			var birthday = birth.getDate()+"/"+(birth.getMonth()+1)+"/"+birth.getFullYear();
+			$('birthday').set('html', birthday);
+			$('parti').set('href', candidat.siteUrl);
+			$('parti').set('html', candidat.partiFullName);
+			var fx = new Fx.Morph('help', {
+			    duration: 400,
+			    transition: Fx.Transitions.Quart.easeOut
+			});
+			fx.start({
+				opacity: 0
+			}).chain(function (){
+				$('help').setStyle('display', 'none');
+				$('candidatInfo').setStyle('display', 'block');
+				$('candidatInfo').fade(1);
+			});
+			new Request.HTML({
+				url: 'image/'+candidat.candidatName,
+				onSuccess: function(responseTree, responseElements, responseHTML) {
+					$('candidatImage').set('html', responseHTML);
+					new Request.JSON({url: 'image/tweets/'+candidat.candidatName, 
+						headers:{'Content-type':'application/json'},
+						urlEncoded: false,
+						method: "get",
+						onSuccess: function(tweets){
+							that.tweets = tweets ;
+							if(that.tweetsTimer != null)
+							clearTimeout(that.tweetsTimer);
+							that.tweetsTimer = setTimeout(function () {that.changeTweet()}, 2000+3000*Math.random());
+						}
+					}).send();
+				}
+			}).get();
+		} else {
+			var fx = new Fx.Morph('candidatInfo', {
+			    duration: 400,
+			    transition: Fx.Transitions.Quart.easeOut
+			});
+			fx.start({
+				opacity: 0
+			}).chain(function (){
+				$('candidatInfo').setStyle('display', 'none');
+				$('help').setStyle('display', 'block');
+				$('help').fade(1);
+			});
+		}
+	},
+	/**
 	 * Update the theme threechart.
 	 */
 	updateThemes: function(timestamp, candidatName) {
@@ -147,13 +273,13 @@ var DataHandler = new Class({
 			total += themes[theme] ;
 		}
 		for(theme in themes) {
-			var title = "PrÃ©occupation des franÃ§ais pour "+this.options.themeDescrition[theme];
+			var title = "Préoccupation des français pour "+this.options.themeDescrition[theme].title;
 			if(typeof(candidat) != "undefined") {
 				title += " pour "+candidat.displayName;
 			}
 			var percent;
 			total == 0 ? percent = 0 : percent=themes[theme]/total*100 ;
-			var text = "Plus le carrÃ© est important, plus la prÃ©occupation est grande.<br /> Valeur :"+Math.round(percent*10)/10+"%";
+			var text = "Plus le carré est important, plus la préoccupation est grande.<br /> Valeur :"+Math.round(percent*10)/10+"%";
 			values.push({id: theme, value: percent, title: title, text: text});
 		}
 		this.threeMap.draw(values);
@@ -191,7 +317,7 @@ var DataHandler = new Class({
 		type = type || "tendance" ;
 		var report = this.getReport(date);
 		var series = [{name: "", data: [] }];
-		var values = {"buzz": 0, "neg": 0, "pos": 0, "none": 0};
+		var values = {"tendance": 0, "buzz": 0, "neg": 0, "pos": 0, "none": 0};
 
 		//All candidats, we take the average.
 		if(typeof(candidat) == "undefined") {
@@ -211,7 +337,7 @@ var DataHandler = new Class({
 				values[value] = Math.round(report.candidats[candidat.candidatName][value]*10)/10;
 			}
 		}
-		var colors = ['#00FF00', '#FF00FF', '#FF0044'];
+		var colors = ['#00FF00', '#FF00FF', '#FF0044', '#3749ed', '#8fed37'];
 		var i =0;
 		for(var value in values) {
 			series[0].data.displayName = value ;

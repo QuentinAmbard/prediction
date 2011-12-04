@@ -65,6 +65,7 @@ var Chart = new Class({
 					pointStart : 0 //To be defined during initialization.
 				},
 				series : {
+					allowPointSelect: true,
 					cursor : 'pointer',
 					point : {
 						events : {

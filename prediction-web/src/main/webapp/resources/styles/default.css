@@ -46,12 +46,14 @@ html { font-size: 100%; overflow-y: scroll; -webkit-text-size-adjust: 100%; -ms-
 
 body{
 	background:url(../images/background.jpg) repeat;
-	font:12px times, georgia;
+	font:13px times, georgia;
 }
 .clear{
 clear:both;
 }
-
+.detailTip {
+	width: 100px;	
+}
 #container{
 	width:960px;
 	height:785px;
@@ -66,7 +68,11 @@ clear:both;
 	overflow: hidden;
 	position:relative;
 }
-
+#candidatInfo {
+	top: 0px;
+	opacity: 0;
+	display: none;
+}
 #vote{
 	background:url(../images/vote.png) no-repeat;
 	height:50px;
@@ -92,16 +98,49 @@ clear:both;
 	width:280px;
 	margin:10px 0;
 }
+#candidatName{
+	margin-top: 5px;	
+}
 #red{
 	background-color: #de001a;
 	height:10px;
 	width:240px;
 }
-
+#candidatImage {
+	z-index: 999999;
+}
+#candidatImage p{
+	line-height:6px;
+	background-color:#000000;
+	font-family:monospace;
+}
+#candidatImage p a{
+	margin: 0px;
+	font-size:9px;
+	text-decoration: none;	
+}
+#candidatImage p a:hover{
+	text-decoration: underline;
+}
+#visualizationTarget {
+	font-weight: bold;
+}
+#visualizationType{
+	font-weight: bold;
+	text-decoration: underline;
+}
+#visualizationDate {
+	font-weight: bold;
+}
+.details {
+	font-size:14px;
+	font-style:normal;
+}
 .selectBloc{
-	margin: 1px 50px;
-	width: 310px;
-	font-size:18px;
+	margin: 10px 10px;
+	width: 400px;
+	font-size:17px;
+	font-style:italic;
 }
 select{
 	font: lighter 22px "Times New Roman",serif !important;
@@ -117,39 +156,52 @@ select{
 	padding: 0px 0px 0px 5px !important;
 	height:auto!important;
 }
+#help {
+	margin-top: 15px;
+}
+.italic {
+	font-style:italic;
+}
 #leftColomn{
 	width:192px;
 	margin-left:15px;
 	float:left;
 }
-#leftColomn a{
+#candidatInfo a{
 	color:#aa4643;
 	font-size:12px;
 	text-decoration:underline;
-	margin-left:20px;
 	font-weight:normal;
 }
-#leftColomn  h2{
+#leftColomn  h2{t
 	font-size:18px;
 	line-height:20px;
 	text-align:left;
 	margin-bottom:5px;
 }
-#leftColomn .parti{
-	margin:10px 40px;
+#partiImage {
+	width: 90px;
+	float: left;
+}
+#parti {
+	margin-top: 5px ;	
 }
 .left{
+	z-index: 5000;
 	float:left;
 }
 .right{
 	float:right;
+}
+.treemapColumn {
+	height: 120px;
 }
 #middleColomn{
 	float:left;
 	position:relative;
 }
 #rightColomn{
-	margin-top: -90px;
+	margin-top: -70px;
 	margin-right:12px;
 	float:right;
 }
@@ -276,4 +328,36 @@ a.blueButton, a.redButton{
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
 	cursor: pointer;
+}
+
+/*
+tips structure :
+<div class="tips"> //the className you pass in options will be assigned here.
+    <div class="tip-top"></div> //useful for styling
+ 
+    <div class="tip">
+ 
+        <div class="tip-title"></div>
+ 
+        <div class="tip-text"></div>
+ 
+    </div>
+ 
+    <div class="tip-bottom"></div> //useful for styling
+</div>
+*/
+.tips .tip-title {
+	font-weight: bold;
+}
+.tips {
+	z-index: 999999;
+	padding: 5px;
+	background-color:black;
+	box-shadow:  0 0px 5px #000000;
+	-webkit-box-shadow:  0 0px 5px #000000;
+	-moz-box-shadow:  0 0px 5px #000000;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	color:#dedede;
 }

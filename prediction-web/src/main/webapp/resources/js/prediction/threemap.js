@@ -71,7 +71,7 @@ var ThreeMap = new Class({
 					}
 				});
 				div.inject(this.container);
-				new Tips(div);
+				new Tips(div, {className: "tips"});
 			}
 			div.store('tip:text', values[i].text);
 			div.store('tip:title', values[i].title);
@@ -84,11 +84,8 @@ var ThreeMap = new Class({
 			
 			
 			(function (div, left, top, width, height) {
-				var myEffect = new Fx.Morph(div, {
-				    duration: 100
-				});
 				div.addEvents({'mouseover': function () {
-						myEffect.start({
+						this.morph({
 							left: left-that.options.zoom/2, 
 							top: top-that.options.zoom/2,
 							width: width+that.options.zoom,
@@ -96,7 +93,7 @@ var ThreeMap = new Class({
 						});
 					}, 
 					'mouseout': function () {
-						myEffect.start({
+						this.morph({
 							left: left, 
 							top: top,
 							width: width,
