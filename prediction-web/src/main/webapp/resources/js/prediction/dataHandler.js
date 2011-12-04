@@ -15,13 +15,13 @@ var DataHandler = new Class({
 	tweetsTimer: null,
 	options: {
 		events: {
-			"1319061600000": ["Accouchement de Carla Bruni."],
-			"1318716000000": ["Second tour des primaires socialistes"],
-			"1318370400000": ["Premier tour des primaires socialistes"],
-			"1319666400000": ["Sommet européen"],
-			"1320361200000": ["Ouverture du G20 à Cannes"],
-			"1319320800000": ["convention d'investiture"],
-			"1322002800000": ["Discours d'Evay Joly à Tokyo"]
+			"1319061600000": [{value: "Accouchement de Carla Bruni.", candidatName: "SARKOZY"}],
+			"1318716000000": [{value: "Second tour des primaires socialistes", candidatName: "HOLLANDE"}],
+			"1318370400000": [{value: "Premier tour des primaires socialistes", candidatName: "HOLLANDE"}],
+			"1319666400000": [{value: "Sommet européen", candidatName: "SARKOZY"}],
+			"1320361200000": [{value: "Ouverture du G20 à Cannes", candidatName: "SARKOZY"}],
+			"1319320800000": [{value: "convention d'investiture", candidatName: "HOLLANDE"}],
+			"1322002800000": [{value: "Discours d'Eva Joly à Tokyo", candidatName: "JOLY"}]
 		},
 		themeDescrition: {"SECURITY": {title: "la Sécurité", text: "Représente l'importance du thème de la sécurité pour les français."}, 
 			"EUROPE": {title: "l'Europe", text: "Représente l'importance du thème de l'Europe pour les français."},
@@ -86,7 +86,6 @@ var DataHandler = new Class({
 	 * Update the visualization date and its event.
 	 */
 	updateVisualizationDate: function (date) {
-		console.log(date);
 		var events = this.options.events[date] ;
 		var txt = "";
 		if(typeof(events) != "undefined") {
@@ -94,7 +93,7 @@ var DataHandler = new Class({
 				if(txt.length>0) {
 					txt+=",";
 				}
-				txt+='<a href="http://www.google.fr/#q='+encodeURIComponent(events[i])+'" target="_blank">'+events[i]+'</a>';
+				txt+='<a href="http://www.google.fr/#q='+encodeURIComponent(events[i].value)+'" target="_blank">'+events[i].value+'</a>';
 			}
 		} else {
 			txt = "Aucun evenement particulier pour ce jour.";
@@ -333,32 +332,47 @@ var DataHandler = new Class({
 		for(var i =0, ii=this.reports.length;i<ii;i++) {
 			var data = [];
 			var report = this.reports[i];
-			for (candidat in report.candidats) {
+			for (candidatName in report.candidats) {
 				var serie = null;
 				for(var j=0,jj=series.length;j<jj;j++) {
-					if(series[j].nameBrut == candidat) {
+					if(series[j].nameBrut == candidatName) {
 						serie = series[j] ;
 						break;
 					} 
 				}
 				if(serie == null) {
-					serie = {nameBrut: candidat, name: this.candidats[candidat].displayName, lineWidth: 2, data: []};
+					serie = {nameBrut: candidatName, name: this.candidats[candidatName].displayName, lineWidth: 2, data: []};
 					series.push(serie);
 				}
 				var value ;
 				if(theme) {
-					value = report.candidats[candidat].themes[type];
+					value = report.candidats[candidatName].themes[type];
 				} else {
-					value = report.candidats[candidat][type] ;
+					value = report.candidats[candidatName][type] ;
 				}
 				var point = {
 						x: report.timestamp, 
 						y: Math.round(value*10)/10
 				}
-				if(typeof(this.options.events[report.timestamp]) != "undefined") {
-					console.log("okay")
+				
+				// && this.options.events[report.timestamp].candidatName == candidatName
+				var events = this.options.events[report.timestamp] ;
+				var star = false ;
+				if(typeof(events) != "undefined") {
+					for(var e=0,ee=events.length;e<ee;e++) {
+						if(events[e].candidatName == candidatName) {
+							point.marker = {
+								enabled: true,
+								symbol: 'url(resources/images/star.png)'
+							}
+							star = true ;
+							break;
+						}
+					}
+				} 
+				if(!star){
 					point.marker = {
-						symbol: 'url(resources/images/star.png)'
+						enabled : false
 					}
 				}
 				serie.data.push(point);

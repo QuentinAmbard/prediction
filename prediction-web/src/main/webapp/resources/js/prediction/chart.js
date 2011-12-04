@@ -75,7 +75,6 @@ var Chart = new Class({
 						}
 					},
 					marker : {
-						enabled : false,
 						states : {
 							hover : {
 								enabled : true,
