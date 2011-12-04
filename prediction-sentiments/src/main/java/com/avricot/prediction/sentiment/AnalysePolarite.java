@@ -49,6 +49,8 @@ public class AnalysePolarite {
 
 		//TODO : comprendre pourquoi  http://t.co/IrJVg85u fait completement péter le parseur
 		
+		LOG.info("Nombre de tweets restant à traiter = " + tweeterRepository.countNoPolarity());
+		
 		do {
 			tweetsToEvaluate = tweeterRepository.findNoPolarity(300);
 			
@@ -60,7 +62,7 @@ public class AnalysePolarite {
 				tweeterRepository.save(tweetsToEvaluate);
 				LOG.info(tweetsToEvaluate.size() + " tweets traités et sauvegardés.");
 			}
-		} while (tweeterRepository.count() > 0);
+		} while (tweeterRepository.countNoPolarity() > 0);
 	}
 
 	/**

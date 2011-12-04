@@ -3,15 +3,15 @@ package com.avricot.prediction.model.report.tweeter;
 import com.avricot.prediction.model.report.PolarityReport;
 
 public class TweetReport {
-	private int tweetNumber;
+	private long tweetNumber;
 	private PolarityReport negativePolarity;
 	private PolarityReport positivePolarity;
 
-	public int getTweetNumber() {
+	public long getTweetNumber() {
 		return tweetNumber;
 	}
 
-	public void setTweetNumber(int tweetNumber) {
+	public void setTweetNumber(long tweetNumber) {
 		this.tweetNumber = tweetNumber;
 	}
 

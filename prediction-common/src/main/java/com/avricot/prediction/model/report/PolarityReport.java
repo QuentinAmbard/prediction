@@ -2,9 +2,9 @@ package com.avricot.prediction.model.report;
 
 public class PolarityReport {
 	private float score;
-	private int number;
+	private long number;
 
-	public PolarityReport(float score, int number) {
+	public PolarityReport(float score, long number) {
 		this.score = score;
 		this.number = number;
 	}
@@ -17,11 +17,11 @@ public class PolarityReport {
 		this.score = score;
 	}
 
-	public int getNumber() {
+	public long getNumber() {
 		return number;
 	}
 
-	public void setNumber(int number) {
+	public void setNumber(long number) {
 		this.number = number;
 	}
 }

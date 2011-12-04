@@ -22,7 +22,7 @@ public class Mashup {
 		List<Report> reports = reportRepository.findAll();
 		for (Report report : reports) {
 			for (Entry<CandidatName, CandidatReport> e : report.getCandidats().entrySet()) {
-				e.getValue().setBuzz(e.getValue().getInsight());
+//				e.getValue().setBuzz(e.getValue().getInsight());
 				e.getValue().setNone((float) (e.getValue().getInsight() * Math.random()));
 				e.getValue().setPos((float) (e.getValue().getInsight() * Math.random()));
 				e.getValue().setNeg((float) (e.getValue().getInsight() * Math.random()));
@@ -36,4 +36,6 @@ public class Mashup {
 		}
 		reportRepository.save(reports);
 	}
+	
+	
 }
