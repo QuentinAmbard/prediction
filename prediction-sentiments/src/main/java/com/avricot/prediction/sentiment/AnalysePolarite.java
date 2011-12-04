@@ -60,7 +60,7 @@ public class AnalysePolarite {
 				tweeterRepository.save(tweetsToEvaluate);
 				LOG.info(tweetsToEvaluate.size() + " tweets traités et sauvegardés.");
 			}
-		} while (!tweeterRepository.findNoPolarity(2).isEmpty());
+		} while (tweeterRepository.count() > 0);
 	}
 
 	/**

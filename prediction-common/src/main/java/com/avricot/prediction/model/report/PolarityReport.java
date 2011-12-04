@@ -4,6 +4,11 @@ public class PolarityReport {
 	private float score;
 	private int number;
 
+	public PolarityReport(float score, int number) {
+		this.score = score;
+		this.number = number;
+	}
+	
 	public float getScore() {
 		return score;
 	}
