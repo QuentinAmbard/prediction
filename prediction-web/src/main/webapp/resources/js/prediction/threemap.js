@@ -84,7 +84,11 @@ var ThreeMap = new Class({
 			
 			
 			(function (div, left, top, width, height) {
-				div.addEvents({'mouseover': function () {
+				div.addEvents({
+					'click': function () {
+						that.fireEvent('click', div.id);
+					}, 
+					'mouseover': function () {
 						this.morph({
 							left: left-that.options.zoom/2, 
 							top: top-that.options.zoom/2,

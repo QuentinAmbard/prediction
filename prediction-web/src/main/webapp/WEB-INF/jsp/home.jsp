@@ -35,7 +35,7 @@
 					<div class="selectBloc">
 						Vous visualisez <span id="visualizationType" class="tooltips">la tendance</span> pour <span id="visualizationTarget">tous les candidats</span>.
 						<div class="details">
-							Résultats pour le <span id="visualizationDate" >jour des elections</span>. <br />
+							Résultats pour le <span id="visualizationDate" >jour des elections (projection dans le futur)</span>. <br />
 							Evenements : <span id="visualizationEvent">Présidentielles !</span>
 						</div>
 					</div>
@@ -46,10 +46,11 @@
 			<div id="leftColomn">
 				<div id="help">
 					<h2>Que voyez vous ?</h2>
-					Voici les données résumées des elections 2012 sur internet (twitter, google, grand journaux etc.)<br /><br />
+					Voici une représentation des données sur les elections 2012 présentes sur le web (twitter, google, grand journaux etc.)<br /><br />
 					<div class="italic">
 						Selectionnez un type d'opinion ou un thème sur les menus de droite pour changer le type d'affichage.<br /><br />
 						Vous pouvez ensuite naviguer dans le temps et visualiser la répartition géographique.  <br /><br />
+						Pensez à affiner les resultats par candidat en cliquant sur le camembert.<br /><br />
 						<a class="blueButton" href="#">D'ou viennent les données ?</a>
 						<a class="redButton" href="#">Faites parti des données</a>
 					</div>
@@ -133,7 +134,7 @@
 			</div>
 			<div class="middleColomn chartOpinions">
 			<div class="likeArea"></div>
-				<div id="containerChartDetails" style="z-index: 400; position: absolute; top: -10px; left:40px; width: 180px; height: 180px; margin: 0 auto"></div>
+				<div id="containerChartDetails" style="z-index: 400; position: absolute; top: -10px; left:40px; width: 180px; height: 190px; margin: 0 auto"></div>
 			</div>
 			<div class="bottomColomnLeft"></div>
 			

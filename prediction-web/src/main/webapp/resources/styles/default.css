@@ -137,6 +137,7 @@ clear:both;
 	font-style:normal;
 }
 .selectBloc{
+	z-index: 999999;
 	margin: 10px 10px;
 	width: 400px;
 	font-size:17px;

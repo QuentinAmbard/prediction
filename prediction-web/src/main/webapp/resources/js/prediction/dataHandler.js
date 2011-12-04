@@ -14,6 +14,15 @@ var DataHandler = new Class({
 	tweets: [],
 	tweetsTimer: null,
 	options: {
+		events: {
+			"1319061600000": ["Accouchement de Carla Bruni."],
+			"1318716000000": ["Second tour des primaires socialistes"],
+			"1318370400000": ["Premier tour des primaires socialistes"],
+			"1319666400000": ["Sommet européen"],
+			"1320361200000": ["Ouverture du G20 à Cannes"],
+			"1319320800000": ["convention d'investiture"],
+			"1322002800000": ["Discours d'Evay Joly à Tokyo"]
+		},
 		themeDescrition: {"SECURITY": {title: "la Sécurité", text: "Représente l'importance du thème de la sécurité pour les français."}, 
 			"EUROPE": {title: "l'Europe", text: "Représente l'importance du thème de l'Europe pour les français."},
 			"ECONOMIC": {title: "l'Economie",  text: "Représente l'importance du thème de l'économie pour les français."},
@@ -30,15 +39,16 @@ var DataHandler = new Class({
 	},
 	initialize: function(profile, options){
 		new Tips(".tooltips", {className: "tips"});
-		$('visualizationType').store('tip:title', this.options.opinionDescription["tendance"].title);
-		$('visualizationType').store('tip:text', this.options.opinionDescription["tendance"].text);
+		this.setVisualizationType(this.options.opinionDescription["tendance"]);
 		this.setOptions(options);
 		var that = this ;
 		this.threeMap = new ThreeMap("treeMap");
+		this.threeMap.addEvent('click', function (theme) {
+			that.setVisualizationType(that.options.themeDescrition[theme]);
+			that.updateGraph("theme."+theme)
+		});
 		this.geoDataHandler = new GeoDataHandler();
 		this.selectType = $('selectType')
-		/*this.selectType.addEvent('click', function () {
-		});*/
 		this.pie = new Pie("containerPie", {
 			stickyTracking: false
 		});
@@ -57,8 +67,7 @@ var DataHandler = new Class({
 		});
 		this.chart = new Chart("containerChart");
 		this.chart.addEvent('clickOnChart', function (date, type) {
-			var day = new Date(date) ;
-			$('visualizationDate').set('html', day.getDate()+"/"+(day.getMonth()+1)+"/"+day.getFullYear());
+			that.updateVisualizationDate(date);
 			that.updatePie(date, type);
 		});
 		this.chartDetails = new BarChart("containerChartDetails", 
@@ -68,13 +77,39 @@ var DataHandler = new Class({
 				 {id: "pos", title: "Avis positifs", text: "De combien on parle en<br />bon termes de ce candidat."}, 
 				 {id: "none", title: "Désinteressé", text: "De combien les français <br />ne s'interessent pas à <br />ce candidat."}]);
 		this.chartDetails.addEvent('click', function (type) {
-			$('visualizationType').set('html', that.options.opinionDescription[type].title);
-			$('visualizationType').store('tip:title', that.options.opinionDescription[type].title);
-			$('visualizationType').store('tip:text', that.options.opinionDescription[type].text);
-
+			that.setVisualizationType(that.options.opinionDescription[type]);
 			that.updatePie(that.selectedTimestamp, type);
 			that.updateGraph(type);
 		});
+	},
+	/**
+	 * Update the visualization date and its event.
+	 */
+	updateVisualizationDate: function (date) {
+		console.log(date);
+		var events = this.options.events[date] ;
+		var txt = "";
+		if(typeof(events) != "undefined") {
+			for(var i=0,ii=events.length;i<ii;i++) {
+				if(txt.length>0) {
+					txt+=",";
+				}
+				txt+='<a href="http://www.google.fr/#q='+encodeURIComponent(events[i])+'" target="_blank">'+events[i]+'</a>';
+			}
+		} else {
+			txt = "Aucun evenement particulier pour ce jour.";
+		}
+		$('visualizationEvent').set('html', txt);
+		var day = new Date(date) ;
+		$('visualizationDate').set('html', day.getDate()+"/"+(day.getMonth()+1)+"/"+day.getFullYear());
+	},
+	/**
+	 * VisualizationType : value + tip
+	 */
+	setVisualizationType: function(obj) {
+		$('visualizationType').set('html', obj.title);
+		$('visualizationType').store('tip:title', obj.title);
+		$('visualizationType').store('tip:text', obj.text);
 	},
 	/**
 	 * Return the candidat with a displayedName (eg. Nicolas Sarkozy)
@@ -123,7 +158,7 @@ var DataHandler = new Class({
 			    				that.updateGraphDetails(candidat);
 			    				var candidatName = this.selected ? undefined : candidat.candidatName;
 			    				that.geoDataHandler.displayGeoReport(that.selectedTimestamp, candidatName);
-			    				that.updateThemes(that.selectedTimestamp, candidatName);
+			    				that.updateThemes(that.selectedTimestamp, candidat);
 			    				that.updateCandidatInfo(candidat);
 				    		}
 			    		}
@@ -252,10 +287,10 @@ var DataHandler = new Class({
 	/**
 	 * Update the theme threechart.
 	 */
-	updateThemes: function(timestamp, candidatName) {
+	updateThemes: function(timestamp, candidat) {
 		var themes ;
 		var report = this.getReport(timestamp);
-		if(typeof(candidatName) == "undefined") {
+		if(typeof(candidat) == "undefined") {
 			themes = {};
 			for(candidatReport in report.candidats){
 				for(theme in report.candidats[candidatReport].themes) {
@@ -265,7 +300,7 @@ var DataHandler = new Class({
 				}
 			}
 		} else {
-			themes = report.candidats[candidatName].themes;
+			themes = report.candidats[candidat.candidatName].themes;
 		}
 		var values = [];
 		var total = 0;
@@ -286,9 +321,14 @@ var DataHandler = new Class({
 	},
 	/**
 	 * Return the series given a specific type.
+	 * Themes must start with theme.ID
 	 */
 	getSeriesForChart: function (type) {
 		type = type || "tendance" ;
+		var theme = type.indexOf("theme.")!=-1;
+		if(theme) {
+			type = type.substring("theme.".length, type.length);
+		}
 		var series = []
 		for(var i =0, ii=this.reports.length;i<ii;i++) {
 			var data = [];
@@ -305,7 +345,23 @@ var DataHandler = new Class({
 					serie = {nameBrut: candidat, name: this.candidats[candidat].displayName, lineWidth: 2, data: []};
 					series.push(serie);
 				}
-				serie.data.push([report.timestamp, Math.round(report.candidats[candidat][type]*10)/10]);
+				var value ;
+				if(theme) {
+					value = report.candidats[candidat].themes[type];
+				} else {
+					value = report.candidats[candidat][type] ;
+				}
+				var point = {
+						x: report.timestamp, 
+						y: Math.round(value*10)/10
+				}
+				if(typeof(this.options.events[report.timestamp]) != "undefined") {
+					console.log("okay")
+					point.marker = {
+						symbol: 'url(resources/images/star.png)'
+					}
+				}
+				serie.data.push(point);
 			}
 		}
 		return series ;
@@ -394,7 +450,6 @@ var DataHandler = new Class({
 	 */
 	updateGraph: function (type) {
 		var newSeries = this.getSeriesForChart(type);
-		type = type || "tendance" ;
 		for(var i=0, ii=this.chart.chart.series.length;i<ii;i++){
 			this.chart.chart.series[i].setData(newSeries[i].data) ;
 		}
