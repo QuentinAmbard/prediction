@@ -43,4 +43,11 @@ public class TweetRepositoryImpl implements TweetRepositoryCustom {
 		return mongoTemplate.find(query, Tweet.class);
 	}
 
+	@Override
+	public List<Tweet> findNoPolarity(int size) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("polarity").is(null));
+		query.limit(size);
+		return mongoTemplate.find(query, Tweet.class);
+	}
 }

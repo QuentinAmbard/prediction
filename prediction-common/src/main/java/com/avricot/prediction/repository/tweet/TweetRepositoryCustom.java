@@ -23,4 +23,6 @@ public interface TweetRepositoryCustom {
 	List<Tweet> findByCandidatName(CandidatName candidatName, int size);
 
 	List<Tweet> getTweetNotChecked(int size);
+	
+	List<Tweet> findNoPolarity(int size);
 }
