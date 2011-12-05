@@ -11,8 +11,6 @@ import com.avricot.prediction.model.candidat.Candidat;
 import com.avricot.prediction.model.report.CandidatReport;
 import com.avricot.prediction.model.report.PolarityReport;
 import com.avricot.prediction.model.report.Report;
-import com.avricot.prediction.model.report.tweeter.TweetReport;
-import com.avricot.prediction.model.tweet.Tweet;
 import com.avricot.prediction.report.Polarity;
 import com.avricot.prediction.repository.candidat.CandidatRespository;
 import com.avricot.prediction.repository.report.ReportRespository;
@@ -67,17 +65,19 @@ public class MashupTweet {
 
 		for (Candidat candidat : candidats) {
 			 CandidatReport dailyReport = report.getCandidats().get(candidat.getCandidatName());
-			 TweetReport dailyTweetReport = new TweetReport();
  			 long negativeTweets = tweetRepository.count(candidat.getCandidatName(), startDate, endDate, Polarity.NEGATIVE);
 			 long positiveTweets = tweetRepository.count(candidat.getCandidatName(), startDate, endDate, Polarity.POSITIVE);
+			
 			 /* Score =  tweets de la polarité / nombre de tweet total */
 			 long tweetNumber = tweetRepository.count(candidat.getCandidatName(), startDate, endDate);
-			 PolarityReport negativeReport = new PolarityReport(negativeTweets/tweetNumber, negativeTweets);
-			 PolarityReport positiveReport = new PolarityReport(positiveTweets/tweetNumber, positiveTweets);
-			 dailyTweetReport.setNegativePolarity(negativeReport);
-			 dailyTweetReport.setPositivePolarity(positiveReport);
-			 dailyTweetReport.setTweetNumber(tweetNumber);
-			 dailyReport.setTweetReport(dailyTweetReport);
+			 PolarityReport negativePolarity = new PolarityReport(negativeTweets/tweetNumber, negativeTweets);
+			 PolarityReport positivePolarity = new PolarityReport(positiveTweets/tweetNumber, positiveTweets);
+			 
+			 dailyReport.setPositivePolarity(positivePolarity);
+			 dailyReport.setNegativePolarity(negativePolarity);
+			 dailyReport.setNeg(negativeTweets/tweetNumber);
+			 dailyReport.setPos(positiveTweets/tweetNumber);
+			 dailyReport.setTweetNumber(tweetNumber);
 		}
 		reportRepository.save(report);
 	}

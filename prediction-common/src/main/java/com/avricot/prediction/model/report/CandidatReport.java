@@ -5,13 +5,12 @@ import java.util.HashMap;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.avricot.prediction.model.candidat.Candidat.CandidatName;
-import com.avricot.prediction.model.report.tweeter.TweetReport;
 import com.avricot.prediction.model.theme.Theme;
 
 public class CandidatReport {
-	private TweetReport tweetReport;
+	private long tweetNumber;
 	private float insight;
-	private float buzzScore;
+	private float buzz;
 	private float tweetScore;
 	private float rssScore;
 	private float tendance;
@@ -34,14 +33,6 @@ public class CandidatReport {
 		this.rssCountResult = rssCountResult;
 	}
 
-	public TweetReport getTweetReport() {
-		return tweetReport;
-	}
-
-	public void setTweetReport(TweetReport tweetReport) {
-		this.tweetReport = tweetReport;
-	}
-
 	@JsonIgnore
 	public float getInsight() {
 		return insight;
@@ -52,11 +43,11 @@ public class CandidatReport {
 	}
 
 	public float getBuzz() {
-		return buzzScore;
+		return buzz;
 	}
 
 	public void setBuzz(float buzz) {
-		this.buzzScore = buzz;
+		this.buzz = buzz;
 	}
 
 	public float getTendance() {
@@ -142,5 +133,14 @@ public class CandidatReport {
 
 	public void setRssScore(float rssScore) {
 		this.rssScore = rssScore;
+	}
+
+	@JsonIgnore
+	public long getTweetNumber() {
+		return tweetNumber;
+	}
+
+	public void setTweetNumber(long tweetNumber) {
+		this.tweetNumber = tweetNumber;
 	}
 }
