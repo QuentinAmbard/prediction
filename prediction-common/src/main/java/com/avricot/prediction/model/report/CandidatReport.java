@@ -11,7 +11,7 @@ import com.avricot.prediction.model.theme.Theme;
 public class CandidatReport {
 	private TweetReport tweetReport;
 	private float insight;
-	private float buzzScore;
+	private float buzz;
 	private float tweetScore;
 	private float rssScore;
 	private float tendance;
@@ -52,11 +52,11 @@ public class CandidatReport {
 	}
 
 	public float getBuzz() {
-		return buzzScore;
+		return buzz;
 	}
 
 	public void setBuzz(float buzz) {
-		this.buzzScore = buzz;
+		this.buzz = buzz;
 	}
 
 	public float getTendance() {
