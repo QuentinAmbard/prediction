@@ -23,17 +23,17 @@
 		<script type="text/javascript" src="./resources/js/highcharts/modules/exporting.js"></script>-->
 </head>
 <body>
+<header style="margin: auto; width: 200px">
+		<a href="#" id="logo"></a>
+		<div id="blue"></div>
+		<div id="red"></div>
+</header>
 	<div id="container">
 		<div id="vote"></div>
 			<div class="header">
 				<div class="left">
-					<a href="#" id="logo"></a>
-					<div id="blue"></div>
-					<div id="red"></div>
-				</div>
-				<div class="left" style="width:400px;">
 					<div class="selectBloc">
-						Vous visualisez <span id="visualizationType" class="tooltips">la tendance</span> pour <span id="visualizationTarget">tous les candidats</span>.
+						<h1>Vous visualisez <span id="visualizationType" class="tooltips">la tendance</span> pour <span id="visualizationTarget">tous les candidats</span>.</h1>
 						<div class="details">
 							<span id="visualizationDate" >Prévision des résultats du premier tour des élections 2012. <image class="tooltips" rel="<span class='italic'>Nous ne nous contentons pas d'additionner des chiffres !</span><br />Chaque donnée est analysées en détail grace à une intelligence artificielle.<br />Ce traitement nous permet de dégager des tendances générales et ainsi de prédire<br/> le résultat des élections de 2012 !" title="Prédiction des résultats du premier tour de 2012" style="width: 20px; height: 20px" src="resources/images/help.png" /></span><br />
 							Evenements : <span id="visualizationEvent">Présidentielles !</span>
@@ -47,23 +47,25 @@
 				<div id="help">
 					<h2>Que voyez vous ?</h2>
 					Voici une analyse sémantique des elections 2012 présentes sur les <span class="tooltips underline" rel="twitter, articles de tweets, google, blogs, grand journaux etc." title="Plein de médias webs sont utilisés ! ">médias web</span> permettant de <span class="bold">prédire le résultat des élections!</span><br /><br />
-					<div class="italic">
+					<div >
 						Selectionnez un type <span class="bold">d'opinion</span> ou un <span class="bold">thème</span> sur les menus de droite pour changer le type d'affichage.<br /><br />
 						Vous pouvez ensuite <span class="bold">naviguer dans le temps </span>, et associer des <span class="bold">évènements</span> aux données (<img src="resources/images/star.png" />).  <br /><br />
 						<span class="bold">Affinez par candidat</span> en cliquant sur le camembert.<br /><br />
 						<a class="blueButton" href="#">D'ou viennent les données ?</a>
+						<!-- 
 						<a class="redButton" href="#">Faites parti des données</a>
+						 -->
 					</div>
 				</div>
 				<div id="candidatInfo">
 					<h2 id="candidatName">Francois Hollande</h2>
 					Né le : <span id="birthday"></span><br />
 					Idéologie : <span id="tendancy"></span><br />
-					Derniers tweets sur ce candidat :
+					Flux d'informations :
 					<div id="candidatImage" class="candidateFrame">
 						
 					</div>
-					<a id="parti" src="image/ps.jpg">azesqd</a><br />
+					Parti : <a id="parti" src="image/ps.jpg">azesqd</a><br />
 					<img class="parti" id="partiImage" src="image/ps.jpg" /><a href="#">Voir le programme</a>
 				</div>				
 			</div>

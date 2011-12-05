@@ -14,7 +14,6 @@ time, mark, audio, video {
 	margin: 0;
 	padding: 0;
 	border: 0;
-	font-size: 100%;
 	font: inherit;
 	vertical-align: baseline;
 }
@@ -22,9 +21,6 @@ time, mark, audio, video {
 article, aside, details, figcaption, figure, 
 footer, header, hgroup, menu, nav, section {
 	display: block;
-}
-body {
-	line-height: 1;
 }
 ol, ul {
 	list-style: none;
@@ -45,8 +41,10 @@ html { font-size: 100%; overflow-y: scroll; -webkit-text-size-adjust: 100%; -ms-
 /**/
 
 body{
+	line-height: 1;
+	font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
 	background:url(../images/background.jpg) repeat;
-	font:14px times, georgia;
+	color: #555;
 }
 .clear{
 clear:both;
@@ -141,9 +139,6 @@ clear:both;
 .selectBloc{
 	z-index: 999999;
 	margin: 10px 10px;
-	width: 400px;
-	font-size:17px;
-	font-style:italic;
 }
 select{
 	font: lighter 22px "Times New Roman",serif !important;
@@ -161,7 +156,8 @@ select{
 }
 #help {
 	margin-top: 15px;
-	text-align: justify;
+	text-align: left;
+	font-size: 13px !important;
 }
 .italic {
 	font-style:italic;
@@ -201,6 +197,7 @@ select{
 	position: absolute;
 }
 #partiImage {
+	display: none;
 	float: left;
 }
 #parti {
@@ -225,6 +222,11 @@ select{
 	margin-top: -70px;
 	margin-right:12px;
 	float:right;
+}
+h1 {
+	font-shadow: #EDEDED 1px 1px 1px;
+	font-size:27px;
+	color:#2E2E2E;
 }
 
 h2{
