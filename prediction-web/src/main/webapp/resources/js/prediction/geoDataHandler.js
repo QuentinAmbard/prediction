@@ -30,7 +30,11 @@ var GeoDataHandler = new Class({
 			var id = regionsEl[i].id;
 			var value = regions[id] || 0;
 			max =Math.max(value, max);
-			regionsEl[i].store('tip:text', 'Valeur : '+value+'%');
+			if(value == 0) {
+				regionsEl[i].store('tip:text', 'Cette répartition est inconnue pour cette région.');
+			} else {
+				regionsEl[i].store('tip:text', 'Répartition : '+value+' % des personnes en parlent ici !');
+			}
 			regionsEl[i].initialColor = regionsEl[i].getProperty('fill');
 		}
 		var tween = new TWEEN.Tween({percent: 0}).to({percent: 100}, 1000).onUpdate(update).start();

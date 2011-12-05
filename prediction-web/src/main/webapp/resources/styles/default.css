@@ -46,7 +46,7 @@ html { font-size: 100%; overflow-y: scroll; -webkit-text-size-adjust: 100%; -ms-
 
 body{
 	background:url(../images/background.jpg) repeat;
-	font:13px times, georgia;
+	font:14px times, georgia;
 }
 .clear{
 clear:both;
@@ -74,7 +74,8 @@ clear:both;
 	display: none;
 }
 #vote{
-	background:url(../images/vote.png) no-repeat;
+	background:url(../images/sprite.png) no-repeat;
+	background-position:-6px -462px;
 	height:50px;
 	width:960px;
 	margin-bottom:10px;
@@ -85,7 +86,8 @@ clear:both;
 	margin-right:15px;
 }
 #logo{
-	background:url(../images/tenfance2012.png) no-repeat;
+	background:url(../images/sprite.png) no-repeat;
+	background-position:-6px -195px;	
 	height:46px;
 	width:268px;
 	display:block;
@@ -159,14 +161,23 @@ select{
 }
 #help {
 	margin-top: 15px;
+	text-align: justify;
 }
 .italic {
 	font-style:italic;
+}
+.bold {
+	font-weight: bold;
 }
 #leftColomn{
 	width:192px;
 	margin-left:15px;
 	float:left;
+	z-index: 999;
+	position: relative;
+}
+.underline {
+	text-decoration:underline;
 }
 #candidatInfo a{
 	color:#aa4643;
@@ -180,8 +191,16 @@ select{
 	text-align:left;
 	margin-bottom:5px;
 }
+#containerChartType {
+	z-index: 999;
+	top: 560px;
+	left: 50px;
+	color: #383838;
+	font-size: 16px;
+	font-style:italic;
+	position: absolute;
+}
 #partiImage {
-	width: 90px;
 	float: left;
 }
 #parti {
@@ -190,6 +209,7 @@ select{
 .left{
 	z-index: 5000;
 	float:left;
+	position: relative;
 }
 .right{
 	float:right;
@@ -214,7 +234,8 @@ h2{
 	line-height:27px;
 }
 .topColomn{
-	background:url(../images/headerColomn.png) no-repeat bottom;
+	background:url(../images/sprite.png) no-repeat;
+	background-position:-6px -261px;
 	height:34px;
 	width:235px;
 }
@@ -241,18 +262,52 @@ h2{
 }
 
 .bottomColomnLeft{
-	background:url(../images/footerColomnRight.png) no-repeat bottom;
-	height:50px;
+	background:url(../images/sprite.png) no-repeat;
+	background-position:-6px -358px;
+	height:58px;
 	width:235px;
 }
 
 .likeArea{
+	position: relative;
+	z-index: 999;
 	width:34px;
 	height:137px;
-	background:url(../images/smileys.png) no-repeat;
 	float:left;
-	margin:15px 0 0 10px;
+	margin-left:10px;
 	
+}
+.likeArea div:hover{
+	opacity: 1;
+}
+.likeArea div{
+	opacity: 0.8;
+	cursor: pointer;
+	width:34px;
+	height:27px;
+	margin:2px 0;
+}
+.tendance{
+	background:url(../images/sprite.png) no-repeat;
+	background-position:-6px -11px;
+}
+
+.favorable{
+	background:url(../images/sprite.png) no-repeat;
+	background-position:-6px -47px;
+}
+.defavorable{
+	background:url(../images/sprite.png) no-repeat;
+	background-position:-6px -84px;
+}
+.neutre{
+	background:url(../images/sprite.png) no-repeat;
+	background-position:-6px -117px;
+}
+.likeArea .buzz{
+	height:36px;
+	background:url(../images/sprite.png) no-repeat;
+	background-position:-6px -149px;
 }
 
 .blueButton{
@@ -347,6 +402,9 @@ tips structure :
     <div class="tip-bottom"></div> //useful for styling
 </div>
 */
+.tooltips {
+	cursor: default;	
+}
 .tips .tip-title {
 	font-weight: bold;
 }

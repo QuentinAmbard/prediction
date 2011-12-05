@@ -23,28 +23,54 @@ var DataHandler = new Class({
 			"1319320800000": [{value: "convention d'investiture", candidatName: "HOLLANDE"}],
 			"1322002800000": [{value: "Discours d'Eva Joly à Tokyo", candidatName: "JOLY"}]
 		},
-		themeDescrition: {"SECURITY": {title: "la Sécurité", text: "Représente l'importance du thème de la sécurité pour les français."}, 
-			"EUROPE": {title: "l'Europe", text: "Représente l'importance du thème de l'Europe pour les français."},
-			"ECONOMIC": {title: "l'Economie",  text: "Représente l'importance du thème de l'économie pour les français."},
-			"GREEN": {title: "l'Ecologie",  text: "Représente l'importance du thème de l'écologie pour les français."},
-			"IMIGRATION": {title: "l'Immigration",  text: "Représente l'importance du thème de l'immigration pour les français."},
-			"SOCIAL": {title: "le Social", text: "Représente l'importance du thème du social pour les français."}
-		},
 		opinionDescription: { "tendance": {title: "la tendance", text: "Représente le résultat prévisionnel des élections de 2012, avec les données du web."}, 
 			"buzz": {title: "le buzz", text: "Représente de combien on parle de ce candidat."}, 
 			"neg": {title: "les avis négatifs", text: "Représente de combien on parle en mauvais termes de ce candidat."}, 
 			"pos": {title: "les avis positifs", text: "Représente de combien on parle en bon termes de ce candidat."}, 
-			"none": {title: "les désinteressés", text: "Représente à quel point les français ne s'interessent pas à ce candidat."}
+			"none": {title: "les désinteressés", text: "Représente à quel point les français ne s'interessent pas à ce candidat."},
+			"SECURITY": {color: "", title: "la Sécurité", text: "Représente l'importance du thème de la sécurité pour les français."}, 
+			"EUROPE": {color: "", title: "l'Europe", text: "Représente l'importance du thème de l'Europe pour les français."},
+			"ECONOMIC": {color: "", title: "l'Economie",  text: "Représente l'importance du thème de l'économie pour les français."},
+			"GREEN": {color: "", title: "l'Ecologie",  text: "Représente l'importance du thème de l'écologie pour les français."},
+			"IMIGRATION": {color: "", title: "l'Immigration",  text: "Représente l'importance du thème de l'immigration pour les français."},
+			"SOCIAL": {color: "", title: "le Social", text: "Représente l'importance du thème du social pour les français."}
+		},
+		candidatColor: {
+			"SARKOZY": "#09589D",
+			"DUPONT-AIGNAN" : "#723E80",
+			"JOLY" : "#7BA600",
+			"MELENCHON" : "#FD0000",
+			"MORIN" : "#7695C3",
+			"BAYROU" : "#EB690B",
+			"VILLEPIN" : "#A6B0E6",
+			"NIHOUS": "#7CA86B",
+			"LEPEN": "#969696",
+			"LEPAGE": "#8EC640",
+			"BOUTIN": "#0CA0D1",
+			"ARTHAUD": "#C20027",
+			"POUTOU": "#FF3D64",
+			"CHEVENEMENT": "#B77171",
+			"HOLLANDE": "#FF29B8"
+		},
+		positionColor: {
+			"EXTREME_GAUCHE": "#FC3232",
+			"GAUCHE": "#E854A8",
+			"CENTRE": "#A4ED2F",
+			"DROITE": "#2F2FED",
+			"EXTREME_DROITE": "#969696"
 		}
 	},
 	initialize: function(profile, options){
+		this.setOptions(options);
+		
+		Highcharts.setOptions({lang: {loading: "Chargement en cours, patientez..."}});
+		
 		new Tips(".tooltips", {className: "tips"});
 		this.setVisualizationType(this.options.opinionDescription["tendance"]);
-		this.setOptions(options);
 		var that = this ;
 		this.threeMap = new ThreeMap("treeMap");
 		this.threeMap.addEvent('click', function (theme) {
-			that.setVisualizationType(that.options.themeDescrition[theme]);
+			that.setVisualizationType(that.options.opinionDescription[theme]);
 			that.updateGraph("theme."+theme)
 		});
 		this.geoDataHandler = new GeoDataHandler();
@@ -54,18 +80,18 @@ var DataHandler = new Class({
 		});
 		this.piePosition = new Pie("containerPiePosition", {
 			dataLabelsEnabled: false,
-			innerSize: 130
+			innerSize: 120
 		});
 		//svg Z-index hack.
 		this.pie.addEvents({
 			'mouseOver': function() {
-				$('containerPie').setStyle('z-index', 3);
+				$('containerPieParent').setStyle('z-index', 30000);
 			},
 			'mouseOut': function() {
-				$('containerPie').setStyle('z-index', 1);
+				$('containerPieParent').setStyle('z-index', 1);
 			}
 		});
-		this.chart = new Chart("containerChart");
+		this.chart = new Chart("containerChart", {events: this.options.events});
 		this.chart.addEvent('clickOnChart', function (date, type) {
 			that.updateVisualizationDate(date);
 			that.updatePie(date, type);
@@ -100,7 +126,7 @@ var DataHandler = new Class({
 		}
 		$('visualizationEvent').set('html', txt);
 		var day = new Date(date) ;
-		$('visualizationDate').set('html', day.getDate()+"/"+(day.getMonth()+1)+"/"+day.getFullYear());
+		$('visualizationDate').set('html', "Données du "+day.getDate()+"/"+(day.getMonth()+1)+"/"+day.getFullYear());
 	},
 	/**
 	 * VisualizationType : value + tip
@@ -142,6 +168,7 @@ var DataHandler = new Class({
 				for(candidat in that.candidats) {
 					var candidatReport = lastReport.candidats[candidat];
 					dataPie.push({parti: that.candidats[candidat].parti,
+						color: that.options.candidatColor[candidat],
 						partiFullName: that.candidats[candidat].partiFullName,
 						name: that.candidats[candidat].displayName, 
 						y:candidatReport.tendance,
@@ -174,7 +201,8 @@ var DataHandler = new Class({
 			    var dataPiePosition = [];
 			    for(var position in dataPiePositionObj) {
 			    	dataPiePosition.push({name: position, 
-			    		y: dataPiePositionObj[position]
+			    		y: dataPiePositionObj[position],
+			    		color: that.options.positionColor[position]
 			    	});
 			    }
 			    var series= [{
@@ -307,7 +335,7 @@ var DataHandler = new Class({
 			total += themes[theme] ;
 		}
 		for(theme in themes) {
-			var title = "Préoccupation des français pour "+this.options.themeDescrition[theme].title;
+			var title = "Préoccupation des français pour "+this.options.opinionDescription[theme].title;
 			if(typeof(candidat) != "undefined") {
 				title += " pour "+candidat.displayName;
 			}
@@ -463,11 +491,22 @@ var DataHandler = new Class({
 	 * Update the graph with new datas.
 	 */
 	updateGraph: function (type) {
+		this.chart.chart.showLoading();
+		var that = this ;
 		var newSeries = this.getSeriesForChart(type);
-		for(var i=0, ii=this.chart.chart.series.length;i<ii;i++){
-			this.chart.chart.series[i].setData(newSeries[i].data) ;
-		}
-		this.chart.chart.redraw();
+		setTimeout(function () {
+			//this.chart.chart.series = newSeries ;
+			for(var i=0, ii=that.chart.chart.series.length;i<ii;i++){
+				that.chart.chart.series[i].setData(newSeries[i].data) ;
+			}
+			that.chart.chart.hideLoading();
+			var theme = type.indexOf("theme.")!=-1;
+			if(theme) {
+				type = type.substring("theme.".length, type.length);
+			}
+			$("containerChartType").set('html', that.options.opinionDescription[type].title);
+			//that.chart.chart.redraw();
+		}, 100);
 	},
 	/**
 	 * Update the graph details

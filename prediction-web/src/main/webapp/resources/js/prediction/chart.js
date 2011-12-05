@@ -2,7 +2,9 @@ var Chart = new Class({
 	Implements : [ Options,Events],
 	chartOptions : null,
 	chart : null,
-	options : {},
+	options : {
+		events: {}
+	},
 	initialize : function(divId, options) {
 		this.setOptions(options);
 		var that = this ;
@@ -33,7 +35,7 @@ var Chart = new Class({
 				min : 0,
 				max: 101,
 				title : {
-					text : 'Tendance'
+					text : '' //Tendance
 				},
 				labels : {
 					x : 3,
@@ -51,10 +53,10 @@ var Chart = new Class({
 			},
 
 			tooltip : {
-			/*	formatter:function () {
-					console.log(this);
-					return 'The value for <b>'+ this.x +'</b> is <b>'+ this.y +'</b>';
-				},*/
+//				formatter:function () {
+//					console.log(this);
+//					return 'The value for <b>'+ this.x +'</b> is <b>'+ this.y +'</b>';
+//				},
 				shared : true,
 				crosshairs : true
 			},
@@ -86,6 +88,19 @@ var Chart = new Class({
 					}
 				}
 			},
+		    loading: {
+		        hideDuration: 100,
+		        showDuration: 100,
+		        style: {
+		        	"font-size": "20px",
+		        	"padding-top": "10px",
+		        	color: "red",
+		        	position: 'absolute',
+		        	backgroundColor: 'black',
+		        	opacity: 0.5,
+		        	textAlign: 'center'
+		        }
+		    },
 			credits : {
 				enabled : false
 			}
