@@ -20,6 +20,7 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import com.avricot.prediction.model.candidat.Candidat;
+import com.avricot.prediction.model.report.CandidatReport;
 import com.avricot.prediction.model.report.Report;
 import com.avricot.prediction.repository.candidat.CandidatRespository;
 import com.avricot.prediction.repository.report.ReportRespository;
@@ -49,6 +50,7 @@ public class NewsPopularity {
 	private static final String RSS_LIBERATION = "http://rss.liberation.fr/rss/9/";
 	private static final String RSS_OUESTFRANCE = "http://www.ouest-france.fr/dma-rss_-Toutes-les-DMA-RSS_6346--fils-tous_filDMA.Htm#xtor=RSS-3003";
 
+	static final long MILLIS_IN_A_DAY = 1000*60*60*24;	
 	private static Logger LOG = Logger.getLogger(NewsPopularity.class);
 
 	public void run() throws ClassNotFoundException, IOException {
@@ -56,8 +58,12 @@ public class NewsPopularity {
 		scoreMap = new HashMap<Candidat, Integer>();
 
 		Date todayDate = DateUtils.getMidnightTimestampDate(new Date());
-		report = reportRepository.findByTimestamp(DateUtils.getMidnightTimestamp(new Date()));
-
+		long midnight = DateUtils.getMidnightTimestamp(new Date());
+		report = reportRepository.findByTimestamp(midnight);
+		
+//		if(report == null)
+//			report = new Report(midnight);
+		
 		LOG.info("Parsing du flux RSS du Figaro");
 		parseRSSLeMondeType(RSS_LEFIGARO, todayDate);
 		
@@ -81,10 +87,20 @@ public class NewsPopularity {
 		LOG.info("Parsing du flux RSS de Le Journal du dimanche");
 		parseRSSLeMondeType(RSS_JDD, todayDate);
 		
+//		for (Candidat candidat : candidats) {
+//			report.getCandidats().put(candidat.getCandidatName(), new CandidatReport());
+//		}
+		
 		/* Enregistrement des valeurs */
 		for (Candidat key : scoreMap.keySet()) {
-			report.getCandidats().get(key.getCandidatName()).setRssCountResult(scoreMap.get(key));
+			if(report.getCandidats().get(key.getCandidatName()) != null) {
+				report.getCandidats().get(key.getCandidatName()).setRssCountResult(scoreMap.get(key));
+		} else {
+				report.getCandidats().put(key.getCandidatName(), new CandidatReport());
+				report.getCandidats().get(key.getCandidatName()).setRssCountResult(scoreMap.get(key));
+			}
 		}
+		
 		reportRepository.save(report);
 	}
 

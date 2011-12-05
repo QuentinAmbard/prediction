@@ -49,7 +49,7 @@ public class MashupTweet {
 	 * Mashup today's tweets.
 	 */
 	public void mashupDailyTweet() {
-		mashup(new Date(System.currentTimeMillis() - 60 * 60 * 24 * 1000 * 10));
+		mashup(new Date(System.currentTimeMillis()));
 	}
 	
 	/**
@@ -70,13 +70,21 @@ public class MashupTweet {
 			
 			 /* Score =  tweets de la polarité / nombre de tweet total */
 			 long tweetNumber = tweetRepository.count(candidat.getCandidatName(), startDate, endDate);
-			 PolarityReport negativePolarity = new PolarityReport(negativeTweets/tweetNumber, negativeTweets);
-			 PolarityReport positivePolarity = new PolarityReport(positiveTweets/tweetNumber, positiveTweets);
-			 
+			 PolarityReport negativePolarity;
+			 PolarityReport positivePolarity;
+			 if(tweetNumber != 0) {
+				 negativePolarity = new PolarityReport(negativeTweets/tweetNumber, negativeTweets);
+			 	 positivePolarity = new PolarityReport(positiveTweets/tweetNumber, positiveTweets);
+			 	 dailyReport.setNeg(negativeTweets/tweetNumber);
+			 	 dailyReport.setPos(positiveTweets/tweetNumber);
+			 } else {
+			 	 dailyReport.setNeg(0);
+			 	 dailyReport.setPos(0);
+				 negativePolarity = new PolarityReport(0, 0);
+			 	 positivePolarity = new PolarityReport(0, 0);
+			 }
 			 dailyReport.setPositivePolarity(positivePolarity);
 			 dailyReport.setNegativePolarity(negativePolarity);
-			 dailyReport.setNeg(negativeTweets/tweetNumber);
-			 dailyReport.setPos(positiveTweets/tweetNumber);
 			 dailyReport.setTweetNumber(tweetNumber);
 		}
 		reportRepository.save(report);
