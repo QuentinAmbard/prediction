@@ -41,7 +41,7 @@ public class TweetRepositoryImpl implements TweetRepositoryCustom {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("candidatName").is(candidatName.name()));
 		query.addCriteria(Criteria.where("date").gt(startDate).lt(endDate));
-		query.addCriteria(Criteria.where("polarity").is(polarity));
+		query.addCriteria(Criteria.where("polarity").is(polarity.name()));
 		return mongoTemplate.count(query, Tweet.class);
 	}
 	

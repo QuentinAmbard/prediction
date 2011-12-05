@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.avricot.prediction.model.candidat.Candidat;
@@ -25,6 +26,9 @@ public class MashupBuzz {
 	private TweetRepository tweetRepository;
 	@Inject
 	private CandidatRespository candidatRepository;
+	
+	static final long MILLIS_IN_A_DAY = 1000*60*60*24;
+	private static Logger LOG = Logger.getLogger(MashupBuzz.class);
 	
 	/**
 	 * Mashup all the days.
@@ -49,7 +53,7 @@ public class MashupBuzz {
 	 * Mashup today's buzz.
 	 */
 	public void mashupDailyBuzz() {
-		mashup(new Date(System.currentTimeMillis() - 60 * 60 * 24 * 1000 * 10));
+		mashup(new Date(System.currentTimeMillis()));
 	}
 	
 	/**
@@ -59,7 +63,7 @@ public class MashupBuzz {
 	 */
 	private void mashup(long midnight) {
 		Date startDate = new Date(midnight);
-		Date endDate = new Date(midnight + 60 * 60 * 24 * 1000);
+		Date endDate = new Date(midnight + MILLIS_IN_A_DAY);
 		Report report = reportRepository.findByTimestamp(midnight);
 		List<Candidat> candidats = candidatRepository.findAll();
 		HashMap<CandidatName, Long> tweetCountMap = new HashMap<CandidatName, Long>();
@@ -82,11 +86,42 @@ public class MashupBuzz {
 		/* Calcul du tweetscore = nombre de tweets pour un candidat / tous les tweets de la journée parlant des candidats */
 		for (CandidatName key : tweetCountMap.keySet()) {
 			CandidatReport dailyReport = report.getCandidats().get(key);
-			dailyReport.setTweetScore((tweetCountMap.get(key) / totalTweet)); //TODO multiplié par 100 ?
-			dailyReport.setRssScore((rssCountMap.get(key) / totalRss));
+			if(totalTweet != 0)
+				dailyReport.setTweetScore((tweetCountMap.get(key) / totalTweet)); //TODO multiplié par 100 ?
+			else 
+				dailyReport.setTweetScore(0);
+			
+			if(totalRss != 0)
+				dailyReport.setRssScore((rssCountMap.get(key) / totalRss));
+			else 
+				dailyReport.setRssScore(0);
+			
 			dailyReport.setBuzz(dailyReport.getRssScore() + dailyReport.getTweetScore() + dailyReport.getInsight() / 3);
+			
+			/* Le désintéressement est l'inverse de la polarité négative * la popularité */
+			if(dailyReport.getNeg() != 0)
+				dailyReport.setNone((1/dailyReport.getNeg()) * dailyReport.getBuzz());
 		}
 		
+		/* Calcul de la tendance */
+		Report yesterdayReport = reportRepository.findByTimestamp((DateUtils.getMidnightTimestamp(new Date()) - MILLIS_IN_A_DAY));
+		Report dayBeforeYesterdayReport = reportRepository.findByTimestamp((DateUtils.getMidnightTimestamp(new Date()) - (MILLIS_IN_A_DAY * 2)));
+		float buzzBeforeYesterday;
+		float buzzYesterday;
+		float buzzToday;
+		
+		if(yesterdayReport != null && dayBeforeYesterdayReport != null) {
+			for (CandidatName key : yesterdayReport.getCandidats().keySet()) {
+				buzzYesterday = yesterdayReport.getCandidats().get(key).getBuzz();
+				buzzBeforeYesterday = dayBeforeYesterdayReport.getCandidats().get(key).getBuzz();
+				buzzToday = report.getCandidats().get(key).getBuzz();
+	
+				/* C'est la moyenne des changements sur 3 jours */
+				report.getCandidats().get(key).setTendance((Math.abs(buzzYesterday - buzzBeforeYesterday) + Math.abs(buzzToday - buzzYesterday)) / 2);
+			}
+		} else {
+			LOG.error("Impossible de calculer la tendance.");
+		}
 		reportRepository.save(report);
 	}
 }
