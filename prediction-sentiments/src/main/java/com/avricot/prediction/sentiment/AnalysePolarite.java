@@ -36,10 +36,11 @@ public class AnalysePolarite {
 	private StringBuffer negativeTweets = new StringBuffer();
 	private StringBuffer neutralTweets = new StringBuffer();
 	private StringBuffer notFrenchTweets = new StringBuffer();
+	private StringBuffer invalidTweets = new StringBuffer();
 	
 	private List<Tweet> tweetsToEvaluate;
 	private List<Candidat> candidats;
-	private String[] mCategories = {"positive", "negative", "neutral", "not_french"};
+	private String[] mCategories = {"positive", "negative", "neutral", "not_french", "invalid"};
 	private DynamicLMClassifier<NGramProcessLM> mClassifier;
 
 	public void run() throws ClassNotFoundException, IOException {
@@ -79,12 +80,15 @@ public class AnalysePolarite {
 				neutralTweets.append(tweet.getValue());
 			else if(tweet.getPolarity() == Polarity.NOT_FRENCH)
 				notFrenchTweets.append(tweet.getValue());
+			else if(tweet.getPolarity() == Polarity.INVALID)
+				invalidTweets.append(tweet.getValue());
 		}
 		
 		tweetCleaner(neutralTweets.toString());
 		tweetCleaner(positiveTweets.toString());
 		tweetCleaner(negativeTweets.toString());
 		tweetCleaner(notFrenchTweets.toString());
+		tweetCleaner(invalidTweets.toString());
 	}
 	
 	/**
@@ -102,7 +106,10 @@ public class AnalysePolarite {
 			}
 			tweet = tweet.replaceAll("RT", "");
 			/* Pseudos Twitter */
-			tweet = tweet.replaceAll("/[@]\\w+/", "");
+			tweet = tweet.replaceAll("@([A-Za-z0-9_]+)", "");
+			tweet = tweet.replaceAll("http://([A-Za-z0-9_./]+)", "");
+			
+			
 			//TODO GERER LES URLS
 //			tweet = tweet.replaceAll("(.*://)", "");
 		}
@@ -122,16 +129,19 @@ public class AnalysePolarite {
         Classification classificationNeg = new Classification("negative");
         Classification classificationNeu = new Classification("neutral");
         Classification classificationNotFrench = new Classification("not_french");
+        Classification classificationInvalid = new Classification("invalid");
         
         Classified<CharSequence> classifiedPos = new Classified<CharSequence>(positiveTweets, classificationPos);
         Classified<CharSequence> classifiedNeg = new Classified<CharSequence>(negativeTweets, classificationNeg);
         Classified<CharSequence> classifiedNeu = new Classified<CharSequence>(neutralTweets, classificationNeu);
         Classified<CharSequence> classifiedNotF = new Classified<CharSequence>(notFrenchTweets, classificationNotFrench);
+        Classified<CharSequence> classifiedInvalid = new Classified<CharSequence>(notFrenchTweets, classificationInvalid);
         
         mClassifier.handle(classifiedPos);
         mClassifier.handle(classifiedNeg);
         mClassifier.handle(classifiedNeu);
         mClassifier.handle(classifiedNotF);
+        mClassifier.handle(classifiedInvalid);
 	}
 	
 	/**
@@ -160,6 +170,8 @@ public class AnalysePolarite {
 				tweet.setPolarity(Polarity.NEUTRAL);
 			else if(bestCategory.equalsIgnoreCase("not_french"))
 				tweet.setPolarity(Polarity.NOT_FRENCH);
+			else if(bestCategory.equalsIgnoreCase("invalid"))
+				tweet.setPolarity(Polarity.INVALID);
 		}
     }
 	
