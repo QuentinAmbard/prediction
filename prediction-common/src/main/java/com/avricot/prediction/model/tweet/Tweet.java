@@ -105,7 +105,6 @@ public class Tweet {
 		this.score = score;
 	}
 
-	@JsonIgnore
 	public String getId() {
 		return id.toStringMongod();
 	}
