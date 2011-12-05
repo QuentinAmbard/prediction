@@ -46,9 +46,9 @@ public class MashupBuzz {
 	}
 
 	/**
-	 * Mashup today's tweets.
+	 * Mashup today's buzz.
 	 */
-	public void mashupDailyTheme() {
+	public void mashupDailyBuzz() {
 		mashup(new Date(System.currentTimeMillis() - 60 * 60 * 24 * 1000 * 10));
 	}
 	
@@ -84,8 +84,7 @@ public class MashupBuzz {
 			CandidatReport dailyReport = report.getCandidats().get(key);
 			dailyReport.setTweetScore((tweetCountMap.get(key) / totalTweet)); //TODO multiplié par 100 ?
 			dailyReport.setRssScore((rssCountMap.get(key) / totalRss));
-			dailyReport.setBuzz(dailyReport.getRssScore() + dailyReport.getTweetScore() / 2);
-			//TODO Ajouter le insight dans ce calcul
+			dailyReport.setBuzz(dailyReport.getRssScore() + dailyReport.getTweetScore() + dailyReport.getInsight() / 3);
 		}
 		
 		reportRepository.save(report);

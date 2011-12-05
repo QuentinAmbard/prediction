@@ -50,7 +50,7 @@ public class MashupTweet {
 	/**
 	 * Mashup today's tweets.
 	 */
-	public void mashupDailyTheme() {
+	public void mashupDailyTweet() {
 		mashup(new Date(System.currentTimeMillis() - 60 * 60 * 24 * 1000 * 10));
 	}
 	

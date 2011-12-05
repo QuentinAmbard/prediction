@@ -18,11 +18,24 @@ public class Mashup {
 	@Inject
 	private ReportRespository reportRepository;
 
+	@Inject
+	private MashupBuzz mashupBuzz;
+	
+	@Inject
+	private MashupTheme mashupTheme;
+	
+	@Inject
+	private MashupTweet mashupTweet;
+	
 	public void mashup() {
+		/* Build daily mashups */
+		mashupBuzz.mashupDailyBuzz();
+		mashupTheme.mashupDailyTheme();
+		mashupTweet.mashupDailyTweet();
+		
 		List<Report> reports = reportRepository.findAll();
 		for (Report report : reports) {
 			for (Entry<CandidatName, CandidatReport> e : report.getCandidats().entrySet()) {
-//				e.getValue().setBuzz(e.getValue().getInsight());
 				e.getValue().setNone((float) (e.getValue().getInsight() * Math.random()));
 				e.getValue().setPos((float) (e.getValue().getInsight() * Math.random()));
 				e.getValue().setNeg((float) (e.getValue().getInsight() * Math.random()));
@@ -36,6 +49,4 @@ public class Mashup {
 		}
 		reportRepository.save(reports);
 	}
-	
-	
 }
