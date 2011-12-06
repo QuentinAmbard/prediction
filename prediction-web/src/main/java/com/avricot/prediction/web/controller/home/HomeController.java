@@ -111,19 +111,16 @@ public class HomeController {
 	public String nojs(Model model) {
 		HashMap<String, List<?>> datas = getMainData();
 		model.addAllAttributes(datas);
-		// List<Report> reports = reportRepository.findAll(new
-		// Sort(Direction.ASC, "timestamp"));
-		// for (Report report : reports) {
-		// for (Entry<CandidatName, CandidatReport> e :
-		// report.getCandidats().entrySet()) {
-		// if (e.getValue().getThemes().containsKey(ThemeName.ENERGY)) {
-		// e.getValue().getThemes().remove(ThemeName.ENERGY);
-		// }
-		// }
-		// }
-		// reportRepository.save(reports);
 		model.addAttribute("themes", ThemeName.values());
 		return "nojs";
+	}
+
+	/**
+	 * Display ccm page.
+	 */
+	@RequestMapping(value = "ccm", method = RequestMethod.GET)
+	public String ccm() {
+		return "ccm";
 	}
 
 	/**

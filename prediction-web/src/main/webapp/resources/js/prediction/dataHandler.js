@@ -76,21 +76,22 @@ var DataHandler = new Class({
 		this.geoDataHandler = new GeoDataHandler();
 		this.selectType = $('selectType')
 		this.pie = new Pie("containerPie", {
-			stickyTracking: false
+			stickyTracking: true
 		});
+		/*
 		this.piePosition = new Pie("containerPiePosition", {
 			dataLabelsEnabled: false,
 			innerSize: 120
-		});
+		});*/
 		//svg Z-index hack.
-		this.pie.addEvents({
-			'mouseOver': function() {
-				$('containerPieParent').setStyle('z-index', 30000);
-			},
-			'mouseOut': function() {
-				$('containerPieParent').setStyle('z-index', 1);
-			}
-		});
+//		this.pie.addEvents({
+//			'mouseOver': function() {
+//				$('containerPieParent').setStyle('z-index', 30000);
+//			},
+//			'mouseOut': function() {
+//				$('containerPieParent').setStyle('z-index', 1);
+//			}
+//		});
 		this.chart = new Chart("containerChart", {events: this.options.events});
 		this.chart.addEvent('clickOnChart', function (date, type) {
 			that.updateVisualizationDate(date);
@@ -198,6 +199,7 @@ var DataHandler = new Class({
 				that.pie.initChart(series);
 
 			    //Position pie serie
+			    /*
 			    var dataPiePositionObj = that.getPositionsForReport(lastReport);
 			    var dataPiePosition = [];
 			    for(var position in dataPiePositionObj) {
@@ -211,6 +213,7 @@ var DataHandler = new Class({
 					data: dataPiePosition
 				}]
 			    that.piePosition.initChart(series);
+			    */
 				that.chart.initChart(that.getSeriesForChart(), that.firstTimestamp);
 				
 				//details chart
@@ -494,12 +497,12 @@ var DataHandler = new Class({
 			var name = this.getCandidat(data[i].name).candidatName;
 			data[i].update(report.candidats[name][type]);
 		}
-		var dataReport = this.getPositionsForReport(report);
-		var i=0;
-		for(var position in dataReport) {
-			positionData[i].update(dataReport[position]);
-	    	i++;
-	    }
+//		var dataReport = this.getPositionsForReport(report);
+//		var i=0;
+//		for(var position in dataReport) {
+//			positionData[i].update(dataReport[position]);
+//	    	i++;
+//	    }
 	},
 	/**
 	 * Update the graph with new datas.

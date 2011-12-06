@@ -395,13 +395,17 @@ tips structure :
     <div class="tip-bottom"></div> //useful for styling
 </div>
 */
-.tooltips {
+
+#mapTip {
+	position: absolute ;
+}
+.tooltips #mapTip{
 	cursor: default;	
 }
 .tips .tip-title {
 	font-weight: bold;
 }
-.tips {
+.tips, #mapTip {
 	z-index: 999999;
 	padding: 5px;
 	background-color:black;
@@ -412,4 +416,141 @@ tips structure :
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
 	color:#dedede;
+}
+
+
+
+/* CCM PAGE */
+#ccmT{
+	padding: 20px;	
+}
+#ccmTitle {
+	margin: 40px 0px 5px 20px;
+	float: left;
+}
+#ccmSubTitle {
+	margin: 10px 0px 5px 200px;
+	float: left;
+	width: 300px;
+}
+#containerShemas{
+	width:960px;
+	height:1000px;
+	margin:	75px auto;
+	background-color:white;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	box-shadow: 0 0px 5px #7e7e7e;
+	-webkit-box-shadow: 0 0px 5px #7e7e7e;
+	-moz-box-shadow: 0 0px 5px #7e7e7e;
+	overflow: hidden;
+	position:relative;
+
+}
+
+.entenoire{
+	background: url(../images/spriteCommentCaMarche.png) no-repeat;
+	width:309px;
+	height:284px;
+	position:absolute;
+	top:165px;
+	left:60px;
+}
+.intelligenceArtificielle{
+	background: url(../images/spriteCommentCaMarche.png) no-repeat;
+	width:195px;
+	height:165px;
+	background-position:0 -305px;
+	position:absolute;
+	top: 320px;
+	left: 285px;
+	
+}
+.apprentissage{
+	background: url(../images/spriteCommentCaMarche.png) no-repeat;
+	width:438px;
+	height:305px;
+	background-position:0 -489px;
+	position:absolute;
+	top: 61px;
+	left: 443px;
+}
+.traitement{
+	background: url(../images/spriteCommentCaMarche.png) no-repeat;
+	width:160px;
+	height:141px;
+	background-position:0 -809px;
+	position:absolute;
+	top: 460px;
+	left: 334px;
+}
+.data{
+	background: url(../images/spriteCommentCaMarche.png) no-repeat;
+	background-position:0 -968px;
+	position:absolute;
+	width: 315px;
+	height: 320px;
+	top:600px;
+	left:242px;
+}
+.shemas{
+	margin-left: 39px;
+	position: relative;
+	margin-top: -10px;
+}
+#containerShemas h2{
+	font-size:16px;
+	font-weight:bold;
+	line-height:20px;
+	text-align:left;
+}
+.entenoireText{
+	font-size:16px ;
+	position:absolute;
+	width: 236px;
+	top: 358px;
+	left: -30px;
+}
+
+
+.intelligenceArtificielleText{
+	font-size:16px ;
+	width:200px;
+	position:absolute;
+	width: 228px;
+	top: 376px;
+	left: 514px;
+}
+
+.apprentissageText{
+	font-size:16px ;
+	width:200px;
+	position:absolute;
+	width: 228px;
+	top: 267px;
+	left: 629px;
+}
+
+.traitementText{
+	font-size:16px ;
+	width:200px;
+	position:absolute;
+	width: 228px;
+	top: 490px;
+	left: 530px;
+}
+
+.dataText{
+	font-size:16px ;
+	width:200px;
+	position:absolute;
+	width: 228px;
+	top: 704px;
+	left: 600px;
+}
+
+#containerShemas .blueButton{
+	float:right;
+	margin-right:20px;
 }
