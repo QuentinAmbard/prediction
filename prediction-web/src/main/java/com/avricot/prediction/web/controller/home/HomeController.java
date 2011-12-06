@@ -121,9 +121,11 @@ public class HomeController {
 			return false;
 		}
 		int sum = 0;
+		int tweets = 0;
 		for (Entry<CandidatName, CandidatReport> entry : report.getCandidats().entrySet()) {
 			sum += entry.getValue().getBuzz();
+			tweets += entry.getValue().getTweetNumber();
 		}
-		return sum > 0;
+		return sum > 0 && tweets > 0;
 	}
 }

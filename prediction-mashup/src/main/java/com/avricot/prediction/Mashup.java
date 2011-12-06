@@ -67,8 +67,11 @@ public class Mashup {
 	}
 	
 	public void mashupEverything() {
+		LOG.info("Mashup all buzz...");
 		mashupBuzz.mashupAllBuzz();
+		LOG.info("Mashup all themes...");
 		mashupTheme.mashupAllTheme();
+		LOG.info("Mashup all tweets...");
 		mashupTweet.mashupAllTweets();
 	}
 }

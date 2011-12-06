@@ -65,6 +65,10 @@ public class MashupTweet {
 
 		for (Candidat candidat : candidats) {
 			 CandidatReport dailyReport = report.getCandidats().get(candidat.getCandidatName());
+			 if(dailyReport == null) {
+				 dailyReport = new CandidatReport();
+				 report.getCandidats().put(candidat.getCandidatName(), dailyReport);
+			 }
  			 long negativeTweets = tweetRepository.count(candidat.getCandidatName(), startDate, endDate, Polarity.NEGATIVE);
 			 long positiveTweets = tweetRepository.count(candidat.getCandidatName(), startDate, endDate, Polarity.POSITIVE);
 			
