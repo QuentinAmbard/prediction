@@ -47,8 +47,7 @@ public class Mashup {
 				e.getValue().setTendance((float) (e.getValue().getInsight() * Math.random()));
 				e.getValue().getThemes().clear();
 				for (ThemeName theme : ThemeName.values()) {
-					if (theme != ThemeName.ENERGY)
-						e.getValue().getThemes().put(theme, (int) (e.getValue().getInsight() * Math.random()));
+					e.getValue().getThemes().put(theme, (int) (e.getValue().getInsight() * Math.random()));
 				}
 			}
 		}
