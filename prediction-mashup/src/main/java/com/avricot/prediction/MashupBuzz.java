@@ -68,6 +68,8 @@ public class MashupBuzz {
 		List<Candidat> candidats = candidatRepository.findAll();
 		HashMap<CandidatName, Long> tweetCountMap = new HashMap<CandidatName, Long>();
 		HashMap<CandidatName, Long> rssCountMap = new HashMap<CandidatName, Long>();
+
+		// Total de tous les candidats de ce jour.
 		long totalTweet = 0;
 		long totalRss = 0;
 		float insightScore;
@@ -108,7 +110,7 @@ public class MashupBuzz {
 			} else {
 				dailyReport.setRssScore(0);
 			}
-
+			LOG.info("maxTweet" + maxTweet + ", maxRss" + maxRss);
 			insightScore = (dailyReport.getInsight() / maxInsight) * 100;
 
 			if (dailyReport.getRssScore() == 0) {

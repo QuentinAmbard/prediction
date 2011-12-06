@@ -31,10 +31,15 @@ public interface TweetRepositoryCustom {
 	 */
 	long count(CandidatName candidatName, Date startDate, Date endDate);
 
+	/**
+	 * Count valid tweets.
+	 */
+	long countValid(CandidatName candidatName, Date startDate, Date endDate);
+
 	List<Tweet> findByCandidatName(CandidatName candidatName, int size);
 
 	List<Tweet> getTweetNotChecked(int size);
-	
+
 	List<Tweet> findNoPolarity(int size);
 
 	/**
@@ -46,8 +51,7 @@ public interface TweetRepositoryCustom {
 	 * @param polarity
 	 * @return number of tweets
 	 */
-	long count(CandidatName candidatName, Date startDate, Date endDate,
-			Polarity polarity);
+	long count(CandidatName candidatName, Date startDate, Date endDate, Polarity polarity);
 
 	long countNoPolarity();
 

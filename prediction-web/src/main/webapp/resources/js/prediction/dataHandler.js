@@ -491,7 +491,7 @@ var DataHandler = new Class({
 	updatePie: function(date, type) {
 		type = type || "tendance" ;
 		var data = this.pie.chart.series[0].data ;
-		var positionData = this.piePosition.chart.series[0].data ;
+		//var positionData = this.piePosition.chart.series[0].data ;
 		var report = this.getReport(date);
 		for(i =0,ii=data.length;i<ii;i++) {
 			var name = this.getCandidat(data[i].name).candidatName;

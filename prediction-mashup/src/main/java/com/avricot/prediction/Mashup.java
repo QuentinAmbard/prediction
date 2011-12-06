@@ -1,7 +1,5 @@
 package com.avricot.prediction;
 
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -17,32 +15,30 @@ import com.avricot.prediction.model.report.Report;
 import com.avricot.prediction.model.theme.Theme.ThemeName;
 import com.avricot.prediction.repository.candidat.CandidatRespository;
 import com.avricot.prediction.repository.report.ReportRespository;
-import com.avricot.prediction.utils.DateUtils;
 
 @Service
 public class Mashup {
 	@Inject
 	private ReportRespository reportRepository;
-	
+
 	@Inject
 	CandidatRespository candidatRespository;
 
 	@Inject
 	private MashupBuzz mashupBuzz;
-	
+
 	@Inject
 	private MashupTheme mashupTheme;
-	
+
 	@Inject
 	private MashupTweet mashupTweet;
-	
+
 	private long maxTweet;
 	private long maxRss;
 	private float maxInsight;
-	
+
 	private static Logger LOG = Logger.getLogger(Mashup.class);
-	
-	
+
 	public void mashup() {
 		List<Report> reports = reportRepository.findAll();
 		for (Report report : reports) {
@@ -57,19 +53,19 @@ public class Mashup {
 		}
 		reportRepository.save(reports);
 	}
-	
+
 	public void mashupDaily() {
 		List<Candidat> candidats = candidatRespository.findAll();
 		List<Report> reports = reportRepository.findAll();
 		for (Report report : reports) {
-			if(report.getCandidats() == null) {
+			if (report.getCandidats() == null) {
 				CandidatReport dailyReport = new CandidatReport();
 				for (Candidat candidat : candidats) {
 					report.getCandidats().put(candidat.getCandidatName(), dailyReport);
 				}
 			}
 		}
-		
+
 		/* Build daily mashups */
 		LOG.info("Building daily tweet mashup...");
 		mashupTweet.mashupDailyTweet();
@@ -79,38 +75,38 @@ public class Mashup {
 		mashupTheme.mashupDailyTheme();
 		LOG.info("Done.");
 	}
-	
+
 	public void mashupEverything() {
 		fillMaxValues();
 		LOG.info("Mashup all buzz...");
 		mashupBuzz.mashupAllBuzz(maxTweet, maxRss, maxInsight);
 		LOG.info("Mashup all themes...");
-//		mashupTheme.mashupAllTheme();
+		// mashupTheme.mashupAllTheme();
 		LOG.info("Mashup all tweets...");
-//		mashupTweet.mashupAllTweets();
+		// mashupTweet.mashupAllTweets();
 	}
-	
+
 	public void fillMaxValues() {
 		maxInsight = 0;
 		maxRss = 0;
 		maxTweet = 0;
-		
+
 		List<Candidat> candidats = candidatRespository.findAll();
 		List<Report> reports = reportRepository.findAll();
-		
+
 		for (Report report : reports) {
 			for (Candidat candidat : candidats) {
 				long tweets = report.getCandidats().get(candidat.getCandidatName()).getTweetNumber();
 				float insight = report.getCandidats().get(candidat.getCandidatName()).getInsight();
 				long rss = report.getCandidats().get(candidat.getCandidatName()).getRssCountResult();
-				if(tweets > maxTweet)
+				if (tweets > maxTweet)
 					maxTweet = tweets;
-				if(insight > maxInsight)
+				if (insight > maxInsight)
 					maxInsight = insight;
-				if(rss > maxRss)
+				if (rss > maxRss)
 					maxRss = rss;
 			}
-			
+
 		}
 	}
 }

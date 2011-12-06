@@ -27,7 +27,7 @@ public class TweetRepositoryImpl implements TweetRepositoryCustom {
 		query.addCriteria(Criteria.where("themes").in(theme.name()));
 		return mongoTemplate.count(query, Tweet.class);
 	}
-	
+
 	@Override
 	public long count(CandidatName candidatName, Date startDate, Date endDate) {
 		Query query = new Query();
@@ -35,7 +35,16 @@ public class TweetRepositoryImpl implements TweetRepositoryCustom {
 		query.addCriteria(Criteria.where("date").gt(startDate).lt(endDate));
 		return mongoTemplate.count(query, Tweet.class);
 	}
-	
+
+	@Override
+	public long countValid(CandidatName candidatName, Date startDate, Date endDate) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("candidatName").is(candidatName.name()));
+		query.addCriteria(Criteria.where("date").gt(startDate).lt(endDate));
+		query.addCriteria(Criteria.where("polarity").nin(Polarity.INVALID.name(), Polarity.NOT_FRENCH.name()));
+		return mongoTemplate.count(query, Tweet.class);
+	}
+
 	@Override
 	public long count(CandidatName candidatName, Date startDate, Date endDate, Polarity polarity) {
 		Query query = new Query();
@@ -44,7 +53,7 @@ public class TweetRepositoryImpl implements TweetRepositoryCustom {
 		query.addCriteria(Criteria.where("polarity").is(polarity.name()));
 		return mongoTemplate.count(query, Tweet.class);
 	}
-	
+
 	@Override
 	public long countNoPolarity() {
 		Query query = new Query();
