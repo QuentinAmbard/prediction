@@ -40,6 +40,6 @@ public class Theme {
 	}
 
 	public static enum ThemeName implements Serializable {
-		SECURITY, EUROPE, ECONOMIC, GREEN, IMIGRATION, SOCIAL, ENERGY;
+		SECURITY, EUROPE, ECONOMIC, GREEN, IMIGRATION, SOCIAL;
 	}
 }

@@ -47,8 +47,7 @@ public class Mashup {
 				e.getValue().setTendance((float) (e.getValue().getInsight() * Math.random()));
 				e.getValue().getThemes().clear();
 				for (ThemeName theme : ThemeName.values()) {
-					if (theme != ThemeName.ENERGY)
-						e.getValue().getThemes().put(theme, (int) (e.getValue().getInsight() * Math.random()));
+					e.getValue().getThemes().put(theme, (int) (e.getValue().getInsight() * Math.random()));
 				}
 			}
 		}
@@ -56,6 +55,17 @@ public class Mashup {
 	}
 	
 	public void mashupDaily() {
+		List<Candidat> candidats = candidatRespository.findAll();
+		List<Report> reports = reportRepository.findAll();
+		for (Report report : reports) {
+			if(report.getCandidats() == null) {
+				CandidatReport dailyReport = new CandidatReport();
+				for (Candidat candidat : candidats) {
+					report.getCandidats().put(candidat.getCandidatName(), dailyReport);
+				}
+			}
+		}
+		
 		/* Build daily mashups */
 		LOG.info("Building daily tweet mashup...");
 		mashupTweet.mashupDailyTweet();
@@ -67,8 +77,11 @@ public class Mashup {
 	}
 	
 	public void mashupEverything() {
+		LOG.info("Mashup all buzz...");
 		mashupBuzz.mashupAllBuzz();
+		LOG.info("Mashup all themes...");
 		mashupTheme.mashupAllTheme();
+		LOG.info("Mashup all tweets...");
 		mashupTweet.mashupAllTweets();
 	}
 }

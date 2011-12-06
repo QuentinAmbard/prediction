@@ -77,8 +77,10 @@ public class MashupBuzz {
 			tweetCountMap.put(candidat.getCandidatName(), todayTweets);
 			totalTweet += todayTweets;
 			
-			//Test de la valeur ?
-			long todayRSS = (long) dailyReport.getRssCountResult();
+			long todayRSS = 0;
+			if(dailyReport != null)
+				todayRSS = (long) dailyReport.getRssCountResult();
+			
 		 	rssCountMap.put(candidat.getCandidatName(), todayRSS);
 		 	totalRss += todayRSS;
 		}
@@ -104,8 +106,8 @@ public class MashupBuzz {
 		}
 		
 		/* Calcul de la tendance */
-		Report yesterdayReport = reportRepository.findByTimestamp((DateUtils.getMidnightTimestamp(new Date()) - MILLIS_IN_A_DAY));
-		Report dayBeforeYesterdayReport = reportRepository.findByTimestamp((DateUtils.getMidnightTimestamp(new Date()) - (MILLIS_IN_A_DAY * 2)));
+		Report yesterdayReport = reportRepository.findByTimestamp(midnight - MILLIS_IN_A_DAY);
+		Report dayBeforeYesterdayReport = reportRepository.findByTimestamp(midnight - (MILLIS_IN_A_DAY * 2));
 		float buzzBeforeYesterday;
 		float buzzYesterday;
 		float buzzToday;
