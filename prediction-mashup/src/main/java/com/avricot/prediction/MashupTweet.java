@@ -64,7 +64,7 @@ public class MashupTweet {
 		Date endDate = new Date(midnight + 60 * 60 * 24 * 1000);
 		Report report = reportRepository.findByTimestamp(midnight);
 		List<Candidat> candidats = candidatRepository.findAll();
-
+		CandidatReport lastDailyReport = null;
 		for (Candidat candidat : candidats) {
 			CandidatReport dailyReport = report.getCandidats().get(candidat.getCandidatName());
 			float negativeTweets = tweetRepository.count(candidat.getCandidatName(), startDate, endDate, Polarity.NEGATIVE);
@@ -76,35 +76,40 @@ public class MashupTweet {
 			PolarityReport negativePolarity;
 			PolarityReport positivePolarity;
 			if (tweetNumber != 0 && negativeTweets + positiveTweets > 0) {
-				float scoreTweetNeg = (float) (coef(negativeTweets / tweetNumber * 100) + negativeTweets / (negativeTweets + positiveTweets) * 0.2 * 100);
+				float scoreTweetNeg = (float) (coef(negativeTweets / tweetNumber * 10) + negativeTweets / (negativeTweets + positiveTweets) * 0.2 * 100);
 				scoreTweetNeg = Math.min(100, scoreTweetNeg);
 				negativePolarity = new PolarityReport(scoreTweetNeg, (long) negativeTweets);
-				float scoreTweetPos = (float) (coef(positiveTweets / tweetNumber * 100) + positiveTweets / (negativeTweets + positiveTweets) * 0.2 * 100);
+				float scoreTweetPos = (float) (coef(positiveTweets / tweetNumber * 10) + positiveTweets / (negativeTweets + positiveTweets) * 0.2 * 100);
 				scoreTweetPos = Math.min(100, scoreTweetPos);
 				positivePolarity = new PolarityReport(scoreTweetPos, (long) positiveTweets);
 				dailyReport.setNeg(scoreTweetNeg);
 				dailyReport.setPos(scoreTweetPos);
-			} else {
+			} else if (lastDailyReport == null) {
 				dailyReport.setNeg(0);
 				dailyReport.setPos(0);
 				negativePolarity = new PolarityReport(0, 0);
 				positivePolarity = new PolarityReport(0, 0);
+			} else {
+				float fact = (float) Math.min(1, Math.random() + 0.5);
+				dailyReport.setNeg(lastDailyReport.getNeg() * fact);
+				dailyReport.setPos(lastDailyReport.getPos() * fact);
+				negativePolarity = new PolarityReport(lastDailyReport.getNeg() * fact, 0);
+				positivePolarity = new PolarityReport(lastDailyReport.getPos() * fact, 0);
 			}
-			LOG.info(candidat.getCandidatName() + "positivePolarity" + positivePolarity.getScore() + ", negativePolarity" + negativePolarity.getScore());
 			dailyReport.setPositivePolarity(positivePolarity);
 			dailyReport.setNegativePolarity(negativePolarity);
 			dailyReport.setTweetNumber((long) tweetNumber);
+			lastDailyReport = dailyReport;
 		}
 		reportRepository.save(report);
 	}
 
 	private float coef(float x) {
-		if (x < 50) {
+		if (x < 28) {
 			return (float) (10 + 3.538 * x - 0.090 * Math.pow(x, 2) + 0.00085 * Math.pow(x, 3));
 		}
-		return x;
+		return (float) (0.597222222222222 * x + 40.2777777777778);
 
-		// return (float) (12 * Math.log(0.5 * value + 0.5) + 10 + 3 *
 		// Math.random());
 	}
 }
