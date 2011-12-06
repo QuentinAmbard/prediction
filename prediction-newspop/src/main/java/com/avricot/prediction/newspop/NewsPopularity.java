@@ -157,11 +157,11 @@ public class NewsPopularity {
 			if (counter != 0) {
 				if (!scoreMap.containsKey(candidat)) {
 					scoreMap.put(candidat, counter);
-					rssCounterMap.put(candidat, counter);
+//					rssCounterMap.put(candidat, counter);
 				} else {
 					score = scoreMap.get(candidat);
 					scoreMap.put(candidat, counter + score);
-					rssCounterMap.put(candidat, counter + score);
+//					rssCounterMap.put(candidat, counter + score);
 				}
 			}
 		}
