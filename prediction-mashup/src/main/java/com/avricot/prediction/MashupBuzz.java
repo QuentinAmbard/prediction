@@ -96,14 +96,14 @@ public class MashupBuzz {
 				dailyReport.setCandidatName(key);
 
 			if (totalTweet != 0) {
-				long tweetScore = (tweetCountMap.get(key) / totalTweet) * 100;
-				maxTweet = Math.max(tweetScore, maxTweet);
+				float tweetScore = (tweetCountMap.get(key) / totalTweet) * 100;
+				maxTweet = Math.max(tweetCountMap.get(key), maxTweet);
 				dailyReport.setTweetScore(tweetScore);
 			}
 
 			if (totalRss != 0) {
-				long rssScore = (rssCountMap.get(key) / totalRss) * 100;
-				maxRss = Math.max(rssScore, maxRss);
+				float rssScore = (rssCountMap.get(key) / totalRss) * 100;
+				maxRss = Math.max(rssCountMap.get(key), maxRss);
 				dailyReport.setRssScore(rssScore);
 			} else {
 				dailyReport.setRssScore(0);
@@ -114,7 +114,7 @@ public class MashupBuzz {
 			if (dailyReport.getRssScore() == 0) {
 				dailyReport.setBuzz((dailyReport.getTweetScore() * 100 / maxTweet + insightScore * 100 / maxRss) / 2);
 			} else {
-				dailyReport.setBuzz((dailyReport.getRssScore() * 100 / maxTweet + dailyReport.getTweetScore() * 100 / maxRss + insightScore) / 3);
+				dailyReport.setBuzz((dailyReport.getRssScore() * 100 / maxRss + dailyReport.getTweetScore() * 100 / maxTweet + insightScore) / 3);
 			}
 
 			LOG.info("BUZZ pour " + key.toString() + " - " + dailyReport.getBuzz());
