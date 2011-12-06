@@ -10,6 +10,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.avricot.prediction.model.report.CandidatReport;
 import com.avricot.prediction.model.report.Region;
 
 @Document(collection = "candidat")
@@ -30,6 +31,7 @@ public class Candidat {
 	private String displayName;
 	private List<String> nicknames = new ArrayList<String>();
 	private HashMap<Region, Integer> geoReport = new HashMap<Region, Integer>();
+	private CandidatReport report = new CandidatReport();
 
 	public Candidat() {
 	}
@@ -184,5 +186,13 @@ public class Candidat {
 
 	public void setTendance(Float tendance) {
 		this.tendance = tendance;
+	}
+
+	public CandidatReport getReport() {
+		return report;
+	}
+
+	public void setReport(CandidatReport report) {
+		this.report = report;
 	}
 }

@@ -62,7 +62,7 @@ var DataHandler = new Class({
 	},
 	initialize: function(profile, options){
 		this.setOptions(options);
-		
+		$('nojs').fade(0);
 		Highcharts.setOptions({lang: {loading: "Chargement en cours, patientez..."}});
 		
 		new Tips(".tooltips", {className: "tips"});
@@ -153,6 +153,7 @@ var DataHandler = new Class({
 			urlEncoded: false,
 			method: "get",
 			onSuccess: function(data){
+				$('access').fade(0);
 				that.candidats = {};
 				for(var i =0,ii=data.candidats.length;i<ii;i++) {
 					that.candidats[data.candidats[i].candidatName] = data.candidats[i] ;
@@ -335,6 +336,7 @@ var DataHandler = new Class({
 			total += themes[theme] ;
 		}
 		for(theme in themes) {
+			console.log(theme);
 			var title = "Préoccupation des français pour "+this.options.opinionDescription[theme].title;
 			if(typeof(candidat) != "undefined") {
 				title += " pour "+candidat.displayName;

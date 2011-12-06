@@ -24,7 +24,7 @@
 </head>
 <body>
 <header style="margin: auto; width: 200px">
-		<a href="#" id="logo"></a>
+		<a title="retourner sur la page d'accueil" href="#" id="logo"></a>
 		<div id="blue"></div>
 		<div id="red"></div>
 </header>
@@ -51,7 +51,7 @@
 						Selectionnez un type <span class="bold">d'opinion</span> ou un <span class="bold">thème</span> sur les menus de droite pour changer le type d'affichage.<br /><br />
 						Vous pouvez ensuite <span class="bold">naviguer dans le temps </span>, et associer des <span class="bold">évènements</span> aux données (<img src="resources/images/star.png" />).  <br /><br />
 						<span class="bold">Affinez par candidat</span> en cliquant sur le camembert.<br /><br />
-						<a class="blueButton" href="#">D'ou viennent les données ?</a>
+						<a title="découvrir d'ou viennent les données" class="blueButton" href="#">D'ou viennent les données ?</a>
 						<!-- 
 						<a class="redButton" href="#">Faites parti des données</a>
 						 -->
@@ -65,12 +65,23 @@
 					<div id="candidatImage" class="candidateFrame">
 						
 					</div>
-					Parti : <a id="parti" src="image/ps.jpg">azesqd</a><br />
-					<img class="parti" id="partiImage" src="image/ps.jpg" /><a href="#">Voir le programme</a>
+					Parti : <a title="le parti de ce candidat" id="parti" src="image/ps.jpg">azesqd</a><br />
+					<img class="parti" id="partiImage" src="image/ps.jpg" />
+					<!-- 
+					<a title="le programme de ce candidat" href="#">Voir le programme</a>
+					 -->
 				</div>				
 			</div>
 		</div>
 		<div id="middleColomn">
+			<div id="access">
+				Chargement en cours... 
+				<div id="nojs">
+					Vous ne parvenez pas à accéder au contenu ? <br />
+					tendance2012 est accessible pour tous. <br />
+					<a title="accéder aux données en mode texte" href="./nojs">Cliquez ici.</a><br />
+				</div>
+			</div>
 			<div id="containerPieParent" style="overflow: hidden; z-index:100;width:900px; height: 205px; position: absolute; left: -200px; top: -40px;">
 				<div id="containerPie" style=" width: 900px; height: 400px; margin: 0 auto"></div>
 			</div>

@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,6 +22,7 @@ import com.avricot.prediction.model.report.CandidatReport;
 import com.avricot.prediction.model.report.GeoReport;
 import com.avricot.prediction.model.report.Region;
 import com.avricot.prediction.model.report.Report;
+import com.avricot.prediction.model.theme.Theme.ThemeName;
 import com.avricot.prediction.repository.candidat.CandidatRespository;
 import com.avricot.prediction.repository.georeport.GeoReportRepository;
 import com.avricot.prediction.repository.report.ReportRespository;
@@ -99,18 +101,18 @@ public class HomeController {
 	@ResponseBody
 	@RequestMapping(value = "candidats", method = RequestMethod.GET)
 	public HashMap<String, List<?>> candidat() {
-		HashMap<String, List<?>> result = new HashMap<String, List<?>>();
-		List<Candidat> candidats = candidatRepository.findAll(new Sort(Direction.ASC, "positionValue"));
-		result.put("candidats", candidats);
-		List<Report> reports = reportRepository.findAll(new Sort(Direction.ASC, "timestamp"));
-		// quick fix, remove last reports, because of insight errors.
-		int i = reports.size() - 1;
-		while (!isValidReport(reports.get(i), candidats)) {
-			reports.remove(i);
-			i--;
-		}
-		result.put("reports", reports);
-		return result;
+		return getMainData();
+	}
+
+	/**
+	 * Display data page for user without js, such as lynx & co.
+	 */
+	@RequestMapping(value = "nojs", method = RequestMethod.GET)
+	public String nojs(Model model) {
+		HashMap<String, List<?>> datas = getMainData();
+		model.addAllAttributes(datas);
+		model.addAttribute("themes", ThemeName.values());
+		return "nojs";
 	}
 
 	/**
@@ -126,4 +128,23 @@ public class HomeController {
 		}
 		return sum > 0;
 	}
+
+	/**
+	 * Main data for main page & nojs page.
+	 */
+	private HashMap<String, List<?>> getMainData() {
+		HashMap<String, List<?>> result = new HashMap<String, List<?>>();
+		List<Candidat> candidats = candidatRepository.findAll(new Sort(Direction.ASC, "positionValue"));
+		result.put("candidats", candidats);
+		List<Report> reports = reportRepository.findAll(new Sort(Direction.ASC, "timestamp"));
+		// quick fix, remove last reports, because of insight errors.
+		int i = reports.size() - 1;
+		while (!isValidReport(reports.get(i), candidats)) {
+			reports.remove(i);
+			i--;
+		}
+		result.put("reports", reports);
+		return result;
+	}
+
 }

@@ -229,6 +229,19 @@ h1 {
 	color:#2E2E2E;
 }
 
+#access{
+	position: absolute	;
+	z-index: 9999999;
+	left: 60px;
+	top: 30px;
+	width: 400px;
+	text-align: center;
+}
+#contentNoJs {
+	overflow: auto;
+	padding: 10px;	
+	height: 750px;
+}
 h2{
 	font-size:24px;
 	color:#4b4b4b;
