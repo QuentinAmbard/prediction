@@ -361,7 +361,7 @@ var DataHandler = new Class({
 		for(var i =0, ii=this.reports.length;i<ii;i++) {
 			var data = [];
 			var report = this.reports[i];
-			for (candidatName in report.candidats) {
+			for (var candidatName in report.candidats) {
 				var serie = null;
 				for(var j=0,jj=series.length;j<jj;j++) {
 					if(series[j].nameBrut == candidatName) {
@@ -370,7 +370,7 @@ var DataHandler = new Class({
 					} 
 				}
 				if(serie == null) {
-					serie = {nameBrut: candidatName, name: this.candidats[candidatName].displayName, lineWidth: 2, data: []};
+					serie = {nameBrut: candidatName, name: this.candidats[candidatName].displayName, lineWidth: 2, data: [], av:0, max: 0};
 					series.push(serie);
 				}
 				var value ;
@@ -379,9 +379,10 @@ var DataHandler = new Class({
 				} else {
 					value = report.candidats[candidatName][type] ;
 				}
+				value = Math.round(value*10)/10 ;
 				var point = {
 						x: report.timestamp, 
-						y: Math.round(value*10)/10
+						y: value
 				}
 				
 				// && this.options.events[report.timestamp].candidatName == candidatName
@@ -405,6 +406,18 @@ var DataHandler = new Class({
 					}
 				}
 				serie.data.push(point);
+				serie.av += value ;
+				serie.max = Math.max(value, serie.max) ;
+			}
+		}
+		//Just display the graph with values. Max 7.
+		var displayed = 0;
+		series.sort(function (s1, s2) {
+			return s2.av-s1.av;
+		})
+		for(i =0, ii=series.length;i<ii;i++) {
+			if(i>7 && series[i].max<15 || series[i].max<3) {
+				series[i].visible = false ;
 			}
 		}
 		return series ;
@@ -492,6 +505,10 @@ var DataHandler = new Class({
 	 * Update the graph with new datas.
 	 */
 	updateGraph: function (type) {
+		if(this.isWorking) {
+			return ;
+		}
+		this.isWorking = true ;
 		this.chart.chart.showLoading();
 		var that = this ;
 		var newSeries = this.getSeriesForChart(type);
@@ -506,6 +523,7 @@ var DataHandler = new Class({
 				type = type.substring("theme.".length, type.length);
 			}
 			$("containerChartType").set('html', that.options.opinionDescription[type].title);
+			that.isWorking = false ;
 			//that.chart.chart.redraw();
 		}, 100);
 	},

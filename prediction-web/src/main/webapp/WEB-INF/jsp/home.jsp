@@ -80,10 +80,10 @@
 					<a title="accéder aux données en mode texte" href="./nojs">Cliquez ici.</a><br />
 				</div>
 			</div>
-			<div id="containerPieParent" style="overflow: hidden; z-index:100;width:900px; height: 205px; position: absolute; left: -200px; top: -40px;">
+			<div id="containerPieParent" style="overflow: hidden; z-index:100;width:900px; height: 205px; position: absolute; left: -200px; top: -25px;">
 				<div id="containerPie" style=" width: 900px; height: 400px; margin: 0 auto"></div>
 			</div>
-			<div id="containerPiePositionParent" style="z-index: 2; overflow: hidden; position: absolute;  top: 85px; left: 180px; ">
+			<div id="containerPiePositionParent" style="z-index: 2; overflow: hidden; position: absolute;  top: 100px; left: 180px; ">
 				<div id="containerPiePosition" style="width: 140px; height: 145px; margin: 0 auto"></div>
 			</div>
 			<div style="position: absolute; top: 300px; left: 50px; z-index: 0; width: 400px; margin: 0 auto">

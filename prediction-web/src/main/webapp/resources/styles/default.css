@@ -77,7 +77,6 @@ clear:both;
 	background-position:-6px -462px;
 	height:50px;
 	width:960px;
-	margin-bottom:10px;
 }
 .header{
 	float:left;
@@ -139,7 +138,7 @@ clear:both;
 }
 .selectBloc{
 	z-index: 999999;
-	margin: 10px 10px;
+	margin: 0px 10px;
 }
 select{
 	font: lighter 22px "Times New Roman",serif !important;
