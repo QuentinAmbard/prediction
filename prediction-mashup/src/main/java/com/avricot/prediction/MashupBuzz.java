@@ -88,10 +88,6 @@ public class MashupBuzz {
 		/* Calcul du tweetscore = nombre de tweets pour un candidat / tous les tweets de la journée parlant des candidats */
 		for (CandidatName key : tweetCountMap.keySet()) {
 			CandidatReport dailyReport = report.getCandidats().get(key);
-			if(dailyReport == null) {
-				dailyReport = new CandidatReport();
-				report.getCandidats().put(key, dailyReport);
-			}
 			if(totalTweet != 0)
 				dailyReport.setTweetScore((tweetCountMap.get(key) / totalTweet)); //TODO multiplié par 100 ?
 			else 
@@ -110,8 +106,8 @@ public class MashupBuzz {
 		}
 		
 		/* Calcul de la tendance */
-		Report yesterdayReport = reportRepository.findByTimestamp((DateUtils.getMidnightTimestamp(new Date()) - MILLIS_IN_A_DAY));
-		Report dayBeforeYesterdayReport = reportRepository.findByTimestamp((DateUtils.getMidnightTimestamp(new Date()) - (MILLIS_IN_A_DAY * 2)));
+		Report yesterdayReport = reportRepository.findByTimestamp(midnight - MILLIS_IN_A_DAY);
+		Report dayBeforeYesterdayReport = reportRepository.findByTimestamp(midnight - (MILLIS_IN_A_DAY * 2));
 		float buzzBeforeYesterday;
 		float buzzYesterday;
 		float buzzToday;

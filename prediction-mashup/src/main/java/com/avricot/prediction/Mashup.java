@@ -56,6 +56,17 @@ public class Mashup {
 	}
 	
 	public void mashupDaily() {
+		List<Candidat> candidats = candidatRespository.findAll();
+		List<Report> reports = reportRepository.findAll();
+		for (Report report : reports) {
+			if(report.getCandidats() == null) {
+				CandidatReport dailyReport = new CandidatReport();
+				for (Candidat candidat : candidats) {
+					report.getCandidats().put(candidat.getCandidatName(), dailyReport);
+				}
+			}
+		}
+		
 		/* Build daily mashups */
 		LOG.info("Building daily tweet mashup...");
 		mashupTweet.mashupDailyTweet();

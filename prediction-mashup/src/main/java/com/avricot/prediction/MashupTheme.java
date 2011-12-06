@@ -64,10 +64,6 @@ public class MashupTheme {
 
 		for (Candidat candidat : candidats) {
 			CandidatReport dailyReport = report.getCandidats().get(candidat.getCandidatName());
-			if(dailyReport == null) {
-				dailyReport = new CandidatReport();
-				report.getCandidats().put(candidat.getCandidatName(), dailyReport);
-			}
 			for (ThemeName theme : ThemeName.values()) {
 				long value = tweetRepository.count(candidat.getCandidatName(), startDate, endDate, theme);
 				dailyReport.getThemes().put(theme, (int) value);
