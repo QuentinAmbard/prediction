@@ -1,7 +1,5 @@
 package com.avricot.prediction;
 
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -17,7 +15,6 @@ import com.avricot.prediction.model.report.Report;
 import com.avricot.prediction.model.theme.Theme.ThemeName;
 import com.avricot.prediction.repository.candidat.CandidatRespository;
 import com.avricot.prediction.repository.report.ReportRespository;
-import com.avricot.prediction.utils.DateUtils;
 
 @Service
 public class Mashup {
@@ -39,6 +36,7 @@ public class Mashup {
 	private long maxTweet;
 	private long maxRss;
 	private float maxInsight;
+	private float maxBuzz;
 	
 	private static Logger LOG = Logger.getLogger(Mashup.class);
 	
@@ -100,6 +98,9 @@ public class Mashup {
 		
 		for (Report report : reports) {
 			for (Candidat candidat : candidats) {
+				if(report.getCandidats().get(candidat.getCandidatName()) == null)
+					report.getCandidats().put(candidat.getCandidatName(), new CandidatReport());
+		
 				long tweets = report.getCandidats().get(candidat.getCandidatName()).getTweetNumber();
 				float insight = report.getCandidats().get(candidat.getCandidatName()).getInsight();
 				long rss = report.getCandidats().get(candidat.getCandidatName()).getRssCountResult();
@@ -113,4 +114,5 @@ public class Mashup {
 			
 		}
 	}
+	
 }
