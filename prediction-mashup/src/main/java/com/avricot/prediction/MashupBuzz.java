@@ -111,10 +111,16 @@ public class MashupBuzz {
 
 			insightScore = (dailyReport.getInsight() / maxInsight) * 100;
 
-			if (dailyReport.getRssScore() == 0) {
-				dailyReport.setBuzz((dailyReport.getTweetScore() * 100 / maxTweet + insightScore * 100 / maxRss) / 2);
+			long maxTweetNew;
+			if(tweetCountMap.get(key) <= maxTweet) {
+				maxTweetNew = (long) (maxTweet * 0.80);
 			} else {
-				dailyReport.setBuzz((dailyReport.getRssScore() * 100 / maxRss + dailyReport.getTweetScore() * 100 / maxTweet + insightScore) / 3);
+				maxTweetNew = maxTweet;
+			}
+			if (dailyReport.getRssScore() == 0) {
+					dailyReport.setBuzz(((dailyReport.getTweetScore() * 100) / maxTweetNew + insightScore) / 2);
+			} else {
+				dailyReport.setBuzz(((dailyReport.getRssScore() * 100) / maxRss + (dailyReport.getTweetScore() * 100) / maxTweetNew + insightScore) / 3);
 			}
 
 			LOG.info("BUZZ pour " + key.toString() + " - " + dailyReport.getBuzz());
@@ -124,9 +130,6 @@ public class MashupBuzz {
 			 */
 			if (dailyReport.getNeg() != 0)
 				dailyReport.setNone((1 / dailyReport.getNeg()) * dailyReport.getBuzz());
-		}
-
-		for (CandidatName key : tweetCountMap.keySet()) {
 		}
 
 		/* Calcul de la tendance */
