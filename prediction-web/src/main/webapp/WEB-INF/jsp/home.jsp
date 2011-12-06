@@ -59,13 +59,11 @@
 				</div>
 				<div id="candidatInfo">
 					<h2 id="candidatName">Francois Hollande</h2>
-					Né le : <span id="birthday"></span><br />
-					Idéologie : <span id="tendancy"></span><br />
+					Parti : <a title="le parti de ce candidat" id="parti" target="_blank" src="image/ps.jpg">azesqd</a><br />
 					Flux d'informations :
 					<div id="candidatImage" class="candidateFrame">
 						
 					</div>
-					Parti : <a title="le parti de ce candidat" id="parti" src="image/ps.jpg">azesqd</a><br />
 					<img class="parti" id="partiImage" src="image/ps.jpg" />
 					<!-- 
 					<a title="le programme de ce candidat" href="#">Voir le programme</a>
@@ -141,7 +139,6 @@
 			</div>
 		</div>
 		<div id="rightColomn">
-			\|/ selectionnez un type d'opinion.
 			<div class="topColomn">
 				<h2>Opinions</h2>
 			</div>
@@ -157,7 +154,6 @@
 			</div>
 			<div class="bottomColomnLeft"></div>
 			
-			\|/ selectionnez un des thème suivants
 			<div class="topColomn" style="margin-top: 10px;">
 				<h2>Thèmes</h2>
 			</div>
@@ -169,13 +165,6 @@
 		</div>
 		<div id="containerChartType">Tendance</div>
 		<div id="containerChart" style="position: absolute; z-index: 888; bottom:0px; left:0px;  width: 960px; height: 300px; margin: 0 auto"></div>
-		<div class="historyContainer">
-			<!-- <div style="width:10%;  background-color:red;"></div>
-			<div style="width:20%; background-color:yellow;"></div>
-			<div style="width:30%; background-color:brown;"></div>
-			<div style="width:40%; background-color:purple;"></div>-->
-			<div class="cursor"style="left:30px;"></div> 
-		</div>
 	</div>
 
 </body> 

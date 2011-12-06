@@ -263,11 +263,11 @@ var DataHandler = new Class({
 		var that = this ;
 		if(typeof(candidat) != "undefined") {
 			$('candidatName').set('html', candidat.displayName);
-			$('partiImage').setProperty('src', './resources/images/parti/'+candidat.parti+".jpg");
-			$('tendancy').set('html', candidat.tendancy);
-			var birth = new Date(candidat.birthday) ;
-			var birthday = birth.getDate()+"/"+(birth.getMonth()+1)+"/"+birth.getFullYear();
-			$('birthday').set('html', birthday);
+//			$('partiImage').setProperty('src', './resources/images/parti/'+candidat.parti+".jpg");
+//			$('tendancy').set('html', candidat.tendancy);
+//			var birth = new Date(candidat.birthday) ;
+//			var birthday = birth.getDate()+"/"+(birth.getMonth()+1)+"/"+birth.getFullYear();
+//			$('birthday').set('html', birthday);
 			$('parti').set('href', candidat.siteUrl);
 			$('parti').set('html', candidat.partiFullName);
 			var fx = new Fx.Morph('help', {

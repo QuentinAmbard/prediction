@@ -68,6 +68,7 @@ clear:both;
 }
 #candidatInfo {
 	top: 0px;
+	padding-top: 10px;
 	opacity: 0;
 	display: none;
 }
@@ -360,28 +361,6 @@ a.blueButton, a.redButton{
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
 	margin-bottom:10px;
-}
-
-.historyContainer{
-	width: 890px;
-	height: 20px;
-	position: absolute;
-	bottom: 65px;
-	left: 61px;
-}
-
-.historyContainer div{
-	height:5px;
-	margin-top:10px;
-	float:left;
-}
-.historyContainer div.cursor{
-	position: absolute;
-	background: url(../images/cursor.png) no-repeat;
-	width: 15px;
-	height: 18px;
-	z-index: 2;
-	bottom: -4px;
 }
 
 
