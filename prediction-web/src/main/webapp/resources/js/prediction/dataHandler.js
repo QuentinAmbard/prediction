@@ -336,7 +336,6 @@ var DataHandler = new Class({
 			total += themes[theme] ;
 		}
 		for(theme in themes) {
-			console.log(theme);
 			var title = "Préoccupation des français pour "+this.options.opinionDescription[theme].title;
 			if(typeof(candidat) != "undefined") {
 				title += " pour "+candidat.displayName;
