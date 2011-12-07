@@ -38,7 +38,7 @@
 					<div class="selectBloc">
 						<h1>Vous visualisez <span id="visualizationType" class="tooltips">la tendance</span> pour <span id="visualizationTarget">tous les candidats</span>.</h1>
 						<div class="details">
-							<span id="visualizationDate" >Prévision des résultats du premier tour des élections 2012. <image class="tooltips" rel="<span class='italic'>Nous ne nous contentons pas d'additionner des chiffres !</span><br />Chaque donnée est analysées en détail grace à une intelligence artificielle.<br />Ce traitement nous permet de dégager des tendances générales et ainsi de prédire<br/> le résultat des élections de 2012 !" title="Prédiction des résultats du premier tour de 2012" style="width: 20px; height: 20px" src="resources/images/help.png" /></span><br />
+							<span id="visualizationDate" >Voici les résultats du premier tour des élections 2012 ! <image class="tooltips" rel="<span class='italic'>Nous ne nous contentons pas d'additionner des chiffres !</span><br />Chaque donnée est analysées en détail grace à une intelligence artificielle.<br />Ce traitement nous permet de dégager des tendances générales et ainsi de prédire<br/> le résultat des élections de 2012 !" title="Prédiction des résultats du premier tour de 2012" style="width: 20px; height: 20px" src="resources/images/help.png" /></span><br />
 							Evenements : <span id="visualizationEvent">Présidentielles !</span>
 						</div>
 					</div>
@@ -123,7 +123,7 @@
 			
 		</div>
 		<div id="containerChartType">Représente la tendance des candidats.</div>
-		<div id="containerChart" style="position: absolute; z-index: 5; bottom:0px; left:0px;  width: 960px; height: 300px; margin: 0 auto"></div>
+		<div id="containerChart" style="position: absolute; z-index: 5; bottom:0px; left:0px;  width: 760px; height: 300px; margin: 0 auto"></div>
 	</div>
 
 </body> 

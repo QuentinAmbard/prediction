@@ -6,6 +6,7 @@ var DataHandler = new Class({
 	selectedTimestamp: null,
 	selectedType: "tendance",
 	selectedCandidat: undefined,
+	future: true, //True: display the tendance on the pie.
 	pie: null,
 	chart: null,
 	selectType: null,
@@ -171,6 +172,7 @@ var DataHandler = new Class({
 				that.candidats = {};
 				for(var i =0,ii=data.candidats.length;i<ii;i++) {
 					that.candidats[data.candidats[i].candidatName] = data.candidats[i] ;
+					console.log( data.candidats[i].report.tendance)
 				}
 				that.reports = data.reports ;
 				that.firstTimestamp = that.reports[0].timestamp ;
@@ -181,12 +183,12 @@ var DataHandler = new Class({
 				var dataPie = [];
 				var lastReport = that.reports[that.reports.length-1] ;
 				for(candidat in that.candidats) {
-					var candidatReport = lastReport.candidats[candidat];
+					console.log(that.candidats[candidat].tendance)
 					dataPie.push({parti: that.candidats[candidat].parti,
 						color: that.options.candidatColor[candidat],
 						partiFullName: that.candidats[candidat].partiFullName,
 						name: that.candidats[candidat].displayName, 
-						y:candidatReport.tendance,
+						y:that.candidats[candidat].report.tendance,
 						events:{
 							//Click on a point on the main pie
 			    			click:function () {
@@ -340,17 +342,19 @@ var DataHandler = new Class({
 		}
 		themes = {};
 		if(typeof(candidat) == "undefined") {
-				for(var i =0,ii=reports.length;i<ii;i++) {
-					var report = reports[i];
-					for(candidatReport in report.candidats){
-						for(theme in report.candidats[candidatReport].themes) {
-							value = themes[theme] || 0 ;
-							value += report.candidats[candidatReport].themes[theme] ;
-							themes[theme] = value ;
-						}
+			//Moyenne de tous les candidats.
+			for(var i =0,ii=reports.length;i<ii;i++) {
+				var report = reports[i];
+				for(candidatReport in report.candidats){
+					for(theme in report.candidats[candidatReport].themes) {
+						value = themes[theme] || 0 ;
+						value += report.candidats[candidatReport].themes[theme] ;
+						themes[theme] = value ;
 					}
 				}
+			}
 		} else {
+			//Candidat.
 			for(var i =0,ii=reports.length;i<ii;i++) {
 				var report = reports[i];
 				for(theme in report.candidats[candidat.candidatName].themes) {
@@ -548,24 +552,30 @@ var DataHandler = new Class({
 		if(theme) {
 			type = type.substring("theme.".length, type.length);
 		}
-
 		var data = this.pie.chart.series[0].data ;
 		//var positionData = this.piePosition.chart.series[0].data ;
-		var report = this.getReport(date);
-		for(i =0,ii=data.length;i<ii;i++) {
-			var name = this.getCandidat(data[i].name).candidatName;
-			if(theme) {
-				data[i].update(report.candidats[name].themes[type]);
-			} else {
-				data[i].update(report.candidats[name][type]);
+		if(date == "future"){
+			for(candidat in this.candidats){
+				data[i].update(this.candidats[candidat].tendance);
+			}
+		} else {
+			var report = this.getReport(date);
+			for(i =0,ii=data.length;i<ii;i++) {
+				var name = this.getCandidat(data[i].name).candidatName;
+				if(theme) {
+					data[i].update(report.candidats[name].themes[type]);
+				} else {
+					data[i].update(report.candidats[name][type]);
+				}
 			}
 		}
-//		var dataReport = this.getPositionsForReport(report);
-//		var i=0;
-//		for(var position in dataReport) {
-//			positionData[i].update(dataReport[position]);
-//	    	i++;
-//	    }
+	//		var dataReport = this.getPositionsForReport(report);
+	//		var i=0;
+	//		for(var position in dataReport) {
+	//			positionData[i].update(dataReport[position]);
+	//	    	i++;
+	//	    }
+			
 	},
 	/**
 	 * Update the graph with new datas.

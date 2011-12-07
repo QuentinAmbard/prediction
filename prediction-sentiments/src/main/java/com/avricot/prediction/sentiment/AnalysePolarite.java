@@ -99,19 +99,15 @@ public class AnalysePolarite {
 	String tweetCleaner(String tweet) {
 		for (Candidat candidat : candidats) {
 			tweet = tweet.replaceAll("\\#", "");
+			tweet = tweet.replaceAll("@([A-Za-z0-9_]+)", "");
 			tweet = tweet.replaceAll("(?i)"+candidat.getDisplayName(), "");
 			tweet = tweet.replaceAll("(?i)"+candidat.getCandidatName().toString(), "");
 			for (String nickname : candidat.getNicknames()) {
 				tweet = tweet.replaceAll("(?i)"+nickname, "");
 			}
 			tweet = tweet.replaceAll("RT", "");
-			/* Pseudos Twitter */
-			tweet = tweet.replaceAll("@([A-Za-z0-9_]+)", "");
 			tweet = tweet.replaceAll("http://([A-Za-z0-9_./]+)", "");
 			
-			
-			//TODO GERER LES URLS
-//			tweet = tweet.replaceAll("(.*://)", "");
 		}
 		
 		return tweet;

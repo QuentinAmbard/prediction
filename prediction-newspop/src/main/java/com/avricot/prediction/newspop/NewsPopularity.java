@@ -61,9 +61,6 @@ public class NewsPopularity {
 		long midnight = DateUtils.getMidnightTimestamp(new Date());
 		report = reportRepository.findByTimestamp(midnight);
 		
-//		if(report == null)
-//			report = new Report(midnight);
-		
 		LOG.info("Parsing du flux RSS du Figaro");
 		parseRSSLeMondeType(RSS_LEFIGARO, todayDate);
 		
@@ -86,11 +83,7 @@ public class NewsPopularity {
 		/* Le Journal du Dimanche */
 		LOG.info("Parsing du flux RSS de Le Journal du dimanche");
 		parseRSSLeMondeType(RSS_JDD, todayDate);
-		
-//		for (Candidat candidat : candidats) {
-//			report.getCandidats().put(candidat.getCandidatName(), new CandidatReport());
-//		}
-		
+
 		/* Enregistrement des valeurs */
 		for (Candidat key : scoreMap.keySet()) {
 			if(report.getCandidats().get(key.getCandidatName()) != null) {

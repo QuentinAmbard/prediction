@@ -80,33 +80,38 @@ public class Mashup {
 		fillMaxValues();
 		LOG.info("Mashup all buzz...");
 		mashupBuzz.mashupAllBuzz(maxTweet, maxRss, maxInsight);
+		mashupBuzz.calculDesMoyennes();
 		LOG.info("Mashup all themes...");
-		// mashupTheme.mashupAllTheme();
+		mashupTheme.mashupAllTheme();
 		LOG.info("Mashup all tweets...");
-		// mashupTweet.mashupAllTweets();
+		mashupTweet.mashupAllTweets();
+		LOG.info("Done.");
 	}
 
 	public void fillMaxValues() {
 		maxInsight = 0;
 		maxRss = 0;
 		maxTweet = 0;
-
+		
 		List<Candidat> candidats = candidatRespository.findAll();
 		List<Report> reports = reportRepository.findAll();
-
+		
 		for (Report report : reports) {
 			for (Candidat candidat : candidats) {
+				if(report.getCandidats().get(candidat.getCandidatName()) == null)
+					report.getCandidats().put(candidat.getCandidatName(), new CandidatReport());
+		
 				long tweets = report.getCandidats().get(candidat.getCandidatName()).getTweetNumber();
 				float insight = report.getCandidats().get(candidat.getCandidatName()).getInsight();
 				long rss = report.getCandidats().get(candidat.getCandidatName()).getRssCountResult();
-				if (tweets > maxTweet)
+				if(tweets > maxTweet)
 					maxTweet = tweets;
-				if (insight > maxInsight)
+				if(insight > maxInsight)
 					maxInsight = insight;
-				if (rss > maxRss)
+				if(rss > maxRss)
 					maxRss = rss;
 			}
-
+			
 		}
 	}
 }
