@@ -1,7 +1,6 @@
 package com.avricot.prediction;
 
 import java.util.List;
-import java.util.Map.Entry;
 
 import javax.inject.Inject;
 
@@ -9,10 +8,8 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.avricot.prediction.model.candidat.Candidat;
-import com.avricot.prediction.model.candidat.Candidat.CandidatName;
 import com.avricot.prediction.model.report.CandidatReport;
 import com.avricot.prediction.model.report.Report;
-import com.avricot.prediction.model.theme.Theme.ThemeName;
 import com.avricot.prediction.repository.candidat.CandidatRespository;
 import com.avricot.prediction.repository.report.ReportRespository;
 
@@ -22,7 +19,7 @@ public class Mashup {
 	private ReportRespository reportRepository;
 
 	@Inject
-	CandidatRespository candidatRespository;
+	private CandidatRespository candidatRespository;
 
 	@Inject
 	private MashupBuzz mashupBuzz;
@@ -39,21 +36,9 @@ public class Mashup {
 
 	private static Logger LOG = Logger.getLogger(Mashup.class);
 
-	public void mashup() {
-		List<Report> reports = reportRepository.findAll();
-		for (Report report : reports) {
-			for (Entry<CandidatName, CandidatReport> e : report.getCandidats().entrySet()) {
-				e.getValue().setNone((float) (e.getValue().getInsight() * Math.random()));
-				e.getValue().setTendance((float) (e.getValue().getInsight() * Math.random()));
-				e.getValue().getThemes().clear();
-				for (ThemeName theme : ThemeName.values()) {
-					e.getValue().getThemes().put(theme, (float) (e.getValue().getInsight() * Math.random()));
-				}
-			}
-		}
-		reportRepository.save(reports);
-	}
-
+	/**
+	 * Mashup quotidien des données du jour
+	 */
 	public void mashupDaily() {
 		List<Candidat> candidats = candidatRespository.findAll();
 		List<Report> reports = reportRepository.findAll();
@@ -76,6 +61,10 @@ public class Mashup {
 		LOG.info("Done.");
 	}
 
+	/**
+	 * Mashup de toutes les données que nous avons en base et mise à jour de 
+	 * tous les rapports
+	 */
 	public void mashupEverything() {
 		fillMaxValues();
 		LOG.info("Mashup all buzz...");
@@ -88,6 +77,10 @@ public class Mashup {
 		LOG.info("Done.");
 	}
 
+	
+	/**
+	 * Permet de récupérer les valeurs maximales pour les tweets, les rss et les insight
+	 */
 	public void fillMaxValues() {
 		maxInsight = 0;
 		maxRss = 0;

@@ -21,6 +21,10 @@ import com.avricot.prediction.repository.candidat.CandidatRespository;
 import com.avricot.prediction.repository.tweet.TweetRepository;
 import com.avricot.prediction.sentiment.services.URLUtils;
 
+/**
+ * Classe analysant les tweets et articles
+ */
+
 @Service
 public class AnalysePolarite {
 	
@@ -43,21 +47,26 @@ public class AnalysePolarite {
 	private String[] mCategories = {"positive", "negative", "neutral", "not_french", "invalid"};
 	private DynamicLMClassifier<NGramProcessLM> mClassifier;
 
+	/**
+	 * Méthode principale de l'analyse des tweets, elle entraîne l'analyse
+	 * puis récupère des lots de 300 tweets qu'elle analyse et enregistre en base.
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
 	public void run() throws ClassNotFoundException, IOException {
 		int nGram = 8;
 		mClassifier = DynamicLMClassifier.createNGramProcess(mCategories, nGram);
 		candidats = candidatRespository.findAll();
-
-		//TODO : comprendre pourquoi  http://t.co/IrJVg85u fait completement péter le parseur
 		
+		/* On entraîne l'analyseur */
+		train();
+
 		LOG.info("Nombre de tweets restant à traiter = " + tweeterRepository.countNoPolarity());
 		
 		do {
 			tweetsToEvaluate = tweeterRepository.findNoPolarity(300);
-			
 			if(!tweetsToEvaluate.isEmpty()) {
-				LOG.info("\n\n\n>>>>>>>>>>>>>>>>> SIZE = " +  tweetsToEvaluate.size() + "<<<<<<<<<<<<<<<<<\n\n");
-				train();
+				LOG.info("Traitement de " + tweetsToEvaluate.size() + "tweets...");
 				evaluateTweets();
 				
 				tweeterRepository.save(tweetsToEvaluate);
@@ -67,7 +76,8 @@ public class AnalysePolarite {
 	}
 
 	/**
-	 * 
+	 * Récupère tous les tweets manuellement évalués et les catégorise pour
+	 * préparer l'entraînement de l'analyseur.
 	 */
 	void prepareTweetsForTrain() {
 		List<Tweet> positifs = tweeterRepository.findAllByChecked(true);
@@ -92,9 +102,10 @@ public class AnalysePolarite {
 	}
 	
 	/**
-	 * Nettoie les tweets avant de les injecter dans l'entrainement du détecteur
-	 * @param tweet
-	 * @return
+	 * Nettoie les tweets avant de les injecter dans l'entrainement du détecteur.
+	 * Suppression des pseudos, des url, des #, des RT et des noms et surnoms des candidats.
+	 * @param tweet à nettoyer
+	 * @return le tweet tout propre
 	 */
 	String tweetCleaner(String tweet) {
 		for (Candidat candidat : candidats) {
@@ -157,7 +168,6 @@ public class AnalysePolarite {
 			}
 			
 			final String bestCategory = classification.bestCategory();
-//			LOG.info(tweetValue +" => " + bestCategory);
 			if(bestCategory.equalsIgnoreCase("positive"))
 				tweet.setPolarity(Polarity.POSITIVE);
 			else if(bestCategory.equalsIgnoreCase("negative"))
@@ -192,7 +202,6 @@ public class AnalysePolarite {
 	Classification evaluateURLPolarite(List<String> urls) throws IOException {
 		StringBuffer toAnalyse = new StringBuffer("");
 		for (String currentUrl : urls) {
-			LOG.info("URL scannée : " + currentUrl);
 			try {
 				String[] splittedArticle = null;
 				Document doc = Jsoup.connect(currentUrl).timeout(2500).get();

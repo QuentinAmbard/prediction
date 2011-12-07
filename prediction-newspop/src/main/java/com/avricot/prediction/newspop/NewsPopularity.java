@@ -84,6 +84,9 @@ public class NewsPopularity {
 		LOG.info("Parsing du flux RSS de Le Journal du dimanche");
 		parseRSSLeMondeType(RSS_JDD, todayDate);
 
+		if(report == null) {
+			report = new Report();
+		}
 		/* Enregistrement des valeurs */
 		for (Candidat key : scoreMap.keySet()) {
 			if(report.getCandidats().get(key.getCandidatName()) != null) {
@@ -106,26 +109,32 @@ public class NewsPopularity {
 	 * @return
 	 * @throws IOException
 	 */
-	private HashMap<Candidat, Integer> parseRSSLeMondeType(String url, Date todayDate) throws IOException {
-		Document doc = Jsoup.connect(url).timeout(10000).get();
-		Elements items = doc.getElementsByTag("item");
-		HashMap<Candidat, Integer> rssCounterMap = new HashMap<Candidat, Integer>();
-		SimpleDateFormat sdf = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z", Locale.US);
-		for (Element item : items) {
-			Date dateArticle = null;
-			try {
-				dateArticle = sdf.parse(item.getElementsByTag("pubdate").text());
-			} catch (ParseException e) {
-				LOG.error("Erreur dans la conversion d'une date RSS");
-				e.printStackTrace();
+	private HashMap<Candidat, Integer> parseRSSLeMondeType(String url, Date todayDate) {
+		Document doc;
+		HashMap<Candidat, Integer> rssCounterMap = null;
+		try {
+			doc = Jsoup.connect(url).timeout(10000).get();
+			Elements items = doc.getElementsByTag("item");
+			rssCounterMap = new HashMap<Candidat, Integer>();
+			SimpleDateFormat sdf = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z", Locale.US);
+			for (Element item : items) {
+				Date dateArticle = null;
+				try {
+					dateArticle = sdf.parse(item.getElementsByTag("pubdate").text());
+				} catch (ParseException e) {
+					LOG.error("Erreur dans la conversion d'une date RSS");
+					e.printStackTrace();
+				} 
+	
+				/* Si l'article est paru dans la journée souhaitée */
+				if (dateArticle.after(todayDate)) {
+					Elements link = item.getElementsByTag("guid");
+					Document article = Jsoup.connect(link.text()).timeout(0).get();
+					parseForCandidatPopularity(article.body().text(), rssCounterMap);
+				}
 			}
-
-			/* Si l'article est paru dans la journée souhaitée */
-			if (dateArticle.after(todayDate)) {
-				Elements link = item.getElementsByTag("guid");
-				Document article = Jsoup.connect(link.text()).timeout(0).get();
-				parseForCandidatPopularity(article.body().text(), rssCounterMap);
-			}
+		} catch (IOException e1) {
+			LOG.error("Erreur dans le parsing d'un article \n" + e1.getMessage());
 		}
 
 		return rssCounterMap;

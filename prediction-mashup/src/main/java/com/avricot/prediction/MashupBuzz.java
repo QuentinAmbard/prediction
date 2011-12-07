@@ -19,6 +19,10 @@ import com.avricot.prediction.repository.report.ReportRespository;
 import com.avricot.prediction.repository.tweet.TweetRepository;
 import com.avricot.prediction.utils.DateUtils;
 
+/**
+ * Mashup des buzz
+ */
+
 @Service
 public class MashupBuzz {
 	@Inject
@@ -145,15 +149,15 @@ public class MashupBuzz {
 				dailyReport.setBuzz((float) (dailyReport.getBuzz() * 0.80));
 			}
 			
-			LOG.info("BUZZ pour " + key.toString() + " - " + dailyReport.getBuzz() + " insight = " + insightScore);
 			
 			/* Désintéressement */
 			Random r = new Random();
-			float rand = r.nextFloat()/8;
-			if (dailyReport.getNeg() != 0) {
-				float none = ((dailyReport.getBuzz() + 30) * 1/dailyReport.getNeg())*rand;
+			float rand = r.nextFloat()/2;
+			if (dailyReport.getBuzz() != 0) {
+				float none = (float) Math.abs(1/dailyReport.getBuzz() * 0.164);
 				dailyReport.setNone((float) (Math.min(100, none)));
 			}
+				LOG.info("BUZZ pour " + key.toString() + " - " + dailyReport.getBuzz() + " insight = " + insightScore + " None => " + dailyReport.getNone());
 		}
 
 		/* Calcul de la tendance */
@@ -262,6 +266,7 @@ public class MashupBuzz {
 	 */
 	void calculDesMoyennes() {
 		HashMap<Candidat, Float> sommeBuzz = new HashMap<Candidat, Float>();
+		HashMap<Candidat, Float> sommeTendance = new HashMap<Candidat, Float>();
 		List<Candidat> candidats = candidatRepository.findAll();
 		List<Report> reports = reportRepository.findAll();
 		
@@ -269,17 +274,24 @@ public class MashupBuzz {
 		for (Report report : reports) {
 			for (Candidat candidat : candidats) {
 				float buzz =  report.getCandidats().get(candidat.getCandidatName()).getBuzz();
+				float tendance = report.getCandidats().get(candidat.getCandidatName()).getTendance();
 				if(sommeBuzz.get(candidat) != null)
 					sommeBuzz.put(candidat, sommeBuzz.get(candidat) + buzz);
 				else
 					sommeBuzz.put(candidat, buzz);
+				
+				if(sommeTendance.get(candidat) != null)
+					sommeTendance.put(candidat, sommeTendance.get(candidat) + tendance);
+				else
+					sommeTendance.put(candidat, tendance);
 			}
 		}
 		
 		/* Calcul et enregistrement des moyennes */
 		for (Candidat candidat : candidats) {
 			candidat.getReport().setBuzz(sommeBuzz.get(candidat)/reports.size());
-			LOG.info("moyenne pour " + candidat.getCandidatName().toString() + " => " + sommeBuzz.get(candidat)/reports.size());
+			candidat.getReport().setTendance(sommeTendance.get(candidat)/reports.size());
+			LOG.info("moyenne pour " + candidat.getCandidatName().toString() + " => " + sommeBuzz.get(candidat)/reports.size() + " et tendance => " + sommeTendance.get(candidat)/reports.size());
 			candidatRepository.save(candidat);
 		}
 	}
