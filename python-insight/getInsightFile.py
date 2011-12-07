@@ -56,7 +56,7 @@ def update_report(candidat, value, timestamp, regionName):
                 db.report.update({"_id": report['_id']}, report)
             else :
                 report = {}
-                report['candidats'] = {candidat['candidatName']: {}}
+                report['candidats'] = {candidat['candidatName']: {'candidatName' : candidat['candidatName']}}
                 report['timestamp'] = timestamp
                 report['candidats'][candidat['candidatName']]['insight'] = int(value)
                 db.report.save(report)

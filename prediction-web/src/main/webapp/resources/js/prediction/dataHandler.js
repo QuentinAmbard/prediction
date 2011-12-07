@@ -13,6 +13,7 @@ var DataHandler = new Class({
 	threeMap: null,
 	tweets: [],
 	tweetsTimer: null,
+	globalTheme: null,
 	options: {
 		events: {
 			"1319061600000": [{value: "Accouchement de Carla Bruni.", candidatName: "SARKOZY"}],
@@ -71,7 +72,9 @@ var DataHandler = new Class({
 		this.threeMap = new ThreeMap("treeMap");
 		this.threeMap.addEvent('click', function (theme) {
 			that.setVisualizationType(that.options.opinionDescription[theme]);
-			that.updateGraph("theme."+theme)
+			that.selectedType = "theme."+theme
+			that.updateGraph();
+			
 		});
 		this.geoDataHandler = new GeoDataHandler();
 		this.selectType = $('selectType')
@@ -84,18 +87,20 @@ var DataHandler = new Class({
 			innerSize: 120
 		});*/
 		//svg Z-index hack.
-//		this.pie.addEvents({
-//			'mouseOver': function() {
-//				$('containerPieParent').setStyle('z-index', 30000);
-//			},
-//			'mouseOut': function() {
-//				$('containerPieParent').setStyle('z-index', 1);
-//			}
-//		});
+		this.pie.addEvents({
+			'mouseOver': function() {
+				$('containerPieParent').setStyle('z-index', 30000);
+			},
+			'mouseOut': function() {
+				$('containerPieParent').setStyle('z-index', 1);
+			}
+		});
 		this.chart = new Chart("containerChart", {events: this.options.events});
-		this.chart.addEvent('clickOnChart', function (date, type) {
+		this.chart.addEvent('clickOnChart', function (date, value) {
+			that.selectedTimestamp = date ;
 			that.updateVisualizationDate(date);
-			that.updatePie(date, type);
+			that.updatePie(date);
+			that.updateThemes(date);
 		});
 		this.chartDetails = new BarChart("containerChartDetails", 
 				[{id: "tendance", title: "Tendance", text: "Le résultat de la prévision<br />des élections de 2012"}, 
@@ -122,10 +127,11 @@ var DataHandler = new Class({
 				}
 				txt+='<a href="http://www.google.fr/#q='+encodeURIComponent(events[i].value)+'" target="_blank">'+events[i].value+'</a>';
 			}
+			$('visualizationEvent').set('html', txt);
+			$('visualizationEvent').fade(1);
 		} else {
-			txt = "Aucun evenement particulier pour ce jour.";
+			$('visualizationEvent').fade(0);
 		}
-		$('visualizationEvent').set('html', txt);
 		var day = new Date(date) ;
 		$('visualizationDate').set('html', "Données du "+day.getDate()+"/"+(day.getMonth()+1)+"/"+day.getFullYear());
 	},
@@ -220,7 +226,7 @@ var DataHandler = new Class({
 				that.chartDetails.initChart(that.getSeriesForChartDetails(that.lastTimestamp));
 				
 				//Theme threemap
-				that.updateThemes(that.lastTimestamp);
+				that.updateThemes();
 			}
 		}).send();
 	}, 
@@ -319,19 +325,33 @@ var DataHandler = new Class({
 	 * Update the theme threechart.
 	 */
 	updateThemes: function(timestamp, candidat) {
-		var themes ;
-		var report = this.getReport(timestamp);
+		var themes, reports ;
+		if(typeof(timestamp) == "undefined") {
+			reports = this.reports ;
+		} else {
+			reports = [this.getReport(timestamp)]
+		}
+		themes = {};
 		if(typeof(candidat) == "undefined") {
-			themes = {};
-			for(candidatReport in report.candidats){
-				for(theme in report.candidats[candidatReport].themes) {
+				for(var i =0,ii=reports.length;i<ii;i++) {
+					var report = reports[i];
+					for(candidatReport in report.candidats){
+						for(theme in report.candidats[candidatReport].themes) {
+							value = themes[theme] || 0 ;
+							value += report.candidats[candidatReport].themes[theme] ;
+							themes[theme] = value ;
+						}
+					}
+				}
+		} else {
+			for(var i =0,ii=reports.length;i<ii;i++) {
+				var report = reports[i];
+				for(theme in report.candidats[candidat.candidatName].themes) {
 					value = themes[theme] || 0 ;
-					value += report.candidats[candidatReport].themes[theme] ;
+					value += report.candidats[candidat.candidatName].themes[theme] ;
 					themes[theme] = value ;
 				}
 			}
-		} else {
-			themes = report.candidats[candidat.candidatName].themes;
 		}
 		var values = [];
 		var total = 0;
@@ -345,9 +365,10 @@ var DataHandler = new Class({
 			}
 			var percent;
 			total == 0 ? percent = 0 : percent=themes[theme]/total*100 ;
-			var text = "Plus le carré est important, plus la préoccupation est grande.<br /> Valeur :"+Math.round(percent*10)/10+"%";
+			var text = "Plus le carré est important, plus la préoccupation est grande.<br /> Valeur : "+Math.round(percent*10)/10+"%";
 			values.push({id: theme, value: percent, title: title, text: text});
 		}
+
 		this.threeMap.draw(values);
 	},
 	/**
@@ -355,7 +376,7 @@ var DataHandler = new Class({
 	 * Themes must start with theme.ID
 	 */
 	getSeriesForChart: function (type) {
-		type = type || "tendance" ;
+		type = type || this.selectedType ;
 		var theme = type.indexOf("theme.")!=-1;
 		if(theme) {
 			type = type.substring("theme.".length, type.length);
@@ -429,7 +450,11 @@ var DataHandler = new Class({
 	 * Return the series given a specific type.
 	 */
 	getSeriesForChartDetails: function (date, type, candidat) {
-		type = type || "tendance" ;
+		type = type || this.selectedType ;
+		var theme = type.indexOf("theme.")!=-1;
+		if(theme) {
+			type = type.substring("theme.".length, type.length);
+		}
 		var report = this.getReport(date);
 		var series = [{name: "", data: [] }];
 		var values = {"tendance": 0, "buzz": 0, "neg": 0, "pos": 0, "none": 0};
@@ -489,13 +514,25 @@ var DataHandler = new Class({
 	 * Update the 2 pies
 	 */
 	updatePie: function(date, type) {
-		type = type || "tendance" ;
+		type = type || this.selectedType ;
+		var theme = type.indexOf("theme.")!=-1;
+		if(theme) {
+			type = type.substring("theme.".length, type.length);
+		}
+
 		var data = this.pie.chart.series[0].data ;
 		//var positionData = this.piePosition.chart.series[0].data ;
 		var report = this.getReport(date);
+		console.log(type);
+		console.log(report);
+		console.log(date);
 		for(i =0,ii=data.length;i<ii;i++) {
 			var name = this.getCandidat(data[i].name).candidatName;
-			data[i].update(report.candidats[name][type]);
+			if(theme) {
+				data[i].update(report.candidats[name].themes[type]);
+			} else {
+				data[i].update(report.candidats[name][type]);
+			}
 		}
 //		var dataReport = this.getPositionsForReport(report);
 //		var i=0;
@@ -515,16 +552,17 @@ var DataHandler = new Class({
 		this.chart.chart.showLoading();
 		var that = this ;
 		var newSeries = this.getSeriesForChart(type);
+		type = type || this.selectedType ;
+		var theme = type.indexOf("theme.")!=-1;
+		if(theme) {
+			type = type.substring("theme.".length, type.length);
+		}
 		setTimeout(function () {
 			//this.chart.chart.series = newSeries ;
 			for(var i=0, ii=that.chart.chart.series.length;i<ii;i++){
 				that.chart.chart.series[i].setData(newSeries[i].data) ;
 			}
 			that.chart.chart.hideLoading();
-			var theme = type.indexOf("theme.")!=-1;
-			if(theme) {
-				type = type.substring("theme.".length, type.length);
-			}
 			$("containerChartType").set('html', that.options.opinionDescription[type].title);
 			that.isWorking = false ;
 			//that.chart.chart.redraw();

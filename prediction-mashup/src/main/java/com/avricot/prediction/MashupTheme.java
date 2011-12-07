@@ -2,12 +2,15 @@ package com.avricot.prediction;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map.Entry;
 
 import javax.inject.Inject;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.avricot.prediction.model.candidat.Candidat;
+import com.avricot.prediction.model.candidat.Candidat.CandidatName;
 import com.avricot.prediction.model.report.CandidatReport;
 import com.avricot.prediction.model.report.Report;
 import com.avricot.prediction.model.theme.Theme.ThemeName;
@@ -25,14 +28,37 @@ public class MashupTheme {
 	@Inject
 	private CandidatRespository candidatRepository;
 
+	private static Logger LOGGER = Logger.getLogger(MashupTheme.class);
+
 	/**
 	 * Mashup all the days.
 	 */
 	public void mashupAllTheme() {
+		List<Candidat> candidats = candidatRepository.findAll();
 		List<Report> reports = reportRepository.findAll();
+		float max = 0;
 		for (Report report : reports) {
-			mashup(report.getTimestamp());
+			max = Math.max(max, mashup(report, candidats));
 		}
+		// Normalize the data ;
+		for (Report report : reports) {
+			for (Entry<CandidatName, CandidatReport> e : report.getCandidats().entrySet()) {
+				CandidatReport dailyReport = e.getValue();
+				if (dailyReport != null) {
+					for (ThemeName theme : ThemeName.values()) {
+						if (dailyReport.getThemes().get(theme) == null) {
+							dailyReport.getThemes().put(theme, 0F);
+						} else {
+							float value = dailyReport.getThemes().get(theme);
+							value = value / max * 100;
+							dailyReport.getThemes().put(theme, value);
+						}
+					}
+				}
+			}
+		}
+		reportRepository.save(reports);
+
 	}
 
 	/**
@@ -48,36 +74,29 @@ public class MashupTheme {
 	 * @param date
 	 */
 	private void mashup(Date date) {
-		mashup(DateUtils.getMidnightTimestamp(date));
+		mashup(reportRepository.findByTimestamp(DateUtils.getMidnightTimestamp(date)), candidatRepository.findAll());
 	}
 
 	/**
-	 * Mashup the data for the given date.
-	 * 
-	 * @param midnight
+	 * Mashup the data for the given date. Doesn't save the report. Return the
+	 * max value.
 	 */
-	private void mashup(long midnight) {
-		Date startDate = new Date(midnight);
-		Date endDate = new Date(midnight + 60 * 60 * 24 * 1000);
-		Report report = reportRepository.findByTimestamp(midnight);
-		List<Candidat> candidats = candidatRepository.findAll();
-
+	private long mashup(Report report, List<Candidat> candidats) {
+		// Date startDate = new Date(midnight);
+		// Date endDate = new Date(midnight + 60 * 60 * 24 * 1000);
+		// Report report = reportRepository.findByTimestamp(midnight);
+		long themeMax = 0;
 		for (Candidat candidat : candidats) {
 			CandidatReport dailyReport = report.getCandidats().get(candidat.getCandidatName());
-			for (ThemeName theme : ThemeName.values()) {
-				long value = tweetRepository.count(candidat.getCandidatName(), startDate, endDate, theme);
-				dailyReport.getThemes().put(theme, (int) value);
+			if (dailyReport != null) {
+				for (ThemeName theme : ThemeName.values()) {
+					long value = tweetRepository.count(candidat.getCandidatName(), new Date(report.getTimestamp()), new Date(report.getTimestamp() + 60 * 60 * 24 * 1000), theme);
+					themeMax = Math.max(themeMax, value);
+					LOGGER.info("save" + theme.name() + "=" + value + "(old" + dailyReport.getThemes().get(theme));
+					dailyReport.getThemes().put(theme, (float) value);
+				}
 			}
-			// List<Tweet> tweets =
-			// tweetRepository.findByCandidatNameAndBetween(candidat.getCandidatName(),
-			// startDate, endDate);
-			// for (Tweet tweet : tweets) {
-			// for (ThemeName theme : tweet.getThemes()) {
-			// Integer value = dailyReport.getThemes().get(theme);
-			// dailyReport.getThemes().put(theme, value + 1);
-			// }
-			// }
 		}
-		reportRepository.save(report);
+		return themeMax;
 	}
 }

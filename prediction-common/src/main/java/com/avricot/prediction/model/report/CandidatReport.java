@@ -16,14 +16,14 @@ public class CandidatReport {
 	private float tendance;
 	private float neg;
 	private float pos;
-	private float none; //Désintérressement
+	private float none; // Désintérressement
 	private PolarityReport negativePolarity;
 	private PolarityReport positivePolarity;
 	private int rssCountResult;
 	private CandidatName candidatName;
 	private final HashMap<Region, Integer> geoReport = new HashMap<Region, Integer>();
-	private final HashMap<Theme.ThemeName, Integer> themes = new HashMap<Theme.ThemeName, Integer>();
-	
+	private final HashMap<Theme.ThemeName, Float> themes = new HashMap<Theme.ThemeName, Float>();
+
 	@JsonIgnore
 	public int getRssCountResult() {
 		return rssCountResult;
@@ -113,7 +113,7 @@ public class CandidatReport {
 		return geoReport;
 	}
 
-	public HashMap<Theme.ThemeName, Integer> getThemes() {
+	public HashMap<Theme.ThemeName, Float> getThemes() {
 		return themes;
 	}
 

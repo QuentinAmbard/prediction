@@ -63,7 +63,6 @@ var ThreeMap = new Class({
 					id: values[i].id,
 					styles: {
 						position: "absolute",
-						backgroundColor: this.options.colors[i],
 						left: this.width*Math.random(), 
 						top: this.height*Math.random(),
 						width: 0,

@@ -554,3 +554,23 @@ tips structure :
 	float:right;
 	margin-right:20px;
 }
+
+
+#SECURITY{
+	background: #df2d42 url(../images/themes/securite.png) no-repeat center;
+}
+#EUROPE{
+	background: #004492 url(../images/themes/europe.png) no-repeat center;
+}
+#ECONOMIC{
+	background: #edba0a url(../images/themes/economie.png) no-repeat center;
+}
+#GREEN{
+	background: #55bf3b url(../images/themes/environement.png) no-repeat center;
+}
+#IMIGRATION{
+	background: #9e9e9e url(../images/themes/immigration.png) no-repeat center;
+}
+#SOCIAL{
+	background: #f696f6 url(../images/themes/social.png) no-repeat center;
+}
