@@ -40,7 +40,7 @@ var DataHandler = new Class({
 		},
 		candidatColor: {
 			"SARKOZY": "#09589D",
-			"DUPONT-AIGNAN" : "#723E80",
+			"DUPONT_AIGNAN" : "#723E80",
 			"JOLY" : "#7BA600",
 			"MELENCHON" : "#FD0000",
 			"MORIN" : "#7695C3",
@@ -117,10 +117,13 @@ var DataHandler = new Class({
 				 {id: "pos", title: "Avis positifs", text: "De combien on parle en<br />bon termes de ce candidat."}, 
 				 {id: "none", title: "Désinteressé", text: "De combien les français <br />ne s'interessent pas à <br />ce candidat."}]);
 		this.chartDetails.addEvent('click', function (type) {
-			that.setVisualizationType(that.options.opinionDescription[type]);
-			that.updatePie(that.selectedTimestamp, type);
-			that.updateGraph(type);
+			that.clickOnChartDetail(type);
 		});
+	},
+	clickOnChartDetail: function (type) {
+		this.setVisualizationType(this.options.opinionDescription[type]);
+		this.updatePie(this.selectedTimestamp, type);
+		this.updateGraph(type);
 	},
 	/**
 	 * Update the visualization date and its event.
@@ -172,9 +175,12 @@ var DataHandler = new Class({
 				that.candidats = {};
 				for(var i =0,ii=data.candidats.length;i<ii;i++) {
 					that.candidats[data.candidats[i].candidatName] = data.candidats[i] ;
-					console.log( data.candidats[i].report.tendance)
 				}
 				that.reports = data.reports ;
+				//Add picto Analyse click events
+				$$('.likeArea div').addEvent('click', function () {
+					that.clickOnChartDetail(this.id);
+				});
 				that.firstTimestamp = that.reports[0].timestamp ;
 				that.lastTimestamp = that.reports[that.reports.length-1].timestamp ;
 				that.selectedTimestamp = that.lastTimestamp ;
@@ -183,7 +189,6 @@ var DataHandler = new Class({
 				var dataPie = [];
 				var lastReport = that.reports[that.reports.length-1] ;
 				for(candidat in that.candidats) {
-					console.log(that.candidats[candidat].tendance)
 					dataPie.push({parti: that.candidats[candidat].parti,
 						color: that.options.candidatColor[candidat],
 						partiFullName: that.candidats[candidat].partiFullName,
@@ -195,8 +200,10 @@ var DataHandler = new Class({
 			    				var candidat = this.selected ? undefined : that.getCandidat(this.name) ;
 			    				if(!candidat) {
 			    					$('visualizationTarget').set('html', 'tous les candidats');
+			    					$('visualizationTarget').setStyle('color', '');
 			    				} else {
 			    					$('visualizationTarget').set('html', candidat.displayName);
+			    					$('visualizationTarget').setStyle('color', that.options.candidatColor[candidat.candidatName]);
 			    				}
 			    				that.updateGraphDetails(candidat);
 			    				var candidatName = this.selected ? undefined : candidat.candidatName;
@@ -381,6 +388,11 @@ var DataHandler = new Class({
 		}
 
 		this.threeMap.draw(values);
+		if(total == 0) {
+			$('noTheme').setStyle('display', '');
+		} else {
+			$('noTheme').setStyle('display', 'none');
+		}
 	},
 	/**
 	 * Return the series given a specific type.
@@ -406,7 +418,7 @@ var DataHandler = new Class({
 					} 
 				}
 				if(serie == null) {
-					serie = {nameBrut: candidatName, name: this.candidats[candidatName].displayName, lineWidth: 2, data: [], av:0, max: 0};
+					serie = {color: this.options.candidatColor[candidatName], nameBrut: candidatName, name: this.candidats[candidatName].displayName, lineWidth: 2, data: [], av:0, max: 0};
 					series.push(serie);
 				}
 				var value ;
@@ -581,7 +593,6 @@ var DataHandler = new Class({
 	 * Update the graph with new datas.
 	 */
 	updateGraph: function (type, doNotHide) {
-		console.log(doNotHide)
 		doNotHide = doNotHide || false;
 		if(this.isWorking) {
 			return ;

@@ -75,8 +75,9 @@ clear:both;
 }
 #vote{
 	background:url(../images/sprite.png) no-repeat;
-	background-position:-6px -462px;
-	height:50px;
+	background-position:-6px -472px;
+	margin-bottom: 7px;
+	height:40px;
 	width:960px;
 }
 .header{
@@ -262,9 +263,16 @@ h2{
 	text-align:center;
 	line-height:27px;
 }
+#noTheme{
+	position: absolute ;
+	width: 210px;
+	text-align: center;
+	top: 30px;
+	left: 5px;
+}
 .topColomn{
 	background:url(../images/sprite.png) no-repeat;
-	background-position:-6px -261px;
+	background-position:-6px -274px;
 	height:34px;
 	width:235px;
 }
