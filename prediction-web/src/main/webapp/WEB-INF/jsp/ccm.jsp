@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 
-<html manifest="cache.manifest">
+<html>
   <head>
   
     <meta charset="iso-8859-1" />
