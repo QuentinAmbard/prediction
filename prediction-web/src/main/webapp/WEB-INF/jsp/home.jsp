@@ -33,8 +33,8 @@
 					<div class="selectBloc">
 						<h1>Vous visualisez <span id="visualizationType" class="tooltips">la tendance</span> pour <span id="visualizationTarget">tous les candidats</span>.</h1>
 						<div class="details">
-							<span id="visualizationDate" >Voici les résultats du premier tour des élections 2012 ! <image class="tooltips" rel="<span class='italic'>Nous ne nous contentons pas d'additionner des chiffres !</span><br />Chaque donnée est analysées en détail grace à une intelligence artificielle.<br />Ce traitement nous permet de dégager des tendances générales et ainsi de prédire<br/> le résultat des élections de 2012 !" title="Prédiction des résultats du premier tour de 2012" style="width: 20px; height: 20px" src="resources/images/help.png" /></span><br />
-							Evenements : <span id="visualizationEvent">Présidentielles !</span>
+							<span id="visualizationDate" >Voici les résultats du premier tour des élections 2012 ! <image class="tooltips" rel="<span class='italic'>Nous ne nous contentons pas d'additionner des chiffres !</span><br />Chaque donnée est analysées en détail grâce à une intelligence artificielle.<br />Ce traitement nous permet de dégager des tendances générales et ainsi de prédire<br/> le résultat des élections de 2012 !" title="Prédiction des résultats du premier tour de 2012" style="width: 20px; height: 20px" src="resources/images/help.png" /></span><br />
+							Evènements : <span id="visualizationEvent">Présidentielles !</span>
 						</div>
 					</div>
 				</div>
@@ -44,9 +44,9 @@
 			<div id="leftColomn">
 				<div id="help">
 					<h2>Que voyez vous ?</h2>
-					Voici une analyse sémantique des elections 2012 présentes sur les <span class="tooltips underline" rel="twitter, articles de tweets, google, blogs, grand journaux etc." title="Plein de médias webs sont utilisés ! ">médias web</span> permettant de <span class="bold">prédire le résultat des élections!</span><br /><br />
+					Voici une synthèse des données du web sur les Présidentielles françaises de 2012. Extraites de <span class="tooltips underline" rel="Twitter, articles, Google, Blogs, RSS, etc." title="Plein de médias webs sont utilisés ! ">médias web</span>, elles sont traitées et analysées afin de <span class="bold">prédire le résultat des élections !</span><br /><br />
 					<div >
-						Selectionnez un type <span class="bold">d'opinion</span> ou un <span class="bold">thème</span> sur les menus de droite pour changer le type d'affichage.<br /><br />
+						Sélectionnez un type d'<span class="bold">analyse</span> ou un <span class="bold">thème</span> sur les menus de droite pour changer le type d'affichage.<br />
 						Vous pouvez ensuite <span class="bold">naviguer dans le temps </span>, et associer des <span class="bold">évènements</span> aux données (<img src="resources/images/star.png" />).  <br /><br />
 						<span class="bold">Affinez par candidat</span> en cliquant sur le camembert.<br /><br />
 						<a title="découvrir d'ou viennent les données" class="blueButton" href="./ccm">D'ou viennent les données ?</a>
