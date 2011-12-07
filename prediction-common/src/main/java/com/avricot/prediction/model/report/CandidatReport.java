@@ -8,7 +8,7 @@ import com.avricot.prediction.model.candidat.Candidat.CandidatName;
 import com.avricot.prediction.model.theme.Theme;
 
 public class CandidatReport {
-	private long tweetNumber;
+	private long tweetNumber; 
 	private float insight;
 	private float buzz;
 	private float tweetScore;
