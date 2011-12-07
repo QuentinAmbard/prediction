@@ -429,6 +429,16 @@ a.blueButton, a.redButton{
 	right: 0px;
 }
 
+.border{
+	background: url(../images/sprite.png) no-repeat;
+	width: 227px;
+	background-color: white;
+	background-position: -291px -263px;
+	position: absolute;
+	height: 63px;
+	margin-left:1px;
+}
+
 
 /*
 tips structure :
