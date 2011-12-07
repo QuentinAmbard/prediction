@@ -13,6 +13,10 @@ import com.avricot.prediction.model.report.Report;
 import com.avricot.prediction.repository.candidat.CandidatRespository;
 import com.avricot.prediction.repository.report.ReportRespository;
 
+/**
+ * Classe orchestrant la génération des mashups de données 
+ */
+
 @Service
 public class Mashup {
 	@Inject

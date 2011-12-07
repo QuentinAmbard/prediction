@@ -19,6 +19,10 @@ import com.avricot.prediction.repository.report.ReportRespository;
 import com.avricot.prediction.repository.tweet.TweetRepository;
 import com.avricot.prediction.utils.DateUtils;
 
+/**
+ * Mashup des themes
+ */
+
 @Service
 public class MashupTheme {
 	@Inject

@@ -18,6 +18,10 @@ import com.avricot.prediction.repository.report.ReportRespository;
 import com.avricot.prediction.repository.tweet.TweetRepository;
 import com.avricot.prediction.utils.DateUtils;
 
+/**
+ * Mashup des tweets
+ */
+
 @Service
 public class MashupTweet {
 	private static Logger LOG = Logger.getLogger(MashupBuzz.class);
