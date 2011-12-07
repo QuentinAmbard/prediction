@@ -122,8 +122,8 @@
 		<div id="containerChart" style="position: absolute; z-index: 5; bottom:0px; left:0px;  width: 760px; height: 300px; margin: 0 auto"></div>
 		<div class="cristal">
 			<div style="position: absolute; bottom: 0px">
-			Gagnat en 2012 :
-			<div id="winner">Nicolas Sarkozy à 46%</div>
+			Gagnant en 2012 :
+			<div id="winner"></div>
 			<span class="little">Cliquez pour le détail</span>
 			</div>
 		</div>

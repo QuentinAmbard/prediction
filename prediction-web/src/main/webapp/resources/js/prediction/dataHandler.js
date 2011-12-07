@@ -192,12 +192,21 @@ var DataHandler = new Class({
 				//Main pie serie
 				var dataPie = [];
 				var lastReport = that.reports[that.reports.length-1] ;
+				var winner ;
+				var winnerValue = 0;
+				var total = 0;
 				for(candidat in that.candidats) {
+					var value = that.candidats[candidat].report.tendance ;
+					if(value>winnerValue) {
+						winnerValue =value ;
+						winner = that.candidats[candidat] ;
+					}
+					total+=value ;
 					dataPie.push({parti: that.candidats[candidat].parti,
 						color: that.options.candidatColor[candidat],
 						partiFullName: that.candidats[candidat].partiFullName,
 						name: that.candidats[candidat].displayName, 
-						y:that.candidats[candidat].report.tendance,
+						y:value,
 						events:{
 							//Click on a point on the main pie
 			    			click:function () {
@@ -218,6 +227,7 @@ var DataHandler = new Class({
 			    		}
 					});
 				}
+				$('winner').set('html', winner.displayName+" "+(Math.round(winnerValue/total*1000)/10)+"%");
 			    var series= [{
 					type: 'pie',
 					data: dataPie
