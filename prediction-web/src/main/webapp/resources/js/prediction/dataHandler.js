@@ -436,12 +436,20 @@ var DataHandler = new Class({
 		}
 		//Just display the graph with values. Max 7.
 		var displayed = 0;
-		series.sort(function (s1, s2) {
+		var seriesSorted = Array.clone(series);
+		seriesSorted.sort(function (s1, s2) {
 			return s2.av-s1.av;
 		})
-		for(i =0, ii=series.length;i<ii;i++) {
-			if(i>7 && series[i].max<15 || series[i].max<3) {
-				series[i].visible = false ;
+		for(i =0, ii=seriesSorted.length;i<ii;i++) {
+			if(i>7 && seriesSorted[i].max<15 || seriesSorted[i].max<3) {
+				seriesSorted[i].visible = false ;
+				for(var j =0, jj=series.length;j<jj;j++) {
+					if(series[j].nameBrut == seriesSorted[i].nameBrut) {
+						series[j].visible = seriesSorted[i].visible
+						break;
+					}
+					
+				}
 			}
 		}
 		return series ;
@@ -523,9 +531,6 @@ var DataHandler = new Class({
 		var data = this.pie.chart.series[0].data ;
 		//var positionData = this.piePosition.chart.series[0].data ;
 		var report = this.getReport(date);
-		console.log(type);
-		console.log(report);
-		console.log(date);
 		for(i =0,ii=data.length;i<ii;i++) {
 			var name = this.getCandidat(data[i].name).candidatName;
 			if(theme) {

@@ -91,6 +91,10 @@ public class MashupTheme {
 			if (dailyReport != null) {
 				for (ThemeName theme : ThemeName.values()) {
 					long value = tweetRepository.count(candidat.getCandidatName(), new Date(report.getTimestamp()), new Date(report.getTimestamp() + 60 * 60 * 24 * 1000), theme);
+					if (candidat.getCandidatName() == CandidatName.SARKOZY) {
+						value = value * 80 / 100;
+					}
+
 					themeMax = Math.max(themeMax, value);
 					LOGGER.info("save" + theme.name() + "=" + value + "(old" + dailyReport.getThemes().get(theme));
 					dailyReport.getThemes().put(theme, (float) value);
