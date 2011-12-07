@@ -133,7 +133,8 @@ public class MashupBuzz {
 			
 			if(dailyReport.getRssScore() == 0 && dailyReport.getTweetScore() == 0) {
 				dailyReport.setBuzz(insightScore);
-			} else if (dailyReport.getRssScore() == 0) {
+			} else
+				if (dailyReport.getRssScore() == 0) {
 				dailyReport.setBuzz((((dailyReport.getTweetNumber() * 100) / maxTweetNew) + insightScore) / 2);
 			} else {
 				dailyReport.setBuzz(((dailyReport.getRssScore() * 100) / maxRss + ((dailyReport.getTweetNumber() * 100) / maxTweetNew) + insightScore) / 3);
@@ -183,12 +184,21 @@ public class MashupBuzz {
 				float neg = report.getCandidats().get(key).getNeg();
 				float newTendance;
 
-				/* 50 + T*P/(N+P) - T*N/(N+P) */
 				if(pos + neg != 0) {
-					newTendance = 50 + (((tendance + pos) - (tendance * neg)) / (neg + pos));
+					newTendance = tendance + pos / (neg + pos);
+					/* Coefficient de pondération appliqué à Sarkozy */
+					if(key.toString().equalsIgnoreCase("sarkozy")) {
+						newTendance = (float) (newTendance * 0.80);
+					}
 					report.getCandidats().get(key).setTendance(newTendance);
+					LOG.info("Tendance = " + newTendance);
 				} else {
+					/* Coefficient de pondération appliqué à Sarkozy */
+					if(key.toString().equalsIgnoreCase("sarkozy")) {
+						tendance = (float) (tendance * 0.80);
+					}
 					report.getCandidats().get(key).setTendance(tendance);
+					LOG.info("Tendance = " + tendance);
 				}
 			}
 		} else {
