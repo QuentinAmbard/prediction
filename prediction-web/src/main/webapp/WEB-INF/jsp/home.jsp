@@ -108,7 +108,7 @@
 			</div>
 			<div class="bottomColomnLeft"></div>
 			
-			<div class="topColomn" style="margin-top: 10px;">
+			<div class="topColomn" style="margin-top: 30px;">
 				<h2>Thèmes</h2>
 			</div>
 			<div class="middleColomn treemapColumn">
