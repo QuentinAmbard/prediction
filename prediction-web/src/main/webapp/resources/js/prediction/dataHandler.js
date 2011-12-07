@@ -67,10 +67,12 @@ var DataHandler = new Class({
 		this.setOptions(options);
 		$('nojs').fade(0);
 		Highcharts.setOptions({lang: {loading: "Chargement en cours, patientez..."}});
-		
 		new Tips(".tooltips", {className: "tips"});
 		this.setVisualizationType(this.options.opinionDescription["tendance"]);
 		var that = this ;
+		$$('.cristal').addEvent('click', function () {
+			that.updatePie("future");
+		});
 		this.threeMap = new ThreeMap("treeMap");
 		this.threeMap.addEvent('click', function (theme) {
 			that.setVisualizationType(that.options.opinionDescription[theme]);
@@ -121,6 +123,8 @@ var DataHandler = new Class({
 		});
 	},
 	clickOnChartDetail: function (type) {
+		$$('.likeArea div').setStyle('opacity', 0.7);
+		$(type).setStyle('opacity', 1);
 		this.setVisualizationType(this.options.opinionDescription[type]);
 		this.updatePie(this.selectedTimestamp, type);
 		this.updateGraph(type);
@@ -567,8 +571,10 @@ var DataHandler = new Class({
 		var data = this.pie.chart.series[0].data ;
 		//var positionData = this.piePosition.chart.series[0].data ;
 		if(date == "future"){
+			var i =0;
 			for(candidat in this.candidats){
-				data[i].update(this.candidats[candidat].tendance);
+				data[i].update(this.candidats[candidat].report.tendance);
+				i++;
 			}
 		} else {
 			var report = this.getReport(date);

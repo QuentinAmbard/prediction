@@ -25,11 +25,6 @@
 		<script type="text/javascript" src="./resources/js/highcharts/modules/exporting.js"></script>-->
 </head>
 <body>
-<header style="margin: auto; width: 200px">
-		<a title="retourner sur la page d'accueil" href="#" id="logo"></a>
-		<div id="blue"></div>
-		<div id="red"></div>
-</header>
 	<div id="mapTip"></div>
 	<div id="container">
 		<div id="vote"></div>
@@ -125,6 +120,13 @@
 		</div>
 		<div id="containerChartType">Représente la tendance des candidats.</div>
 		<div id="containerChart" style="position: absolute; z-index: 5; bottom:0px; left:0px;  width: 760px; height: 300px; margin: 0 auto"></div>
+		<div class="cristal">
+			<div style="position: absolute; bottom: 0px">
+			Gagnat en 2012 :
+			<div id="winner">Nicolas Sarkozy à 46%</div>
+			<span class="little">Cliquez pour le détail</span>
+			</div>
+		</div>
 	</div>
 
 </body> 
@@ -132,6 +134,7 @@
 TWEEN.start();
 window.addEvent('domready', function() {
 	var dataHandler = new DataHandler ();
+	$('tendance').setStyle('opacity', 1);
 	dataHandler.getData();
 });
 </script>

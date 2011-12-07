@@ -272,7 +272,7 @@ h2{
 }
 .topColomn{
 	background:url(../images/sprite.png) no-repeat;
-	background-position:-6px -274px;
+	background-position:-6px -260px;
 	height:34px;
 	width:235px;
 }
@@ -319,8 +319,8 @@ h2{
 	filter:alpha(opacity=100); 
 }
 .likeArea div{
-	opacity: 0.8;
-	filter:alpha(opacity=80); 
+	opacity: 0.7;
+	filter:alpha(opacity=70); 
 	cursor: pointer;
 	width:34px;
 	height:27px;
@@ -328,7 +328,7 @@ h2{
 }
 .tendance{
 	background:url(../images/sprite.png) no-repeat;
-	background-position:-6px -11px;
+	background-position:-6px -149px;
 }
 
 .favorable{
@@ -346,7 +346,7 @@ h2{
 .likeArea .buzz{
 	height:36px;
 	background:url(../images/sprite.png) no-repeat;
-	background-position:-6px -149px;
+	background-position:-6px -11px;
 }
 
 .blueButton{
@@ -397,13 +397,38 @@ a.blueButton, a.redButton{
 	padding: 5px;
 }
 
-
 #treeMap div {
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
 	cursor: pointer;
 }
+
+.cristal:hover{
+	opacity:1;
+	filter:alpha(opacity=100); 
+}
+.little{
+	font-size:13px;
+}
+#winner {
+	font-size:16px;
+	font-weight:bold;
+}
+.cristal{
+	opacity:0.9;
+	filter:alpha(opacity=90); 
+	cursor: pointer ;
+	text-align: center;
+	background: url(../images/sprite.png) no-repeat;
+	width: 190px;
+	background-position: 20px -568px;
+	position: absolute;
+	height: 170px;
+	bottom: 38px;
+	right: 0px;
+}
+
 
 /*
 tips structure :
@@ -454,15 +479,14 @@ tips structure :
 
 /* CCM PAGE */
 #ccmT{
+	position: absolute;
 	padding: 20px;	
 }
 #ccmTitle {
 	margin: 40px 0px 5px 20px;
-	float: left;
 }
 #ccmSubTitle {
 	margin: 10px 0px 5px 200px;
-	float: left;
 	width: 300px;
 }
 #containerShemas{
@@ -505,31 +529,31 @@ tips structure :
 	height:305px;
 	background-position:0 -489px;
 	position:absolute;
-	top: 61px;
-	left: 443px;
+	top: 39px;
+	left: 425px;
 }
 .traitement{
 	background: url(../images/spriteCommentCaMarche.png) no-repeat;
-	width:160px;
-	height:141px;
-	background-position:0 -809px;
-	position:absolute;
-	top: 460px;
-	left: 334px;
+	width: 160px;
+	height: 174px;
+	background-position: 0 -809px;
+	position: absolute;
+	top: 492px;
+	left: 315px;
 }
 .data{
 	background: url(../images/spriteCommentCaMarche.png) no-repeat;
-	background-position:0 -968px;
-	position:absolute;
+	background-position: 0 -985px;
+	position: absolute;
 	width: 315px;
 	height: 320px;
-	top:600px;
-	left:242px;
+	top: 668px;
+	left: 266px;
 }
 .shemas{
-	margin-left: 39px;
+	margin-left: 50px;
 	position: relative;
-	margin-top: -10px;
+	margin-top: 5px;
 }
 #containerShemas h2{
 	font-size:16px;
@@ -542,7 +566,12 @@ tips structure :
 	position:absolute;
 	width: 236px;
 	top: 358px;
-	left: -30px;
+	left: -41px;
+	background-color: lightgray;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	padding: 5px;
 }
 
 
@@ -550,41 +579,81 @@ tips structure :
 	font-size:16px ;
 	width:200px;
 	position:absolute;
-	width: 228px;
+	width: 355px;
 	top: 376px;
 	left: 514px;
+	background-color: lightgray;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	padding: 5px;
 }
 
 .apprentissageText{
+	border: 1px solid gray;
+	border-style: dashed;
 	font-size:16px ;
-	width:200px;
 	position:absolute;
-	width: 228px;
-	top: 267px;
-	left: 629px;
+	width: 280px;
+	top: 249px;
+	left: 589px;
+	background-color: lightgray;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	padding: 5px;	
 }
 
 .traitementText{
 	font-size:16px ;
 	width:200px;
 	position:absolute;
-	width: 228px;
-	top: 490px;
-	left: 530px;
+	width: 355px;
+	top: 518px;
+	left: 515px;
+	background-color: lightgray;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	padding: 5px;
 }
 
 .dataText{
 	font-size:16px ;
 	width:200px;
 	position:absolute;
-	width: 228px;
-	top: 704px;
-	left: 600px;
+	width: 288px;
+	top: 750px;
+	left: 580px;
+	background-color: lightgray;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	padding: 5px;
 }
 
 #containerShemas .blueButton{
-	float:right;
-	margin-right:20px;
+float:right;
+margin-right:20px;
+
+}
+
+
+#footer {
+    border-radius: 3px 3px 3px 3px;
+    bottom: 0px;
+    font-size: 11px;
+    padding: 10px;
+    position: absolute;
+    left: 15px;
+}
+#footerEl{
+	opacity: 1;
+}
+#hackFb {
+	position: absolute;
+    right: 10px;
+    bottom: 4px;
 }
 
 

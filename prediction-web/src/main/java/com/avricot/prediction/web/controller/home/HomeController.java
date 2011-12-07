@@ -32,16 +32,32 @@ import com.avricot.prediction.repository.report.ReportRespository;
 public class HomeController {
 
 	@Inject
-	private CandidatRespository candidatRepository;
+	private final CandidatRespository candidatRepository;
 
 	@Inject
-	private GeoReportRepository geoReportRepository;
+	private final GeoReportRepository geoReportRepository;
 
 	@Inject
-	private ReportRespository reportRepository;
+	private final ReportRespository reportRepository;
+
+	// TODO: use the cachedMongoRepo with ehcache.
+	private volatile List<Report> cachedReports = null;
+	private volatile List<Candidat> cachedCandidats = null;
+	private volatile long cacheUpdate = 0;
+
+	@Inject
+	public HomeController(ReportRespository reportRepository, GeoReportRepository geoReportRepository, CandidatRespository candidatRepository) {
+		this.reportRepository = reportRepository;
+		this.geoReportRepository = geoReportRepository;
+		this.candidatRepository = candidatRepository;
+		updateCache();
+	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public String home() {
+	public String home(@RequestParam(defaultValue = "false", required = false) boolean updateCache) {
+		if (updateCache) {
+			updateCache();
+		}
 		return "home";
 	}
 
@@ -109,9 +125,8 @@ public class HomeController {
 	 */
 	@RequestMapping(value = "nojs", method = RequestMethod.GET)
 	public String nojs(Model model) {
-		HashMap<String, List<?>> datas = getMainData();
-		model.addAllAttributes(datas);
 		model.addAttribute("themes", ThemeName.values());
+		model.addAllAttributes(getMainData());
 		return "nojs";
 	}
 
@@ -145,14 +160,18 @@ public class HomeController {
 	}
 
 	/**
-	 * Main data for main page & nojs page.
+	 * Main data for main page & nojs page. Use a cache for report. Clear cache
+	 * every min.
 	 */
-	private HashMap<String, List<?>> getMainData() {
+	private synchronized HashMap<String, List<?>> getMainData() {
+		if (System.currentTimeMillis() - cacheUpdate > 60000) {
+			updateCache();
+		}
 		HashMap<String, List<?>> result = new HashMap<String, List<?>>();
-		List<Candidat> candidats = candidatRepository.findAll(new Sort(Direction.ASC, "positionValue"));
+		List<Candidat> candidats = cachedCandidats;
 		result.put("candidats", candidats);
-		List<Report> reports = reportRepository.findAll(new Sort(Direction.ASC, "timestamp"));
-		// quick fix, remove last reports, because of insight errors.
+		List<Report> reports = cachedReports;
+		// Remove some reports, because of insight errors & too big date.
 		for (int i = 0; i < reports.size(); i++) {
 			if (!isValidReport(reports.get(i), candidats)) {
 				reports.remove(i);
@@ -163,4 +182,12 @@ public class HomeController {
 		return result;
 	}
 
+	/**
+	 * Update the cache.
+	 */
+	private synchronized void updateCache() {
+		cachedCandidats = candidatRepository.findAll(new Sort(Direction.ASC, "positionValue"));
+		cachedReports = reportRepository.findAll(new Sort(Direction.ASC, "timestamp"));
+		cacheUpdate = System.currentTimeMillis();
+	}
 }
