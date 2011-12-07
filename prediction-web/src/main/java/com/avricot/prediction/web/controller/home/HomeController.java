@@ -127,6 +127,9 @@ public class HomeController {
 	 * Return true if the report is full.
 	 */
 	private boolean isValidReport(Report report, List<Candidat> candidats) {
+		if (report.getTimestamp() < 1318004559000L) {
+			return false;
+		}
 		if (report.getCandidats().size() < candidats.size()) {
 			return false;
 		}
@@ -138,7 +141,7 @@ public class HomeController {
 			tweets += entry.getValue().getTweetNumber();
 			insight += entry.getValue().getInsight();
 		}
-		return sum > 0 && tweets > 0 && insight > 0;
+		return insight > 0;
 	}
 
 	/**
@@ -150,10 +153,11 @@ public class HomeController {
 		result.put("candidats", candidats);
 		List<Report> reports = reportRepository.findAll(new Sort(Direction.ASC, "timestamp"));
 		// quick fix, remove last reports, because of insight errors.
-		int i = reports.size() - 1;
-		while (!isValidReport(reports.get(i), candidats)) {
-			reports.remove(i);
-			i--;
+		for (int i = 0; i < reports.size(); i++) {
+			if (!isValidReport(reports.get(i), candidats)) {
+				reports.remove(i);
+				i--;
+			}
 		}
 		result.put("reports", reports);
 		return result;

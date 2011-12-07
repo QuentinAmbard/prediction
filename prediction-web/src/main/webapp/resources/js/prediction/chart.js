@@ -67,6 +67,11 @@ var Chart = new Class({
 					pointStart : 0 //To be defined during initialization.
 				},
 				series : {
+					events: {
+		                legendItemClick: function(event) {
+							that.fireEvent('clickOnLegend', this.name, this.visible);
+		                }
+		            },
 					allowPointSelect: true,
 					cursor : 'pointer',
 					point : {

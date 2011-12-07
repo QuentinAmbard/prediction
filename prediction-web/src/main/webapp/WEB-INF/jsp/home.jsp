@@ -122,7 +122,7 @@
 			<div class="bottomColomnLeft"></div>
 			
 		</div>
-		<div id="containerChartType">Tendance</div>
+		<div id="containerChartType">Représente la tendance des candidats.</div>
 		<div id="containerChart" style="position: absolute; z-index: 5; bottom:0px; left:0px;  width: 960px; height: 300px; margin: 0 auto"></div>
 	</div>
 

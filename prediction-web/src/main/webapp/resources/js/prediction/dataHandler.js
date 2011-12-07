@@ -14,6 +14,7 @@ var DataHandler = new Class({
 	tweets: [],
 	tweetsTimer: null,
 	globalTheme: null,
+	forcedCandidat: {},
 	options: {
 		events: {
 			"1319061600000": [{value: "Accouchement de Carla Bruni.", candidatName: "SARKOZY"}],
@@ -101,6 +102,12 @@ var DataHandler = new Class({
 			that.updateVisualizationDate(date);
 			that.updatePie(date);
 			that.updateThemes(date);
+		});
+		this.chart.addEvent('clickOnLegend', function (displayName, visible) {
+			var candidat = that.getCandidat(displayName);
+			that.forcedCandidat[candidat.candidatName] = !visible ;
+			//TODO: ca c'est vraiment bourrin :p
+			that.updateGraph(that.selectedType, true);
 		});
 		this.chartDetails = new BarChart("containerChartDetails", 
 				[{id: "tendance", title: "Tendance", text: "Le résultat de la prévision<br />des élections de 2012"}, 
@@ -381,6 +388,7 @@ var DataHandler = new Class({
 		if(theme) {
 			type = type.substring("theme.".length, type.length);
 		}
+		max = 0;
 		var series = []
 		for(var i =0, ii=this.reports.length;i<ii;i++) {
 			var data = [];
@@ -432,6 +440,7 @@ var DataHandler = new Class({
 				serie.data.push(point);
 				serie.av += value ;
 				serie.max = Math.max(value, serie.max) ;
+				max = Math.max(value, max);
 			}
 		}
 		//Just display the graph with values. Max 7.
@@ -439,16 +448,28 @@ var DataHandler = new Class({
 		var seriesSorted = Array.clone(series);
 		seriesSorted.sort(function (s1, s2) {
 			return s2.av-s1.av;
-		})
+		}) ;
+		var hidden = 0;
 		for(i =0, ii=seriesSorted.length;i<ii;i++) {
-			if(i>7 && seriesSorted[i].max<15 || seriesSorted[i].max<3) {
+			if(i>7 && (seriesSorted[i].max<15 || seriesSorted[i].max<3)) {
 				seriesSorted[i].visible = false ;
 				for(var j =0, jj=series.length;j<jj;j++) {
 					if(series[j].nameBrut == seriesSorted[i].nameBrut) {
 						series[j].visible = seriesSorted[i].visible
+						if(!series[j].visible && (typeof(this.forcedCandidat[series[j].nameBrut]) == "undefined " || !this.forcedCandidat[series[j].nameBrut])) {
+							series[j].data = [];
+						}
 						break;
 					}
 					
+				}
+			}
+		}
+		if(max>0) {
+			for(i =0, ii=series.length;i<ii;i++) {
+				//Report on 100% the values.
+				for(d=0, dd=series[i].data.length; d<dd;d++) {
+					series[i].data[d].y = Math.round(series[i].data[d].y * 100 / max*10)/10;
 				}
 			}
 		}
@@ -549,12 +570,13 @@ var DataHandler = new Class({
 	/**
 	 * Update the graph with new datas.
 	 */
-	updateGraph: function (type) {
+	updateGraph: function (type, doNotHide) {
+		console.log(doNotHide)
+		doNotHide = doNotHide || false;
 		if(this.isWorking) {
 			return ;
 		}
 		this.isWorking = true ;
-		this.chart.chart.showLoading();
 		var that = this ;
 		var newSeries = this.getSeriesForChart(type);
 		type = type || this.selectedType ;
@@ -562,16 +584,23 @@ var DataHandler = new Class({
 		if(theme) {
 			type = type.substring("theme.".length, type.length);
 		}
-		setTimeout(function () {
+		var update = function () {
 			//this.chart.chart.series = newSeries ;
 			for(var i=0, ii=that.chart.chart.series.length;i<ii;i++){
 				that.chart.chart.series[i].setData(newSeries[i].data) ;
 			}
 			that.chart.chart.hideLoading();
-			$("containerChartType").set('html', that.options.opinionDescription[type].title);
+			$("containerChartType").set('html', "Représente "+that.options.opinionDescription[type].title+" des candidats.");
 			that.isWorking = false ;
-			//that.chart.chart.redraw();
-		}, 100);
+		}
+		if(doNotHide) {
+			update()
+		} else {
+			this.chart.chart.showLoading();
+			setTimeout(function () {
+				update () ;
+			}, 100);
+		}
 	},
 	/**
 	 * Update the graph details

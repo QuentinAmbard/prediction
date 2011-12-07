@@ -129,8 +129,21 @@ clear:both;
 	font-weight: bold;
 	text-decoration: underline;
 }
+#visualizationEvent {
+	color:#de001a;
+}
+#help {
+margin-top: 15px;
+text-align: left;
+font-size: 13px !important;
+border: 1px solid gray;
+border-style: dashed;
+padding: 5px;
+border-radius: 10px;
+-moz-border-radius: 10px;
+-webkit-border-radius: 10px;
+}
 #visualizationDate {
-	font-weight: bold;
 }
 .details {
 	font-size:14px;
@@ -166,7 +179,7 @@ select{
 	font-weight: bold;
 }
 #leftColomn{
-	width:192px;
+	width:210px;
 	margin-left:15px;
 	float:left;
 	z-index: 999;
@@ -189,7 +202,7 @@ select{
 }
 #containerChartType {
 	z-index: 999;
-	top: 560px;
+	top: 530px;
 	left: 50px;
 	color: #383838;
 	font-size: 16px;
@@ -224,9 +237,8 @@ select{
 	float:right;
 }
 h1 {
-	font-shadow: #EDEDED 1px 1px 1px;
-	font-size:27px;
-	color:#2E2E2E;
+	font-size: 23px;
+	color: #484848;
 }
 
 #access{
@@ -364,11 +376,13 @@ a.blueButton, a.redButton{
 
 
 .candidateFrame{
-	padding:3px;
-	background-color:black;
-	box-shadow:  0 0px 5px #828282;
-	-webkit-box-shadow:  0 0px 5px #828282;
-	-moz-box-shadow:  0 0px 5px #828282;
+	padding: 3px;
+	background-color: black;
+	box-shadow: 0 0px 5px #828282;
+	-webkit-box-shadow: 0 0px 5px #828282;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	padding: 5px;
 }
 
 
@@ -402,7 +416,7 @@ tips structure :
 .tooltips #mapTip{
 	cursor: default;	
 }
-.tips .tip-title {
+.tip-title {
 	font-weight: bold;
 }
 .tips, #mapTip {
@@ -415,7 +429,12 @@ tips structure :
 	border-radius: 3px;
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
-	color:#dedede;
+	color:white;
+	opacity:0.8;
+	font-size:12px;
+	background: -moz-linear-gradient(top, #5d5d5d, black);
+	background: -webkit-gradient(linear, left top, left bottom, from(#5d5d5d), to(black));
+	background: -moz-linear-gradient(top, #5d5d5d, black);
 }
 
 
