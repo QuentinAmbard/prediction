@@ -36,7 +36,6 @@ public class Mashup {
 	private long maxTweet;
 	private long maxRss;
 	private float maxInsight;
-	private float maxBuzz;
 	
 	private static Logger LOG = Logger.getLogger(Mashup.class);
 	
@@ -82,10 +81,12 @@ public class Mashup {
 		fillMaxValues();
 		LOG.info("Mashup all buzz...");
 		mashupBuzz.mashupAllBuzz(maxTweet, maxRss, maxInsight);
+		mashupBuzz.calculDesMoyennes();
 		LOG.info("Mashup all themes...");
-//		mashupTheme.mashupAllTheme();
+		mashupTheme.mashupAllTheme();
 		LOG.info("Mashup all tweets...");
-//		mashupTweet.mashupAllTweets();
+		mashupTweet.mashupAllTweets();
+		LOG.info("Done.");
 	}
 	
 	public void fillMaxValues() {

@@ -3,6 +3,7 @@ package com.avricot.prediction;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import javax.inject.Inject;
 
@@ -104,9 +105,6 @@ public class MashupBuzz {
 			} else {
 				dailyReport = new CandidatReport();
 			}
-//					
-//			if (dailyReport.getCandidatName() == null)
-//				dailyReport.setCandidatName(key);
 
 			if (totalTweet != 0) {
 				float tweetScore = (tweetCountMap.get(key) / totalTweet) * 100;
@@ -146,13 +144,14 @@ public class MashupBuzz {
 			}
 			
 			LOG.info("BUZZ pour " + key.toString() + " - " + dailyReport.getBuzz() + " insight = " + insightScore);
-			/*
-			 * Le désintéressement est l'inverse de la polarité négative * la
-			 * popularité
-			 */
-			if (dailyReport.getNeg() != 0)
-				dailyReport.setNone((1 / dailyReport.getNeg()) * dailyReport.getBuzz());
 			
+			/* Désintéressement */
+			Random r = new Random();
+			float rand = r.nextFloat()/8;
+			if (dailyReport.getNeg() != 0) {
+				float none = ((dailyReport.getBuzz() + 30) * 1/dailyReport.getNeg())*rand;
+				dailyReport.setNone((float) (Math.min(100, none)));
+			}
 		}
 
 		/* Calcul de la tendance */
@@ -188,14 +187,14 @@ public class MashupBuzz {
 					newTendance = tendance + pos / (neg + pos);
 					/* Coefficient de pondération appliqué à Sarkozy */
 					if(key.toString().equalsIgnoreCase("sarkozy")) {
-						newTendance = (float) (newTendance * 0.80);
+						newTendance = (float) (newTendance * 0.75);
 					}
 					report.getCandidats().get(key).setTendance(newTendance);
 					LOG.info("Tendance = " + newTendance);
-				} else {
+					} else {
 					/* Coefficient de pondération appliqué à Sarkozy */
 					if(key.toString().equalsIgnoreCase("sarkozy")) {
-						tendance = (float) (tendance * 0.80);
+						tendance = (float) (tendance * 0.75);
 					}
 					report.getCandidats().get(key).setTendance(tendance);
 					LOG.info("Tendance = " + tendance);
@@ -220,8 +219,6 @@ public class MashupBuzz {
 			float oldBuzz = report.getCandidats().get(key).getBuzz();
 			float newBuzz = (oldBuzz * 100 / maxBuzz);
 			report.getCandidats().get(key).setBuzz(coef(newBuzz));
-
-			LOG.info("NEW BUZZ VALUE FOR " + key.toString() + " => " + newBuzz);
 		}
 
 		reportRepository.save(report);
@@ -246,10 +243,42 @@ public class MashupBuzz {
 		}
 	}
 	
+	/**
+	 * Harmonisation des données
+	 * @param x
+	 * @return
+	 */
 	private float coef(float x) {
         if (x < 28) {
                 return (float) (3.538 * x - 0.092 * Math.pow(x, 2) + 0.00089 * Math.pow(x, 3));
         }
         return (float) (0.736111111111111 * x + 26.3888888888889);
+	}
+	
+	/**
+	 * Calcul les moyennes des buzz
+	 */
+	void calculDesMoyennes() {
+		HashMap<Candidat, Float> sommeBuzz = new HashMap<Candidat, Float>();
+		List<Candidat> candidats = candidatRepository.findAll();
+		List<Report> reports = reportRepository.findAll();
+		
+		/* Addition de tous les buzz de tous les candidats */
+		for (Report report : reports) {
+			for (Candidat candidat : candidats) {
+				float buzz =  report.getCandidats().get(candidat.getCandidatName()).getBuzz();
+				if(sommeBuzz.get(candidat) != null)
+					sommeBuzz.put(candidat, sommeBuzz.get(candidat) + buzz);
+				else
+					sommeBuzz.put(candidat, buzz);
+			}
+		}
+		
+		/* Calcul et enregistrement des moyennes */
+		for (Candidat candidat : candidats) {
+			candidat.getReport().setBuzz(sommeBuzz.get(candidat)/reports.size());
+			LOG.info("moyenne pour " + candidat.getCandidatName().toString() + " => " + sommeBuzz.get(candidat)/reports.size());
+			candidatRepository.save(candidat);
+		}
 	}
 }
