@@ -125,6 +125,13 @@ public class HomeController {
 	 */
 	@RequestMapping(value = "nojs", method = RequestMethod.GET)
 	public String nojs(Model model) {
+		List<Candidat> candidats = candidatRepository.findAll();
+		float max = 0;
+		for (Candidat candidat : candidats) {
+			if(candidat.getReport().getTendance() > max)
+				max = candidat.getReport().getTendance();
+		}
+		model.addAttribute("maxTendance", max);
 		model.addAttribute("themes", ThemeName.values());
 		model.addAllAttributes(getMainData());
 		return "nojs";

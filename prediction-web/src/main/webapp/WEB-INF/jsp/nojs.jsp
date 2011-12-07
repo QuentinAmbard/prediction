@@ -25,6 +25,14 @@
 			les avis positifs : Représente de combien on parle en bon termes de ce candidat<br />
 			les désinteressés : Représente à quel point les français ne s'interessent pas à ce candidat<br /><br /><br />
 			
+			Tendances :
+			<br />
+			<c:forEach var='candidat' items='${candidats}'>
+				<c:out value='${candidat.candidatName}'/> :
+				<c:out value='${(candidat.report.tendance / maxTendance) * 100}'/>
+				<br />
+			</c:forEach>
+			
 			<TABLE>
 			  <CAPTION>Données pour les elections de 2012</CAPTION>
 			  <TR>
