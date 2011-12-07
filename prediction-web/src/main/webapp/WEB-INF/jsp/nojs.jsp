@@ -1,4 +1,5 @@
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
+<%@ taglib uri='http://java.sun.com/jsp/jstl/fmt' prefix='fmt'%>
 <!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -6,22 +7,6 @@
 	<meta name="description" content="Prediction elections 2012">
 	<title>Prediction</title>
 	<link href="./resources/styles/default.css" rel="stylesheet" type="text/css" />
-	<script type="text/javascript" src="./resources/js/tween.js"></script>
-	<script type="text/javascript" src="./resources/js/mootools.js"></script>
-	<script type="text/javascript" src="./resources/js/mootools-more.js"></script>
-	<script type="text/javascript" src="./resources/js/prediction/dataHandler.js"></script>
-	<script type="text/javascript" src="./resources/js/prediction/geoDataHandler.js"></script>
-	<script type="text/javascript" src="./resources/js/prediction/utils.js"></script>
-	<script type="text/javascript" src="./resources/js/prediction/threemap.js"></script>
-	<script type="text/javascript" src="./resources/js/prediction/pie.js"></script>
-	<script type="text/javascript" src="./resources/js/prediction/chart.js"></script>
-	<script type="text/javascript" src="./resources/js/prediction/barChart.js"></script>
-	<script type="text/javascript" src="./resources/js/highcharts/adapters/mootools-adapter.src.js"></script>
-	<script type="text/javascript" src="./resources/js/highcharts/highcharts.src.js"></script>
-		<!-- 1a) Optional: add a theme file -->
-		<script type="text/javascript" src="./resources/js/highcharts/themes/gray.js"></script>
-		<!-- 1b) Optional: the exporting module 
-		<script type="text/javascript" src="./resources/js/highcharts/modules/exporting.js"></script>-->
 </head>
 <body>
 <header style="margin: auto; width: 200px">
@@ -52,8 +37,10 @@
 				 <TH>Désinteressés</TH>
 			  </TR>
 			 <c:forEach var='report' items='${reports}'>
-					<c:forEach var='candidat' items='${candidats}'>
-					 <TH><c:out value='${report.timestamp}'/></TH>
+		  		<jsp:useBean id="newsDate" class="java.util.Date" />
+			    <jsp:setProperty name="newsDate" property="time" value="${report.timestamp}" />
+				<c:forEach var='candidat' items='${candidats}'>
+				    <TD><fmt:formatDate pattern="dd/MM/yyyy" value="${newsDate}" /></TD>
 					 <TD><c:out value='${candidat.candidatName}'/></TD>
 					 <TD><c:out value='${report.candidats[candidat.candidatName].tendance}'/></TD>
 					 <TD><c:out value='${report.candidats[candidat.candidatName].buzz}'/></TD>
@@ -79,7 +66,9 @@
 			  </TR>
 			 <c:forEach var='report' items='${reports}'>
 					<c:forEach var='candidat' items='${candidats}'>
-						 <TH><c:out value='${report.timestamp}'/></TH>
+			  		<TR>
+			    		<jsp:setProperty name="newsDate" property="time" value="${report.timestamp}" />
+			    		<TH><fmt:formatDate pattern="dd/MM/yyyy" value="${newsDate}" /></TH>
 						 <TD><c:out value='${candidat.candidatName}'/></TD>
 						<c:forEach var='theme' items='${themes}'>
 							 <TD><c:out value='${report.candidats[candidat.candidatName].themes[theme]}'/></TD>
