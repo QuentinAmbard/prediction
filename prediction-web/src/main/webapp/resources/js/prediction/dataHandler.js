@@ -78,6 +78,7 @@ var DataHandler = new Class({
 		this.threeMap.addEvent('click', function (theme) {
 			that.setVisualizationType(that.options.opinionDescription[theme]);
 			$$('.likeArea div').setStyle('opacity', 0.7);
+			that.updateVisualizationDate(that.selectedTimestamp);
 			that.selectedType = "theme."+theme
 			that.updatePie(that.selectedTimestamp);
 			that.updateGraph();

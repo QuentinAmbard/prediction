@@ -57,7 +57,7 @@
 				</div>
 				<div id="candidatInfo">
 					<h2 id="candidatName">Francois Hollande</h2>
-					Parti : <a title="le parti de ce candidat" id="parti" target="_blank" src="image/ps.jpg">azesqd</a><br />
+					Parti : <a title="le parti de ce candidat" id="parti" target="_blank"></a><br />
 					Flux d'informations :
 					<div id="candidatImage" class="candidateFrame">
 						
