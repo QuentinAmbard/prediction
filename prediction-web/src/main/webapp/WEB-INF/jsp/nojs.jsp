@@ -12,22 +12,23 @@
 	<div id="container">
 		<div id="contentNoJs">
 			<h1>Si vous avez des problèmes avec l'affichage graphique, voici une version texte simplifié des données :</h1>
-			<h2>Informations sur les candidats :</h2>
-			<h3>Légende :</h3>
-			la tendance : Représente le résultat prévisionnel des élections de 2012, avec les données du web<br />
-			le buzz : Représente de combien on parle de ce candidat<br />
-			les avis négatifs : Représente de combien on parle en mauvais termes de ce candidat<br />
-			les avis positifs : Représente de combien on parle en bon termes de ce candidat<br />
-			les désinteressés : Représente à quel point les français ne s'interessent pas à ce candidat<br /><br />
-			
-			Tendances :
+			<h2>Voici les résultas prévisionnels pour le premier tour des presidentielles de 2012, par candidat.</h2>
 			<br />
 			<c:forEach var='candidat' items='${candidats}'>
 				<c:out value='${candidat.candidatName}'/> :
-				<c:out value='${(candidat.report.tendance / maxTendance) * 100}'/>
+				<fmt:formatNumber var="val" value="${(candidat.report.tendance / maxTendance) * 100}"  maxFractionDigits="1" />
+				<c:out value='${val}'/> %
 				<br />
 			</c:forEach>
 			<br />
+			<h2>Informations sur les candidats :</h2>
+			<h3>Légende :</h3>
+			<span class="bold">la tendance : </span>Représente le résultat prévisionnel des élections de 2012, avec les données du web<br />
+			<span class="bold">le buzz : </span>Représente de combien on parle de ce candidat<br />
+			<span class="bold">les avis négatifs : </span>Représente de combien on parle en mauvais termes de ce candidat<br />
+			<span class="bold">les avis positifs : </span>Représente de combien on parle en bon termes de ce candidat<br />
+			<span class="bold">les désinteressés : </span>Représente à quel point les français ne s'interessent pas à ce candidat<br /><br />
+			<h2>Détail journalier des analyses.</h2>
 			<TABLE>
 			  <CAPTION>Données pour les elections de 2012</CAPTION>
 			  <TR>
@@ -45,11 +46,16 @@
 				<c:forEach var='candidat' items='${candidats}'>
 				    <TD><fmt:formatDate pattern="dd/MM/yyyy" value="${newsDate}" /></TD>
 					 <TD><c:out value='${candidat.candidatName}'/></TD>
-					 <TD><c:out value='${report.candidats[candidat.candidatName].tendance}'/></TD>
-					 <TD><c:out value='${report.candidats[candidat.candidatName].buzz}'/></TD>
-					 <TD><c:out value='${report.candidats[candidat.candidatName].neg}'/></TD>
-					 <TD><c:out value='${report.candidats[candidat.candidatName].pos}'/></TD>
-					 <TD><c:out value='${report.candidats[candidat.candidatName].none}'/></TD>					 
+					 <fmt:formatNumber var="val" value="${report.candidats[candidat.candidatName].tendance}"  maxFractionDigits="1" />
+					 <TD><c:out value='${val}'/>%</TD>
+					 <fmt:formatNumber var="val" value="${report.candidats[candidat.candidatName].buzz}"  maxFractionDigits="1" />
+					 <TD><c:out value='${val}'/>%</TD>
+					 <fmt:formatNumber var="val" value="${report.candidats[candidat.candidatName].neg}"  maxFractionDigits="1" />
+					 <TD><c:out value='${val}'/>%</TD>
+					 <fmt:formatNumber var="val" value="${report.candidats[candidat.candidatName].pos}"  maxFractionDigits="1" />
+					 <TD><c:out value='${val}'/>%</TD>
+					 <fmt:formatNumber var="val" value="${report.candidats[candidat.candidatName].none}"  maxFractionDigits="1" />
+					 <TD><c:out value='${val}'/>%</TD>					 
 				 </TR>
 				 </c:forEach>
 			</c:forEach>
