@@ -44,7 +44,7 @@
 			<div id="leftColomn">
 				<div id="help">
 					<h2>Que voyez vous ?</h2>
-					Voici une synthèse des données du web sur les Présidentielles françaises de 2012. Extraites de <span class="tooltips underline" rel="Twitter, articles, Google, Blogs, RSS, etc." title="Plein de médias webs sont utilisés ! ">médias web</span>, elles sont traitées et analysées afin de <span class="bold">prédire le résultat des élections !</span><br /><br />
+					Voici une synthèse des données du web concernant les Présidentielles françaises de 2012. Extraites de <span class="tooltips underline" rel="Twitter, articles, Google, Blogs, RSS, etc." title="Plein de médias webs sont utilisés ! ">médias web</span>, elles sont traitées et analysées afin de <span class="bold">prédire le résultat des élections !</span><br /><br />
 					<div >
 						Sélectionnez un type d'<span class="bold">analyse</span> ou un <span class="bold">thème</span> sur les menus de droite pour changer le type d'affichage.<br />
 						Vous pouvez ensuite <span class="bold">naviguer dans le temps </span>, et associer des <span class="bold">évènements</span> aux données (<img src="resources/images/star.png" />).  <br /><br />
@@ -102,8 +102,8 @@
 					<div id="tendance" class="tendance tooltips" title="Cliquez pour afficher par tendance" rel="Représente le résultat prévisionnel des élections de 2012, avec les données du web."}></div>
 					<div id="buzz" class="buzz tooltips" title="Cliquez pour afficher par buzz" rel="Représente de combien on parle de ce candidat."></div>
 					<div id="neg" class="defavorable tooltips" title="Cliquez pour afficher par avis négatifs" rel="Représente de combien on parle en mauvais termes de ce candidat."></div>
-					<div id="pos" class="favorable tooltips" title="Cliquez pour afficher par avis positifs" rel="Représente de combien on parle en bon termes de ce candidat."></div>
-					<div id="none" class="neutre tooltips" title="Cliquez pour afficher par avis désinteressés" rel="Représente à quel point les français ne s'interessent pas à ce candidat."></div>
+					<div id="pos" class="favorable tooltips" title="Cliquez pour afficher par avis positifs" rel="Représente de combien on parle en bons termes de ce candidat."></div>
+					<div id="none" class="neutre tooltips" title="Cliquez pour afficher l'analyse sur la base des avis désintéressés" rel="Représente à quel point les français ne s'interessent pas à ce candidat."></div>
 				</div>
 				<div id="containerChartDetails" style="z-index: 400; position: absolute; top: -10px; left:40px; width: 180px; height: 190px; margin: 0 auto"></div>
 			</div>
@@ -125,7 +125,7 @@
 			<div style="position: absolute; bottom: 0px">
 			Gagnant en 2012 :
 			<div id="winner"></div>
-			<span class="little">Cliquez pour le détail</span>
+			<span class="little" id="winnerDetail">Cliquez pour le détail</span>
 			</div>
 		</div>
 	</div>

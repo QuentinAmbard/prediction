@@ -29,7 +29,7 @@ var DataHandler = new Class({
 		opinionDescription: { "tendance": {title: "la tendance", text: "Représente le résultat prévisionnel des élections de 2012, avec les données du web."}, 
 			"buzz": {title: "le buzz", text: "Représente de combien on parle de ce candidat."}, 
 			"neg": {title: "les avis négatifs", text: "Représente de combien on parle en mauvais termes de ce candidat."}, 
-			"pos": {title: "les avis positifs", text: "Représente de combien on parle en bon termes de ce candidat."}, 
+			"pos": {title: "les avis positifs", text: "Représente de combien on parle en bons termes de ce candidat."}, 
 			"none": {title: "les désinteressés", text: "Représente à quel point les français ne s'interessent pas à ce candidat."},
 			"SECURITY": {color: "", title: "la Sécurité", text: "Représente l'importance du thème de la sécurité pour les français."}, 
 			"EUROPE": {color: "", title: "l'Europe", text: "Représente l'importance du thème de l'Europe pour les français."},
@@ -71,12 +71,15 @@ var DataHandler = new Class({
 		this.setVisualizationType(this.options.opinionDescription["tendance"]);
 		var that = this ;
 		$$('.cristal').addEvent('click', function () {
+			that.future = true ;
 			that.updatePie("future");
 		});
 		this.threeMap = new ThreeMap("treeMap");
 		this.threeMap.addEvent('click', function (theme) {
 			that.setVisualizationType(that.options.opinionDescription[theme]);
+			$$('.likeArea div').setStyle('opacity', 0.7);
 			that.selectedType = "theme."+theme
+			that.updatePie(that.selectedTimestamp);
 			that.updateGraph();
 			
 		});
@@ -101,6 +104,7 @@ var DataHandler = new Class({
 		});
 		this.chart = new Chart("containerChart", {events: this.options.events});
 		this.chart.addEvent('clickOnChart', function (date, value) {
+			that.future = false ;
 			that.selectedTimestamp = date ;
 			that.updateVisualizationDate(date);
 			that.updatePie(date);
@@ -116,7 +120,7 @@ var DataHandler = new Class({
 				[{id: "tendance", title: "Tendance", text: "Le résultat de la prévision<br />des élections de 2012"}, 
 				 {id: "buzz", title: "Buzz", text: "De combien on parle<br />de ce candidat."}, 
 				 {id: "neg", title: "Avis Négatifs", text: "De combien on parle <br />en mauvais termes de <br />ce candidat."}, 
-				 {id: "pos", title: "Avis positifs", text: "De combien on parle en<br />bon termes de ce candidat."}, 
+				 {id: "pos", title: "Avis positifs", text: "De combien on parle en<br />bons termes de ce candidat."}, 
 				 {id: "none", title: "Désinteressé", text: "De combien les français <br />ne s'interessent pas à <br />ce candidat."}]);
 		this.chartDetails.addEvent('click', function (type) {
 			that.clickOnChartDetail(type);
@@ -351,10 +355,7 @@ var DataHandler = new Class({
 			});
 		}
 	},
-	/**
-	 * Update the theme threechart.
-	 */
-	updateThemes: function(timestamp, candidat) {
+	getThemesData:function (timestamp, candidat) {
 		var themes, reports ;
 		if(typeof(timestamp) == "undefined") {
 			reports = this.reports ;
@@ -385,19 +386,28 @@ var DataHandler = new Class({
 				}
 			}
 		}
+		return themes ;
+	},
+	/**
+	 * Update the theme threechart.
+	 */
+	updateThemes: function(timestamp, candidat) {
+		var themes = this.getThemesData(timestamp, candidat) ;
 		var values = [];
 		var total = 0;
 		for(theme in themes) {
 			total += themes[theme] ;
 		}
 		for(theme in themes) {
-			var title = "Préoccupation des français pour "+this.options.opinionDescription[theme].title;
+			var title = "Place de "+this.options.opinionDescription[theme].title+" dans le discours";
 			if(typeof(candidat) != "undefined") {
-				title += " pour "+candidat.displayName;
+				title += " de "+candidat.displayName;
+			} else {
+				title += " des candidats"
 			}
 			var percent;
 			total == 0 ? percent = 0 : percent=themes[theme]/total*100 ;
-			var text = "Plus le carré est important, plus la préoccupation est grande.<br /> Valeur : "+Math.round(percent*10)/10+"%";
+			var text = "Plus le carré est important, plus la préoccupation est grande.<br /> Part de ce thème dans les discours : "+Math.round(percent*10)/10+"%";
 			values.push({id: theme, value: percent, title: title, text: text});
 		}
 
@@ -620,6 +630,11 @@ var DataHandler = new Class({
 		var theme = type.indexOf("theme.")!=-1;
 		if(theme) {
 			type = type.substring("theme.".length, type.length);
+		}
+		if(type == "future") {
+			$('winnerDetail').setStyle('visibility', 'hidden') ;
+		} else {
+			$('winnerDetail').setStyle('visibility', 'visible') ;
 		}
 		var update = function () {
 			//this.chart.chart.series = newSeries ;

@@ -51,7 +51,6 @@
   })();
 </script>
 <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
-<div id="fb-root">
 <script>(function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
   if (d.getElementById(id)) {return;}

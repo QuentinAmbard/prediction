@@ -428,7 +428,9 @@ a.blueButton, a.redButton{
 	bottom: 38px;
 	right: 0px;
 }
-
+#winnerDetail {
+	visibility: hidden;
+}
 .border{
 	background: url(../images/sprite.png) no-repeat;
 	width: 227px;
