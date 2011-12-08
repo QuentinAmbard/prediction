@@ -9,11 +9,6 @@
 	<link href="./resources/styles/default.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-<header style="margin: auto; width: 200px">
-		<a title="retourner sur la page d'accueil" href="#" id="logo"></a>
-		<div id="blue"></div>
-		<div id="red"></div>
-</header>
 	<div id="container">
 		<div id="contentNoJs">
 			<h1>Si vous avez des problèmes avec l'affichage graphique, voici une version texte simplifié des données :</h1>
@@ -88,13 +83,6 @@
 		</div>
 	</div>
 </body> 
-<script type="text/javascript">
-TWEEN.start();
-window.addEvent('domready', function() {
-	var dataHandler = new DataHandler ();
-	dataHandler.getData();
-});
-</script>
 </html>
 
 <script type="text/javascript">

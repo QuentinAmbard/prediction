@@ -187,6 +187,7 @@ var DataHandler = new Class({
 				that.reports = data.reports ;
 				//Add picto Analyse click events
 				$$('.likeArea div').addEvent('click', function () {
+					that.updateVisualizationDate(that.selectedTimestamp);
 					that.clickOnChartDetail(this.id);
 				});
 				that.firstTimestamp = that.reports[0].timestamp ;

@@ -100,10 +100,10 @@
 				<div class="border"></div>
 				<div class="likeArea">
 					<div id="tendance" class="tendance tooltips" title="Cliquez pour afficher par tendance" rel="Représente le résultat prévisionnel des élections de 2012, avec les données du web."}></div>
-					<div id="buzz" class="buzz tooltips" title="Cliquez pour afficher par buzz" rel="Représente de combien on parle de ce candidat."></div>
-					<div id="neg" class="defavorable tooltips" title="Cliquez pour afficher par avis négatifs" rel="Représente de combien on parle en mauvais termes de ce candidat."></div>
-					<div id="pos" class="favorable tooltips" title="Cliquez pour afficher par avis positifs" rel="Représente de combien on parle en bons termes de ce candidat."></div>
-					<div id="none" class="neutre tooltips" title="Cliquez pour afficher l'analyse sur la base des avis désintéressés" rel="Représente à quel point les français ne s'interessent pas à ce candidat."></div>
+					<div id="buzz" class="buzz tooltips" title="Cliquez pour afficher par buzz" rel="Représente de volume d'échanges autour de ce candidat."></div>
+					<div id="neg" class="defavorable tooltips" title="Cliquez pour afficher par avis négatifs" rel="Représente les opinions négatives pour ce candidat."></div>
+					<div id="pos" class="favorable tooltips" title="Cliquez pour afficher par avis positifs" rel="Représente le pourcentage d'échanges positifs à propos de ce candidat."></div>
+					<div id="none" class="neutre tooltips" title="Cliquez pour afficher l'analyse sur la base des avis désintéressés" rel="Représente le pourcentage d'échanges négatif à propos de ce candidat."></div>
 				</div>
 				<div id="containerChartDetails" style="z-index: 400; position: absolute; top: -10px; left:40px; width: 180px; height: 190px; margin: 0 auto"></div>
 			</div>
