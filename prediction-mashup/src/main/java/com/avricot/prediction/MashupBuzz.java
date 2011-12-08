@@ -157,7 +157,6 @@ public class MashupBuzz {
 			
 			/* Désintéressement */
 			Random r = new Random();
-			float rand = r.nextFloat()/2;
 			if (dailyReport.getBuzz() != 0) {
 				float none = (float) Math.abs(1/dailyReport.getBuzz() * 0.164);
 				dailyReport.setNone((float) (Math.min(100, none)));
