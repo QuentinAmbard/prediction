@@ -14,7 +14,7 @@ import com.avricot.prediction.repository.candidat.CandidatRespository;
 import com.avricot.prediction.repository.report.ReportRespository;
 
 /**
- * Classe orchestrant la génération des mashups de données 
+ * Classe orchestrant la génération des mashups de données
  */
 
 @Service
@@ -66,7 +66,7 @@ public class Mashup {
 	}
 
 	/**
-	 * Mashup de toutes les données que nous avons en base et mise à jour de 
+	 * Mashup de toutes les données que nous avons en base et mise à jour de
 	 * tous les rapports
 	 */
 	public void mashupEverything() {
@@ -81,34 +81,34 @@ public class Mashup {
 		LOG.info("Done.");
 	}
 
-	
 	/**
-	 * Permet de récupérer les valeurs maximales pour les tweets, les rss et les insight
+	 * Permet de récupérer les valeurs maximales pour les tweets, les rss et les
+	 * insight
 	 */
 	public void fillMaxValues() {
 		maxInsight = 0;
 		maxRss = 0;
 		maxTweet = 0;
-		
+
 		List<Candidat> candidats = candidatRespository.findAll();
 		List<Report> reports = reportRepository.findAll();
-		
+
 		for (Report report : reports) {
 			for (Candidat candidat : candidats) {
-				if(report.getCandidats().get(candidat.getCandidatName()) == null)
+				if (report.getCandidats().get(candidat.getCandidatName()) == null)
 					report.getCandidats().put(candidat.getCandidatName(), new CandidatReport());
-		
+
 				long tweets = report.getCandidats().get(candidat.getCandidatName()).getTweetNumber();
 				float insight = report.getCandidats().get(candidat.getCandidatName()).getInsight();
 				long rss = report.getCandidats().get(candidat.getCandidatName()).getRssCountResult();
-				if(tweets > maxTweet)
+				if (tweets > maxTweet)
 					maxTweet = tweets;
-				if(insight > maxInsight)
+				if (insight > maxInsight)
 					maxInsight = insight;
-				if(rss > maxRss)
+				if (rss > maxRss)
 					maxRss = rss;
 			}
-			
+
 		}
 	}
 }

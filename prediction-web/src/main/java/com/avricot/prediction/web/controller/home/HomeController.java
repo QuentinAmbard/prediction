@@ -83,6 +83,9 @@ public class HomeController {
 	@RequestMapping(value = "geoReport", method = RequestMethod.GET)
 	public Map<Region, Integer> geoReportForCandidat(@RequestParam long timestamp, @RequestParam CandidatName candidatName) {
 		GeoReport report = geoReportRepository.findByCandidatNameAndTimestamp(candidatName, timestamp);
+		if (report == null) {
+			return null;
+		}
 		return report.getReport();
 	}
 
@@ -128,7 +131,7 @@ public class HomeController {
 		List<Candidat> candidats = candidatRepository.findAll();
 		float max = 0;
 		for (Candidat candidat : candidats) {
-			if(candidat.getReport().getTendance() > max)
+			if (candidat.getReport().getTendance() > max)
 				max = candidat.getReport().getTendance();
 		}
 		model.addAttribute("maxTendance", max);

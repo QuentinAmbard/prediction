@@ -24,7 +24,11 @@ var DataHandler = new Class({
 			"1319666400000": [{value: "Sommet européen", candidatName: "SARKOZY"}],
 			"1320361200000": [{value: "Ouverture du G20 à Cannes", candidatName: "SARKOZY"}],
 			"1319320800000": [{value: "convention d'investiture", candidatName: "HOLLANDE"}],
-			"1322002800000": [{value: "Discours d'Eva Joly à Tokyo", candidatName: "JOLY"}]
+			"1322002800000": [{value: "Discours d'Eva Joly à Tokyo", candidatName: "JOLY"}],
+			"1322002800000": [{value: "Discours d'Eva Joly à Tokyo", candidatName: "JOLY"}],
+			"1322694000000": [{value: "Discours de Nicolas Sarkozy à Toulon", candidatName: "SARKOZY"}],
+			"1322434800000": [{value: "Hervé Morin officialise sa candidature", candidatName: "MORIN"}],
+			"1321398000000": [{value: "Polémique sur l'EPR entre le PS et les verts ", candidatName: "HOLLANDE"}]
 		},
 		opinionDescription: { "tendance": {title: "la tendance", text: "Représente le résultat prévisionnel des élections de 2012, avec les données du web."}, 
 			"buzz": {title: "le buzz", text: "Représente de combien on parle de ce candidat."}, 
@@ -72,6 +76,7 @@ var DataHandler = new Class({
 		var that = this ;
 		$$('.cristal').addEvent('click', function () {
 			that.future = true ;
+			that.updateVisualizationDate()
 			that.updatePie("future", "tendance");
 		});
 		this.threeMap = new ThreeMap("treeMap");
@@ -139,9 +144,11 @@ var DataHandler = new Class({
 	 */
 	updateVisualizationDate: function (date) {
 		if(this.future) {
-			$('visualizationDate').set('html', 'Voici les résultats du premier tour des élections 2012 ! <image class="tooltips" rel="<span class=\'italic\'>Nous ne nous contentons pas d\'additionner des chiffres !</span><br />Chaque donnée est analysées en détail grâce à une intelligence artificielle.<br />Ce traitement nous permet de dégager des tendances générales et ainsi de prédire<br/> le résultat des élections de 2012 !" title="Prédiction des résultats du premier tour de 2012" style="width: 20px; height: 20px" src="resources/images/help.png" />');
+			$('winnerDetail').setStyle('visibility', 'hidden') ;
+			$('visualizationDate').set('html', 'Voici les résultats du premier tour des élections 2012 !');
 			$('visualizationEvent').set('html', 'Présidentielles !');
 		} else {
+			$('winnerDetail').setStyle('visibility', 'visible') ;
 			var events = this.options.events[date] ;
 			var txt = "";
 			if(typeof(events) != "undefined") {
@@ -238,11 +245,16 @@ var DataHandler = new Class({
 			    		}
 					});
 				}
-				$('winner').set('html', winner.displayName+" "+(Math.round(winnerValue/total*1000)/10)+"%");
+				for(var i =0,ii=dataPie.length;i<ii;i++) {
+					if(dataPie[i].y/total<0.01) {
+						dataPie[i].y+= 0.01*total;
+					}
+				}
 			    var series= [{
 					type: 'pie',
 					data: dataPie
 				}]
+				$('winner').set('html', winner.displayName+" "+(Math.round(winnerValue/total*1000)/10)+"%");
 				that.pie.initChart(series);
 
 			    //Position pie serie
@@ -544,6 +556,9 @@ var DataHandler = new Class({
 			for(var value in values) {
 				values[value] = Math.round(values[value]/i*10)/10;
 			}
+			if(this.future) {
+				values["tendance"] *= 15;
+			}
 		} //We just update for a specifc candidat 
 		else {
 			for(var value in values) {
@@ -593,28 +608,40 @@ var DataHandler = new Class({
 			type = type.substring("theme.".length, type.length);
 		}
 		var data = this.pie.chart.series[0].data ;
+		var newData = [];
+		var total =0;
 		//var positionData = this.piePosition.chart.series[0].data ;
+		var addToData = function(report) {
+			var value ;
+			if(theme) {
+				value = report.themes[type] ;
+			} else {
+				value= report[type];
+			}
+			total += value ;
+			newData.push(value)
+		}
 		if(this.future){
-			console.log(type)
 			var i =0;
 			for(candidat in this.candidats){
-				if(theme) {
-					console.log(this.candidats[candidat]);
-					data[i].update(this.candidats[candidat].report.themes[type]);
-				} else {
-					data[i].update(this.candidats[candidat].report[type]);
-				}
+				addToData(this.candidats[candidat].report);
 				i++;
 			}
 		} else {
 			var report = this.getReport(date);
 			for(i =0,ii=data.length;i<ii;i++) {
 				var name = this.getCandidat(data[i].name).candidatName;
-				if(theme) {
-					data[i].update(report.candidats[name].themes[type]);
-				} else {
-					data[i].update(report.candidats[name][type]);
-				}
+				addToData(report.candidats[name]);
+			}
+		}
+		if(total == 0) {
+			total = 100;
+		}
+		for(var i =0,ii=data.length;i<ii;i++) {
+			if(newData[i]/total<0.01) {
+				data[i].update(0.01*total+newData[i]);
+			} else {
+				data[i].update(newData[i]);
 			}
 		}
 	//		var dataReport = this.getPositionsForReport(report);
@@ -640,11 +667,6 @@ var DataHandler = new Class({
 		var theme = type.indexOf("theme.")!=-1;
 		if(theme) {
 			type = type.substring("theme.".length, type.length);
-		}
-		if(type == "future") {
-			$('winnerDetail').setStyle('visibility', 'hidden') ;
-		} else {
-			$('winnerDetail').setStyle('visibility', 'visible') ;
 		}
 		var update = function () {
 			//this.chart.chart.series = newSeries ;
