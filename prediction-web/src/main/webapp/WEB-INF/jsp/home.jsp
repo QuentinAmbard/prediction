@@ -3,7 +3,7 @@
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" />
 	<meta name="description" content="Prediction elections 2012">
-	<title>Prediction</title>
+	<title>Observatoire des Présidentielles 2012</title>
 	<link href="./resources/styles/default.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="./resources/js/tween.js"></script>
 	<script type="text/javascript" src="./resources/js/mootools.js"></script>
