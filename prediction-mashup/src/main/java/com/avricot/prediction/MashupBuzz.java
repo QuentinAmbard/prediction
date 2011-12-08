@@ -14,8 +14,11 @@ import com.avricot.prediction.model.candidat.Candidat;
 import com.avricot.prediction.model.candidat.Candidat.CandidatName;
 import com.avricot.prediction.model.report.CandidatReport;
 import com.avricot.prediction.model.report.Report;
+import com.avricot.prediction.model.theme.Theme;
+import com.avricot.prediction.model.theme.Theme.ThemeName;
 import com.avricot.prediction.repository.candidat.CandidatRespository;
 import com.avricot.prediction.repository.report.ReportRespository;
+import com.avricot.prediction.repository.theme.ThemeRepository;
 import com.avricot.prediction.repository.tweet.TweetRepository;
 import com.avricot.prediction.utils.DateUtils;
 
@@ -31,7 +34,9 @@ public class MashupBuzz {
 	private TweetRepository tweetRepository;
 	@Inject
 	private CandidatRespository candidatRepository;
-
+	@Inject
+	private ThemeRepository themeRepository;
+	
 	static final long MILLIS_IN_A_DAY = 1000 * 60 * 60 * 24;
 	float maxBuzz;
 	private static Logger LOG = Logger.getLogger(MashupBuzz.class);
@@ -241,9 +246,15 @@ public class MashupBuzz {
 		
 		for (Report report : reports) {
 			for (Candidat candidat : candidats) {
-				float buzz = report.getCandidats().get(candidat.getCandidatName()).getBuzz();
-				if(buzz > maxBuzz) {
-					maxBuzz = buzz;
+				if(report.getCandidats() != null)  {
+				if(report.getCandidats().get(candidat.getCandidatName()) != null) {
+				if(report.getCandidats().get(candidat.getCandidatName()).getBuzz() != 0) {
+					float buzz = report.getCandidats().get(candidat.getCandidatName()).getBuzz();
+					if(buzz > maxBuzz) {
+						maxBuzz = buzz;
+					}
+				}
+				}
 				}
 			}
 		}
@@ -276,35 +287,37 @@ public class MashupBuzz {
 		/* Addition de tous les buzz de tous les candidats */
 		for (Report report : reports) {
 			for (Candidat candidat : candidats) {
-				float buzz =  report.getCandidats().get(candidat.getCandidatName()).getBuzz();
-				float tendance = report.getCandidats().get(candidat.getCandidatName()).getTendance();
-				float neg = report.getCandidats().get(candidat.getCandidatName()).getNeg();
-				float pos = report.getCandidats().get(candidat.getCandidatName()).getPos();
-				float none = report.getCandidats().get(candidat.getCandidatName()).getNone();
-				if(sommeBuzz.get(candidat) != null)
-					sommeBuzz.put(candidat, sommeBuzz.get(candidat) + buzz);
-				else
-					sommeBuzz.put(candidat, buzz);
-				
-				if(sommeTendance.get(candidat) != null)
-					sommeTendance.put(candidat, sommeTendance.get(candidat) + tendance);
-				else
-					sommeTendance.put(candidat, tendance);
-				
-				if(sommeNeg.get(candidat) != null)
-					sommeNeg.put(candidat, sommeNeg.get(candidat) + neg);
-				else
-					sommeNeg.put(candidat, neg);
-				
-				if(sommePos.get(candidat) != null)
-					sommePos.put(candidat, sommePos.get(candidat) + pos);
-				else
-					sommePos.put(candidat, pos);
-				
-				if(sommeNone.get(candidat) != null)
-					sommeNone.put(candidat, sommeNone.get(candidat) + none);
-				else
-					sommeNone.put(candidat, none);
+				if(report.getCandidats() != null && report.getCandidats().get(candidat.getCandidatName()) != null) {
+					float buzz = report.getCandidats().get(candidat.getCandidatName()).getBuzz();
+					float tendance = report.getCandidats().get(candidat.getCandidatName()).getTendance();
+					float neg = report.getCandidats().get(candidat.getCandidatName()).getNeg();
+					float pos = report.getCandidats().get(candidat.getCandidatName()).getPos();
+					float none = report.getCandidats().get(candidat.getCandidatName()).getNone();
+					if(sommeBuzz.get(candidat) != null)
+						sommeBuzz.put(candidat, sommeBuzz.get(candidat) + buzz);
+					else
+						sommeBuzz.put(candidat, buzz);
+					
+					if(sommeTendance.get(candidat) != null)
+						sommeTendance.put(candidat, sommeTendance.get(candidat) + tendance);
+					else
+						sommeTendance.put(candidat, tendance);
+					
+					if(sommeNeg.get(candidat) != null)
+						sommeNeg.put(candidat, sommeNeg.get(candidat) + neg);
+					else
+						sommeNeg.put(candidat, neg);
+					
+					if(sommePos.get(candidat) != null)
+						sommePos.put(candidat, sommePos.get(candidat) + pos);
+					else
+						sommePos.put(candidat, pos);
+					
+					if(sommeNone.get(candidat) != null)
+						sommeNone.put(candidat, sommeNone.get(candidat) + none);
+					else
+						sommeNone.put(candidat, none);
+				}
 			}
 		}
 		
@@ -317,6 +330,29 @@ public class MashupBuzz {
 			candidat.getReport().setNone(sommeNone.get(candidat)/reports.size());
 			
 			candidatRepository.save(candidat);
+		}
+		
+		/* Calcul des moyennes des themes */
+		List<Theme> themes = themeRepository.findAll();
+		HashMap<ThemeName, Float> currentTheme;
+		for (Candidat candidat : candidats) {
+			for (Theme theme : themes) {
+				currentTheme = new HashMap<ThemeName, Float>();
+				for (Report report : reports) {
+					if(report.getCandidats() != null 
+							&& report.getCandidats().get(candidat.getCandidatName()) != null 
+							&& report.getCandidats().get(candidat.getCandidatName()).getThemes() != null 
+							&& report.getCandidats().get(candidat.getCandidatName()).getThemes().get(theme.getThemeName()) != null) {
+						float currentThemeCount = report.getCandidats().get(candidat.getCandidatName()).getThemes().get(theme.getThemeName());
+						if(currentTheme.get(theme.getThemeName()) != null)
+							currentTheme.put(theme.getThemeName(), currentTheme.get(theme.getThemeName()) + currentThemeCount);
+						else
+							currentTheme.put(theme.getThemeName(), currentThemeCount);
+					}
+				}
+				candidat.getReport().getThemes().put(theme.getThemeName(), (currentTheme.get(theme.getThemeName()))/reports.size());
+				candidatRepository.save(candidat);
+			}
 		}
 	}
 }

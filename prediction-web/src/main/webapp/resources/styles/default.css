@@ -689,3 +689,12 @@ margin-right:20px;
 #SOCIAL{
 	background: #f696f6 url(../images/themes/social.png) no-repeat center;
 }
+
+td{
+	padding: 15px;
+}
+th{
+	text-align:left;
+	padding: 15px;
+	font-weight:bold;
+}
