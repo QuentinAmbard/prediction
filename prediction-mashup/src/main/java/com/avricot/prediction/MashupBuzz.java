@@ -267,6 +267,9 @@ public class MashupBuzz {
 	void calculDesMoyennes() {
 		HashMap<Candidat, Float> sommeBuzz = new HashMap<Candidat, Float>();
 		HashMap<Candidat, Float> sommeTendance = new HashMap<Candidat, Float>();
+		HashMap<Candidat, Float> sommeNeg = new HashMap<Candidat, Float>();
+		HashMap<Candidat, Float> sommePos= new HashMap<Candidat, Float>();
+		HashMap<Candidat, Float> sommeNone= new HashMap<Candidat, Float>();
 		List<Candidat> candidats = candidatRepository.findAll();
 		List<Report> reports = reportRepository.findAll();
 		
@@ -275,6 +278,9 @@ public class MashupBuzz {
 			for (Candidat candidat : candidats) {
 				float buzz =  report.getCandidats().get(candidat.getCandidatName()).getBuzz();
 				float tendance = report.getCandidats().get(candidat.getCandidatName()).getTendance();
+				float neg = report.getCandidats().get(candidat.getCandidatName()).getNeg();
+				float pos = report.getCandidats().get(candidat.getCandidatName()).getPos();
+				float none = report.getCandidats().get(candidat.getCandidatName()).getNone();
 				if(sommeBuzz.get(candidat) != null)
 					sommeBuzz.put(candidat, sommeBuzz.get(candidat) + buzz);
 				else
@@ -284,6 +290,21 @@ public class MashupBuzz {
 					sommeTendance.put(candidat, sommeTendance.get(candidat) + tendance);
 				else
 					sommeTendance.put(candidat, tendance);
+				
+				if(sommeNeg.get(candidat) != null)
+					sommeNeg.put(candidat, sommeNeg.get(candidat) + neg);
+				else
+					sommeNeg.put(candidat, neg);
+				
+				if(sommePos.get(candidat) != null)
+					sommePos.put(candidat, sommePos.get(candidat) + pos);
+				else
+					sommePos.put(candidat, pos);
+				
+				if(sommeNone.get(candidat) != null)
+					sommeNone.put(candidat, sommeNone.get(candidat) + none);
+				else
+					sommeNone.put(candidat, none);
 			}
 		}
 		
@@ -291,7 +312,10 @@ public class MashupBuzz {
 		for (Candidat candidat : candidats) {
 			candidat.getReport().setBuzz(sommeBuzz.get(candidat)/reports.size());
 			candidat.getReport().setTendance(sommeTendance.get(candidat)/reports.size());
-			LOG.info("moyenne pour " + candidat.getCandidatName().toString() + " => " + sommeBuzz.get(candidat)/reports.size() + " et tendance => " + sommeTendance.get(candidat)/reports.size());
+			candidat.getReport().setNeg(sommeNeg.get(candidat)/reports.size());
+			candidat.getReport().setPos(sommePos.get(candidat)/reports.size());
+			candidat.getReport().setNone(sommeNone.get(candidat)/reports.size());
+			
 			candidatRepository.save(candidat);
 		}
 	}
