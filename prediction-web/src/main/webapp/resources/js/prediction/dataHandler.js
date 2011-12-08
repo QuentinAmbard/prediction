@@ -72,7 +72,7 @@ var DataHandler = new Class({
 		var that = this ;
 		$$('.cristal').addEvent('click', function () {
 			that.future = true ;
-			that.updatePie("future");
+			that.updatePie("future", "tendance");
 		});
 		this.threeMap = new ThreeMap("treeMap");
 		this.threeMap.addEvent('click', function (theme) {
@@ -80,7 +80,7 @@ var DataHandler = new Class({
 			$$('.likeArea div').setStyle('opacity', 0.7);
 			that.updateVisualizationDate(that.selectedTimestamp);
 			that.selectedType = "theme."+theme
-			that.updatePie(that.selectedTimestamp);
+			that.updatePie(that.selectedTimestamp, that.selectedType);
 			that.updateGraph();
 			
 		});
@@ -138,22 +138,27 @@ var DataHandler = new Class({
 	 * Update the visualization date and its event.
 	 */
 	updateVisualizationDate: function (date) {
-		var events = this.options.events[date] ;
-		var txt = "";
-		if(typeof(events) != "undefined") {
-			for(var i=0,ii=events.length;i<ii;i++) {
-				if(txt.length>0) {
-					txt+=",";
-				}
-				txt+='<a href="http://www.google.fr/#q='+encodeURIComponent(events[i].value)+'" target="_blank">'+events[i].value+'</a>';
-			}
-			$('visualizationEvent').set('html', txt);
-			$('visualizationEvent').fade(1);
+		if(this.future) {
+			$('visualizationDate').set('html', 'Voici les résultats du premier tour des élections 2012 ! <image class="tooltips" rel="<span class=\'italic\'>Nous ne nous contentons pas d\'additionner des chiffres !</span><br />Chaque donnée est analysées en détail grâce à une intelligence artificielle.<br />Ce traitement nous permet de dégager des tendances générales et ainsi de prédire<br/> le résultat des élections de 2012 !" title="Prédiction des résultats du premier tour de 2012" style="width: 20px; height: 20px" src="resources/images/help.png" />');
+			$('visualizationEvent').set('html', 'Présidentielles !');
 		} else {
-			$('visualizationEvent').fade(0);
+			var events = this.options.events[date] ;
+			var txt = "";
+			if(typeof(events) != "undefined") {
+				for(var i=0,ii=events.length;i<ii;i++) {
+					if(txt.length>0) {
+						txt+=",";
+					}
+					txt+='<a href="http://www.google.fr/#q='+encodeURIComponent(events[i].value)+'" target="_blank">'+events[i].value+'</a>';
+				}
+				$('visualizationEvent').set('html', txt);
+				$('visualizationEvent').fade(1);
+			} else {
+				$('visualizationEvent').fade(0);
+			}
+			var day = new Date(date) ;
+			$('visualizationDate').set('html', "Données du "+day.getDate()+"/"+(day.getMonth()+1)+"/"+day.getFullYear());
 		}
-		var day = new Date(date) ;
-		$('visualizationDate').set('html', "Données du "+day.getDate()+"/"+(day.getMonth()+1)+"/"+day.getFullYear());
 	},
 	/**
 	 * VisualizationType : value + tip
@@ -367,24 +372,24 @@ var DataHandler = new Class({
 		themes = {};
 		if(typeof(candidat) == "undefined") {
 			//Moyenne de tous les candidats.
-			for(var i =0,ii=reports.length;i<ii;i++) {
-				var report = reports[i];
-				for(candidatReport in report.candidats){
-					for(theme in report.candidats[candidatReport].themes) {
-						value = themes[theme] || 0 ;
-						value += report.candidats[candidatReport].themes[theme] ;
-						themes[theme] = value ;
-					}
+			for (var candidat in this.candidats) {
+				for(theme in this.candidats[candidat].report.themes) {
+					value = themes[theme] || 0 ;
+					value += this.candidats[candidat].report.themes[theme] ;
+					themes[theme] = value ;
 				}
 			}
 		} else {
-			//Candidat.
-			for(var i =0,ii=reports.length;i<ii;i++) {
-				var report = reports[i];
-				for(theme in report.candidats[candidat.candidatName].themes) {
+			if(this.future) {
+				for(theme in this.candidats[candidat.candidatName].report.themes) {
 					value = themes[theme] || 0 ;
-					value += report.candidats[candidat.candidatName].themes[theme] ;
+					value += this.candidats[candidat.candidatName].report.themes[theme] ;
 					themes[theme] = value ;
+				}
+			} else {
+				var report = this.getReport(timestamp) ;
+				for(theme in report.candidats[candidat.candidatName].themes) {
+					themes[theme] = report.candidats[candidat.candidatName].themes[theme] ;
 				}
 			}
 		}
@@ -431,22 +436,18 @@ var DataHandler = new Class({
 			type = type.substring("theme.".length, type.length);
 		}
 		max = 0;
+		var seriesIndexed = {}
 		var series = []
 		for(var i =0, ii=this.reports.length;i<ii;i++) {
 			var data = [];
 			var report = this.reports[i];
 			for (var candidatName in report.candidats) {
-				var serie = null;
-				for(var j=0,jj=series.length;j<jj;j++) {
-					if(series[j].nameBrut == candidatName) {
-						serie = series[j] ;
-						break;
-					} 
-				}
-				if(serie == null) {
+				serie = seriesIndexed[candidatName] ;
+				if(typeof(serie) == "undefined") {
 					serie = {color: this.options.candidatColor[candidatName], nameBrut: candidatName, name: this.candidats[candidatName].displayName, lineWidth: 2, data: [], av:0, max: 0};
+					seriesIndexed[candidatName] = serie ;
 					series.push(serie);
-				}
+				} 
 				var value ;
 				if(theme) {
 					value = report.candidats[candidatName].themes[type];
@@ -485,6 +486,7 @@ var DataHandler = new Class({
 				max = Math.max(value, max);
 			}
 		}
+		delete seriesIndexed ;
 		//Just display the graph with values. Max 7.
 		var displayed = 0;
 		var seriesSorted = Array.clone(series);
@@ -592,10 +594,16 @@ var DataHandler = new Class({
 		}
 		var data = this.pie.chart.series[0].data ;
 		//var positionData = this.piePosition.chart.series[0].data ;
-		if(date == "future"){
+		if(this.future){
+			console.log(type)
 			var i =0;
 			for(candidat in this.candidats){
-				data[i].update(this.candidats[candidat].report.tendance);
+				if(theme) {
+					console.log(this.candidats[candidat]);
+					data[i].update(this.candidats[candidat].report.themes[type]);
+				} else {
+					data[i].update(this.candidats[candidat].report[type]);
+				}
 				i++;
 			}
 		} else {
