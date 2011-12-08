@@ -3,9 +3,14 @@
 
 <html>
   <head>
-  
     <meta charset="iso-8859-1" />
     <title>D'ou viennent les données ?</title>
+    <meta property="og:title" content="Tendance 2012"/>
+    <meta property="og:type" content="non_profit"/>
+    <meta property="og:url" content="http://www.tendance2012.fr"/>
+    <meta property="og:image" content="http://www.tendance2012.fr/resources/images/tenfance2012.png"/>
+    <meta property="og:site_name" content="Observatoire des présidentielles françaises 2012"/>
+    <meta property="fb:admins" content="696231211"/>
 	<link href="./resources/styles/default.css" rel="stylesheet" type="text/css" />
 <body>
 	<div id="containerShemas">
@@ -32,13 +37,13 @@
 				<a href="https://twitter.com/share" class="twitter-share-button" data-text="Whooa ! prédiction des éléctions 2012 avec les données du web! #tendance2012" data-count="horizontal" data-via="avricot">Tweet</a><br />
 				<div style="margin-bottom:10px" class="fb-like" data-href="serv.avricot.com" data-send="true" data-layout="button_count" data-width="50" data-show-faces="true" data-colorscheme="dark"></div>
 				<br /><br />
-				suivez nous sur @tendance_2012<br />
-				<div class="bold">Developpement réalisé par</div>
+				suivez-nous sur <a href="http://twitter.com/tendance_2012" target="_blank">@tendance_2012</a><br />
+				<div class="bold">Développement réalisé par</div>
 				&nbsp;&nbsp;&nbsp; - <a href="http://www.avricot.com" target="_blank">Quentin Ambard</a> | <a href="http://www.avricot.com" target="_blank">www.avricot.com</a><br />
-				&nbsp;&nbsp;&nbsp; - <a href="http://www.viadeo.com/profile/0021rc9ytir4r3gq" target="_blank">Jeremy Artero</a><br />
+				&nbsp;&nbsp;&nbsp; - <a href="http://fr.linkedin.com/in/jeremyartero" target="_blank">Jeremy Artero</a><br />
 				<div class="bold">Design réalisé par </div>
 				&nbsp;&nbsp;&nbsp; - <a href="http://www.viadeo.com/profile/00221fmbgp0u9u4b&amp;language=fr?ga_from=Fu:%2Fprofil%2Fdisplay%2Findex.jsp;Fb%3Amininews%3BFe%3AMN-name-L2%3BMNType%3A8%3B" target="_blank">Vincent Hue</a> | <a href="http://www.html5design.fr" target="_blank">www.html5design.fr</a><br />
-				 <a href="http://www.avricot.com/blog/index.php?contact&amp;idMenu=avriMenu5" target="_blank">contactez nous</a><br />
+				 <a href="http://www.avricot.com/blog/index.php?contact&amp;idMenu=avriMenu5" target="_blank">Contactez-nous !</a><br />
 			</div>
 	</div>
 </body>
