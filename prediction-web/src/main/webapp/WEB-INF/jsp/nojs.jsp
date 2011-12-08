@@ -5,7 +5,7 @@
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" />
 	<meta name="description" content="Prediction elections 2012">
-	<title>Observatoire des Présidentielles 2012</title>
+	<title>Tendance 2012</title>
 	<link href="./resources/styles/default.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
