@@ -18,7 +18,7 @@
 			le buzz : Représente de combien on parle de ce candidat<br />
 			les avis négatifs : Représente de combien on parle en mauvais termes de ce candidat<br />
 			les avis positifs : Représente de combien on parle en bon termes de ce candidat<br />
-			les désinteressés : Représente à quel point les français ne s'interessent pas à ce candidat<br /><br /><br />
+			les désinteressés : Représente à quel point les français ne s'interessent pas à ce candidat<br /><br />
 			
 			Tendances :
 			<br />
@@ -27,7 +27,7 @@
 				<c:out value='${(candidat.report.tendance / maxTendance) * 100}'/>
 				<br />
 			</c:forEach>
-			
+			<br />
 			<TABLE>
 			  <CAPTION>Données pour les elections de 2012</CAPTION>
 			  <TR>
