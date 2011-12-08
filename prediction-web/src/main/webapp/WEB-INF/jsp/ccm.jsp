@@ -35,7 +35,7 @@
 			<div id="footer">
 				&nbsp;&nbsp;&nbsp;<g:plusone size="medium"></g:plusone>
 				<a href="https://twitter.com/share" class="twitter-share-button" data-text="Whooa ! prédiction des éléctions 2012 avec les données du web! #tendance2012" data-count="horizontal" data-via="avricot">Tweet</a><br />
-				<div style="margin-bottom:10px" class="fb-like" data-href="serv.avricot.com" data-send="true" data-layout="button_count" data-width="50" data-show-faces="true" data-colorscheme="dark"></div>
+				<div style="margin-bottom:10px" class="fb-like" data-href="http://www.tendance2012.fr" data-send="true" data-layout="button_count" data-width="50" data-show-faces="true" data-colorscheme="dark"></div>
 				<br /><br />
 				suivez-nous sur <a href="http://twitter.com/tendance_2012" target="_blank">@tendance_2012</a><br />
 				<div class="bold">Développement réalisé par</div>
