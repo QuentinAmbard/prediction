@@ -109,6 +109,7 @@ clear:both;
 	width:240px;
 }
 #candidatImage {
+	width: 186px;
 	z-index: 999999;
 }
 #candidatImage p{
@@ -135,15 +136,15 @@ clear:both;
 	color:#de001a;
 }
 #help {
-margin-top: 15px;
-text-align: left;
-font-size: 13px !important;
-border: 1px solid gray;
-border-style: dashed;
-padding: 5px;
-border-radius: 10px;
--moz-border-radius: 10px;
--webkit-border-radius: 10px;
+	margin-top: 15px;
+	text-align: left;
+	font-size: 13px !important;
+	padding: 5px;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border: 1px solid lightgray;
+	background-color: #E6F1FF;
 }
 #visualizationDate {
 	font-size: 18px;
@@ -204,7 +205,7 @@ select{
 	margin-bottom:5px;
 }
 #containerChartType {
-	z-index: 999;
+	z-index: 99999;
 	top: 520px;
 	left: 50px;
 	color: #383838;
@@ -421,11 +422,11 @@ a.blueButton, a.redButton{
 	cursor: pointer ;
 	text-align: center;
 	background: url(../images/sprite.png) no-repeat;
-	width: 190px;
-	background-position: 20px -568px;
+	width: 208px;
+	background-position: 41px -568px;
 	position: absolute;
-	height: 170px;
-	bottom: 38px;
+	height: 178px;
+	bottom: 13px;
 	right: 0px;
 }
 #winnerDetail {
@@ -459,9 +460,6 @@ tips structure :
 </div>
 */
 
-#mapTip {
-	position: absolute ;
-}
 .tooltips #mapTip{
 	cursor: default;	
 }
@@ -486,7 +484,11 @@ tips structure :
 	background: -webkit-gradient(linear, left top, left bottom, from(#5d5d5d), to(black));
 	background: -moz-linear-gradient(top, #5d5d5d, black);
 }
-
+#mapTip {
+	opacity: 0;	
+	filter:alpha(opacity=0); 
+	position: absolute ;
+}
 
 
 /* CCM PAGE */
@@ -686,4 +688,13 @@ margin-right:20px;
 }
 #SOCIAL{
 	background: #f696f6 url(../images/themes/social.png) no-repeat center;
+}
+
+td{
+	padding: 15px;
+}
+th{
+	text-align:left;
+	padding: 15px;
+	font-weight:bold;
 }

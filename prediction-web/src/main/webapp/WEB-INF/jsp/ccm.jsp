@@ -41,6 +41,7 @@
 				<div class="bold">Développement réalisé par</div>
 				&nbsp;&nbsp;&nbsp; - <a href="http://www.avricot.com" target="_blank">Quentin Ambard</a> | <a href="http://www.avricot.com" target="_blank">www.avricot.com</a><br />
 				&nbsp;&nbsp;&nbsp; - <a href="http://fr.linkedin.com/in/jeremyartero" target="_blank">Jeremy Artero</a><br />
+				&nbsp;&nbsp;&nbsp; - <a href="http://www.viadeo.com/profile/002ud7dupkmtum0" target="_blank">Matthieu Mouminoux</a><br />
 				<div class="bold">Design réalisé par </div>
 				&nbsp;&nbsp;&nbsp; - <a href="http://www.viadeo.com/profile/00221fmbgp0u9u4b&amp;language=fr?ga_from=Fu:%2Fprofil%2Fdisplay%2Findex.jsp;Fb%3Amininews%3BFe%3AMN-name-L2%3BMNType%3A8%3B" target="_blank">Vincent Hue</a> | <a href="http://www.html5design.fr" target="_blank">www.html5design.fr</a><br />
 				 <a href="http://www.avricot.com/blog/index.php?contact&amp;idMenu=avriMenu5" target="_blank">Contactez-nous !</a><br />

@@ -33,7 +33,11 @@
 					<div class="selectBloc">
 						<h1>Vous visualisez <span id="visualizationType" class="tooltips">la tendance</span> pour <span id="visualizationTarget">tous les candidats</span>.</h1>
 						<div class="details">
-							<span id="visualizationDate" >Voici les résultats du premier tour des élections 2012 ! <image class="tooltips" rel="<span class='italic'>Nous ne nous contentons pas d'additionner des chiffres !</span><br />Chaque donnée est analysées en détail grâce à une intelligence artificielle.<br />Ce traitement nous permet de dégager des tendances générales et ainsi de prédire<br/> le résultat des élections de 2012 !" title="Prédiction des résultats du premier tour de 2012" style="width: 20px; height: 20px" src="resources/images/help.png" /></span><br />
+							<image class="tooltips" 
+								rel="<span class='italic'>Nous ne nous contentons pas d'additionner des chiffres !</span><br />Chaque donnée est analysées en détail grâce à une intelligence artificielle.<br />Ce traitement nous permet de dégager des tendances générales et ainsi de prédire<br/> le résultat des élections de 2012 !<br />Vous pouvez revisualiser ces résultats à tout moment en cliquant sur la boule de cristale en bas à droite."
+								title="Prédiction des résultats du premier tour de 2012" 
+								style="width: 20px; height: 20px" 
+								src="resources/images/help.png" /> <span id="visualizationDate" >Voici les résultats du premier tour des élections 2012 ! </span><br />
 							Evènements : <span id="visualizationEvent">Présidentielles !</span>
 						</div>
 					</div>
@@ -57,13 +61,12 @@
 				</div>
 				<div id="candidatInfo">
 					<h2 id="candidatName">Francois Hollande</h2>
-					Parti : <a title="le parti de ce candidat" id="parti" target="_blank" src="image/ps.jpg">azesqd</a><br />
+					Parti : <a title="le parti de ce candidat" id="parti" target="_blank"></a><br />
 					Flux d'informations :
 					<div id="candidatImage" class="candidateFrame">
-						
 					</div>
-					<img class="parti" id="partiImage" src="image/ps.jpg" />
 					<!-- 
+					<img class="parti" id="partiImage" src="image/ps.jpg" />
 					<a title="le programme de ce candidat" href="#">Voir le programme</a>
 					 -->
 				</div>				
@@ -101,9 +104,9 @@
 				<div class="likeArea">
 					<div id="tendance" class="tendance tooltips" title="Cliquez pour afficher par tendance" rel="Représente le résultat prévisionnel des élections de 2012, avec les données du web."}></div>
 					<div id="buzz" class="buzz tooltips" title="Cliquez pour afficher par buzz" rel="Représente de volume d'échanges autour de ce candidat."></div>
-					<div id="neg" class="defavorable tooltips" title="Cliquez pour afficher par avis négatifs" rel="Représente les opinions négatives pour ce candidat."></div>
+					<div id="neg" class="defavorable tooltips" title="Cliquez pour afficher par avis négatifs" rel="Représente le pourcentage d'échanges négatifs à propos de ce candidat."></div>
 					<div id="pos" class="favorable tooltips" title="Cliquez pour afficher par avis positifs" rel="Représente le pourcentage d'échanges positifs à propos de ce candidat."></div>
-					<div id="none" class="neutre tooltips" title="Cliquez pour afficher l'analyse sur la base des avis désintéressés" rel="Représente le pourcentage d'échanges négatif à propos de ce candidat."></div>
+					<div id="none" class="neutre tooltips" title="Cliquez pour afficher l'analyse sur la base des avis désintéressés" rel="Représente le pourcentage d'échanges négatifs à propos de ce candidat."></div>
 				</div>
 				<div id="containerChartDetails" style="z-index: 400; position: absolute; top: -10px; left:40px; width: 180px; height: 190px; margin: 0 auto"></div>
 			</div>
@@ -123,9 +126,9 @@
 		<div id="containerChart" style="position: absolute; z-index: 5; bottom:0px; left:0px;  width: 760px; height: 300px; margin: 0 auto"></div>
 		<div class="cristal">
 			<div style="position: absolute; bottom: 0px">
-			Gagnant en 2012 :
+			...le gagnant en 2012 est
 			<div id="winner"></div>
-			<span class="little" id="winnerDetail">Cliquez pour le détail</span>
+			<span class="little" id="winnerDetail">Cliquez pour les résultats des présidentielles.</span>
 			</div>
 		</div>
 	</div>
