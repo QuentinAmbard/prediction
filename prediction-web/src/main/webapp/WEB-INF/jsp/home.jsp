@@ -3,6 +3,12 @@
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" />
 	<meta name="description" content="Prediction elections 2012">
+	<meta property="og:title" content="Tendance 2012"/>
+    <meta property="og:type" content="non_profit"/>
+    <meta property="og:url" content="http://www.tendance2012.fr"/>
+    <meta property="og:image" content="http://www.tendance2012.fr/resources/images/tenfance2012.png"/>
+    <meta property="og:site_name" content="Observatoire des présidentielles françaises 2012"/>
+    <meta property="fb:admins" content="696231211"/>
 	<title>Tendance 2012</title>
 	<link href="./resources/styles/default.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="./resources/js/tween.js"></script>
