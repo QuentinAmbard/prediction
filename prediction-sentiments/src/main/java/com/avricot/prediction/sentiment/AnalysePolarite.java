@@ -1,6 +1,7 @@
 package com.avricot.prediction.sentiment;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -20,6 +21,7 @@ import com.avricot.prediction.report.Polarity;
 import com.avricot.prediction.repository.candidat.CandidatRespository;
 import com.avricot.prediction.repository.tweet.TweetRepository;
 import com.avricot.prediction.sentiment.services.URLUtils;
+import com.avricot.prediction.utils.DateUtils;
 
 /**
  * Classe analysant les tweets et articles
@@ -35,6 +37,8 @@ public class AnalysePolarite {
 	TweetRepository tweeterRepository;
 	
 	private static Logger LOG = Logger.getLogger(AnalysePolarite.class);
+	
+	static final long MILLIS_IN_A_DAY = 1000 * 60 * 60 * 24;
 	
 	private StringBuffer positiveTweets = new StringBuffer(); 
 	private StringBuffer negativeTweets = new StringBuffer();
@@ -58,13 +62,18 @@ public class AnalysePolarite {
 		mClassifier = DynamicLMClassifier.createNGramProcess(mCategories, nGram);
 		candidats = candidatRespository.findAll();
 		
+		long dateMidnight =  DateUtils.getMidnightTimestamp(new Date(System.currentTimeMillis()));
+		Date startDate = new Date(dateMidnight - MILLIS_IN_A_DAY);
+		Date endDate = new Date(dateMidnight);
+		
 		/* On entraîne l'analyseur */
 		train();
 
-		LOG.info("Nombre de tweets restant à traiter = " + tweeterRepository.countNoPolarity());
+		LOG.info("Nombre de tweets restant à traiter = " + tweeterRepository.countNoPolarityBetween(startDate, endDate));
 		
 		do {
-			tweetsToEvaluate = tweeterRepository.findNoPolarity(300);
+//			tweetsToEvaluate = tweeterRepository.findNoPolarity(300);
+			tweetsToEvaluate = tweeterRepository.findNoPolarityBetween(300, startDate, endDate);
 			if(!tweetsToEvaluate.isEmpty()) {
 				LOG.info("Traitement de " + tweetsToEvaluate.size() + "tweets...");
 				evaluateTweets();
@@ -72,7 +81,9 @@ public class AnalysePolarite {
 				tweeterRepository.save(tweetsToEvaluate);
 				LOG.info(tweetsToEvaluate.size() + " tweets traités et sauvegardés.");
 			}
-		} while (tweeterRepository.countNoPolarity() > 0);
+		} while (tweeterRepository.countNoPolarityBetween(startDate, endDate) > 0);
+		
+		LOG.info("Analyse de sentiments : Fin de traitement des tweets.");
 	}
 
 	/**

@@ -84,4 +84,20 @@ public class TweetRepositoryImpl implements TweetRepositoryCustom {
 		query.limit(size);
 		return mongoTemplate.find(query, Tweet.class);
 	}
+	
+	@Override
+	public List<Tweet> findNoPolarityBetween(int size, Date startDate, Date endDate) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("polarity").is(null));
+		query.addCriteria(Criteria.where("date").gt(startDate).lt(endDate));
+		query.limit(size);
+		return mongoTemplate.find(query, Tweet.class);
+	}
+	
+	public long countNoPolarityBetween(Date startDate, Date endDate) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("polarity").is(null));
+		query.addCriteria(Criteria.where("date").gt(startDate).lt(endDate));
+		return mongoTemplate.count(query, Tweet.class);
+	}
 }

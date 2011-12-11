@@ -41,6 +41,8 @@ public interface TweetRepositoryCustom {
 	List<Tweet> getTweetNotChecked(int size);
 
 	List<Tweet> findNoPolarity(int size);
+	
+	List<Tweet> findNoPolarityBetween(int size, Date startDate, Date endDate);
 
 	/**
 	 * Count the tweet with this parameters:
@@ -54,5 +56,7 @@ public interface TweetRepositoryCustom {
 	long count(CandidatName candidatName, Date startDate, Date endDate, Polarity polarity);
 
 	long countNoPolarity();
+	
+	long countNoPolarityBetween(Date startDate, Date endDate);
 
 }

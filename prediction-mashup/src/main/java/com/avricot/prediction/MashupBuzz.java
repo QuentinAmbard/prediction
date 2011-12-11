@@ -158,7 +158,8 @@ public class MashupBuzz {
 			/* Désintéressement */
 			Random r = new Random();
 			if (dailyReport.getBuzz() != 0) {
-				float none = (float) Math.abs(1/dailyReport.getBuzz() * 0.164);
+				float none = (float) Math.abs(1/dailyReport.getBuzz() * 1.164);
+//				float none = Math.abs(maxBuzz - dailyReport.getBuzz());
 				dailyReport.setNone((float) (Math.min(100, none)));
 			}
 				LOG.info("BUZZ pour " + key.toString() + " - " + dailyReport.getBuzz() + " insight = " + insightScore + " None => " + dailyReport.getNone());
